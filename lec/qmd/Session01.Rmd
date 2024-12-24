@@ -1,18 +1,13 @@
 ---
 title: "Machine Learning Overview"
 author: "Hendrik Orem, Ph.D., with thanks to Jameson Watts"
-output:
-  pdf_document:
-    df_print: kable
-    fig_width: 11
-    fig_height: 8
-  ioslides_presentation: default
-  beamer_presentation: default
-  powerpoint_presentation:
-    df_print: kable
-    slide_level: 2
-    reference_doc: Template.potx
-  slidy_presentation: default
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
 ---
 
 ## Agenda
@@ -64,6 +59,7 @@ output:
 ```{r setup, message=FALSE, warning=FALSE, size="tiny"}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidyverse)
+getwd()
 wine <- read_rds("../../dat/wine.rds")
 ```
 
