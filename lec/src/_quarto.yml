@@ -1,0 +1,13 @@
+project:
+  type: website
+  output-dir: ../
+
+format: 
+    revealjs: 
+        theme: night
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+

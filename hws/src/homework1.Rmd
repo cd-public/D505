@@ -23,7 +23,7 @@ Change the author of this RMD file to be yourself and modify the below code so t
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidyverse)
 
-wine <- read_rds("../resources/wine.rds") %>%
+wine <- readRDS(gzcon(url("https://github.com/cd-public/DSLM-505/raw/master/dat/wine.rds"))) %>%
   filter(province=="Oregon" | province == "California" | province == "New York") %>% 
   mutate(cherry=as.integer(str_detect(description,"[Cc]herry"))) %>% 
   mutate(lprice=log(price)) %>% 

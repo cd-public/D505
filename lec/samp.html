@@ -9,9 +9,8 @@
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.30">
 
-  <meta name="author" content="Jameson Watts, Ph.D.">
-  <meta name="dcterms.date" content="2020-04-25">
-  <title>Anatomy of a technical presentation</title>
+  <meta name="author" content="Jameson > Hendrik > Calvin">
+  <title>Samp</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,11 +28,77 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-ffcbf325be4bf09b74891d05b29692c2.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-drop/drop-runtime.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
@@ -326,103 +391,112 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Anatomy of a technical presentation</h1>
+  <h1 class="title">Samp</h1>
+  <p class="subtitle">Applied Machine Learning</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Jameson Watts, Ph.D. 
+Jameson &gt; Hendrik &gt; Calvin 
 </div>
 </div>
 </div>
 
-  <p class="date">2020-04-25</p>
-</section>
-<section class="slide level2">
-
-<style>
-strong{
-  color: #018080;
-}
-table.rmdtable th {
-    color: black;
-    background: #dbc4cA;
-}
-table.rmdtable td {
-    padding: 0.5em 0.5em;
-}
-</style>
 </section>
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
 <ol type="1">
-<li>First I’m going to talk about</li>
-<li>Then this happens</li>
-<li>This interesting thing comes next</li>
-<li>Bam! …minds blown.</li>
+<li>Course Overview</li>
+<li>Review of Regression</li>
+<li>Dinner Break</li>
+<li>Classification and Ethics</li>
+<li>Basic Feature Engineering</li>
+<li>Vocabulary</li>
 </ol>
 </section>
-<section id="overview" class="slide level2">
-<h2>Overview</h2>
-<ul>
-<li>Research question</li>
-<li>Headline results
-<ul>
-<li>Sub result 1</li>
-<li>Sub result 2</li>
-</ul></li>
-<li>Summary of impact</li>
-</ul>
-</section>
-<section id="background" class="slide level2">
-<h2>Background</h2>
-<ul>
-<li>Give folks some understanding of the context within which you are operating</li>
-<li>Discuss the contextual and/or theoretcial basis for your approach</li>
-</ul>
-</section>
-<section id="methods-1-3-slides" class="slide level2">
-<h2>Methods (1-3 slides)</h2>
-<ul>
-<li>Feature Engineering</li>
-<li>Model Selection and Tuning</li>
-<li>Model-level metrics and validity</li>
-</ul>
-</section>
-<section id="results" class="slide level2">
-<h2>Results</h2>
-<ul>
-<li>Accuracy, Kappa, etc.</li>
-<li>Impact of different features</li>
-<li>How should results be interpreted?</li>
-<li>Impact on Organization?</li>
-</ul>
-</section>
-<section id="limitations" class="slide level2">
-<h2>Limitations</h2>
-<ul>
-<li>What data do you wish you had?</li>
-<li>Where are the models failing and why?</li>
-<li>What is unreliable about the features in your model?</li>
-</ul>
-</section>
-<section id="conclusion" class="slide level2">
-<h2>Conclusion</h2>
-<ul>
-<li>Repeat research question</li>
-<li>Remind audience of the context and justifictions for your method</li>
-<li>Restate results and impact on organization</li>
-</ul>
-</section>
-<section id="backup-slides-and-references" class="slide level2">
-<h2>Backup Slides and References</h2>
-<ul>
-<li>More technical slides used to help answer questions</li>
-<li>References to literature justifying your approach</li>
-</ul>
-
+<section>
+<section id="course-overview" class="title-slide slide level1 center">
+<h1>Course Overview</h1>
 
 </section>
+<section id="expectations-and-assignments" class="slide level2">
+<h2>Expectations and assignments</h2>
+<ol type="1">
+<li>Homework assignments</li>
+<li>Exams</li>
+<li>Modeling Project</li>
+<li>Course Policies</li>
+<li>My expectations for you</li>
+</ol>
+</section>
+<section id="about-me" class="slide level2">
+<h2>About me</h2>
+<ul>
+<li>BA Mathematics, BS Computer Science (UChicago)</li>
+<li>MS, PhD Computer Science (UNC Chapel Hill)</li>
+<li>Data mining, formal analysis, complex models</li>
+<li>Joined Willamette 2021</li>
+</ul>
+</section>
+<section id="about-you" class="slide level2">
+<h2>About you?</h2>
+<ul>
+<li>Background</li>
+<li>Goals for this program and/or course</li>
+</ul>
+</section>
+<section id="basic-concepts-in-machine-learning" class="slide level2">
+<h2>Basic concepts in Machine Learning</h2>
+<ul>
+<li>What is a data scientist?</li>
+<li>What is machine learning?</li>
+<li>What is the role of judgment in machine learning?</li>
+<li>What are the differences between machine learning, statistics and econometrics?</li>
+<li>When is “mere” correlation enough? When is it not?</li>
+</ul>
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<ul>
+<li>Today I use the following libraries:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">local</span>({r <span class="ot">&lt;-</span> <span class="fu">getOption</span>(<span class="st">"repos"</span>)</span>
+<span id="cb1-2"><a></a>       r[<span class="st">"CRAN"</span>] <span class="ot">&lt;-</span> <span class="st">"https://cran.r-project.org"</span> </span>
+<span id="cb1-3"><a></a>       <span class="fu">options</span>(<span class="at">repos=</span>r)</span>
+<span id="cb1-4"><a></a>})</span>
+<span id="cb1-5"><a></a><span class="co"># New?</span></span>
+<span id="cb1-6"><a></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-7"><a></a><span class="fu">install.packages</span>(<span class="st">"moderndive"</span>)</span>
+<span id="cb1-8"><a></a><span class="fu">install.packages</span>(<span class="st">"caret"</span>)</span>
+<span id="cb1-9"><a></a><span class="fu">install.packages</span>(<span class="st">"dslabs"</span>)</span>
+<span id="cb1-10"><a></a><span class="co"># Just for the slides</span></span>
+<span id="cb1-11"><a></a><span class="fu">install.packages</span>(<span class="st">"thematic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You will have some but perhaps not others.</li>
+</ul>
+</section>
+<section id="libraries" class="slide level2">
+<h2>Libraries</h2>
+<ul>
+<li>I’ll just include them upfront.</li>
+</ul>
+</section>
+<section id="partition-our-data" class="slide level2">
+<h2>Partition our Data</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>     sex          height     
+ Female:238   Min.   :50.00  
+ Male  :812   1st Qu.:66.00  
+              Median :68.50  
+              Mean   :68.32  
+              3rd Qu.:71.00  
+              Max.   :82.68  </code></pre>
+</div>
+</div>
+
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -437,6 +511,7 @@ table.rmdtable td {
   <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-drop/drop-runtime.js"></script>
   <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -459,6 +534,7 @@ table.rmdtable td {
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'drop': {"button":true,"shortcut":"`","engine":"webr","webr":{"packages":[]},"pyodide":{"packages":[]}},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -629,7 +705,7 @@ table.rmdtable td {
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealDrop, QuartoSupport,
 
           RevealMath,
           RevealNotes,
