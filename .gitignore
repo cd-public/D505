@@ -11,3 +11,6 @@ exams*
 models*
 recordings*
 *.bak
+lec/src/*.rds
+lec/src/*.quarto_ipynb
+lec/search.json

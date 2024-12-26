@@ -36,7 +36,7 @@ jupyter: python3
 python -m pip install sampleproject
 ```
 -   Here is a "clean" way to do so from within the Python
-```{python}
+```{python Pip}
 import subprocess  # A base package we need to install other packages
 import sys         # A base package we need to install other packages
 install = lambda package : subprocess.check_call([sys.executable, 
@@ -49,29 +49,38 @@ install = lambda package : subprocess.check_call([sys.executable,
 
 ## Packages
 
-- I'll build a list of packages at install them via a loop.
-```{python}
-import subprocess
-import sys
+-   I'll build a list of packages at install them via a loop.
+```{python Packages}
+packages = ["pyreadr"]
 
-install = lambda package : subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
+_ = [install(package) for package in packages]
 ```
-<span style="color:red;font-weight:bold">TODO</span>
+-   I use `_ =` to discard the result of the installation process.
+    -   Stores cell result in a variable.
+    -   I ignore the variable.
+
+## Import
+-   Python packages use `import` rather than `library()`
+```{python Import}
+import pyreadr
+```
+-   Typically use the module name as a function's prefix.
+    -   This resolves name collisions, like `dplyr` and `stats`
+```r
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+```
 
 ## Setup
 
 - We will work with a `wine` dataset that is enormous.
-  - Just to render a bit quickly, take a sample.
-  - You are welcome to work with the [full dataset](https://cd-public.github.io/courses/rmls25/dat/wine.rds)!
 
-```{r Setup}
-wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/wine.rds")))
-wine <- wine %>% drop_na(points, price)
-# performance concession
-# wall <- wine
-# wine = wall[sample(nrow(wall), 100), ]
-summary(wine)
+```{python Setup}
+url = "https://cd-public.github.io/courses/rmls25/dat/"
+rds = "w_1k.rds" # or "w_1k.rds"
+pyreadr.download_file(url + rds, rds)
+wine = pyreadr.read_r(rds)[None]
+wine
 ```
 
 # Review of Regression
