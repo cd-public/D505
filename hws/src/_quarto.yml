@@ -1,0 +1,12 @@
+project:
+  type: website
+  output-dir: ../
+
+format: 
+  html:
+    theme: superhero
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+
+execute: false

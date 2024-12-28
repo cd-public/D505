@@ -1,0 +1,100 @@
+[
+  {
+    "objectID": "homework1.html",
+    "href": "homework1.html",
+    "title": "Wines of the PNW",
+    "section": "",
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages."
+  },
+  {
+    "objectID": "homework1.html#linear-models",
+    "href": "homework1.html#linear-models",
+    "title": "Wines of the PNW",
+    "section": "Linear Models",
+    "text": "Linear Models\nFirst run a linear regression model with log of price as the dependent variable and ‘points’ and ‘cherry’ as features (variables).\n\n# TODO: hint: m1 &lt;- lm(lprice ~ points + cherry)\n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE"
+  },
+  {
+    "objectID": "homework1.html#interaction-models",
+    "href": "homework1.html#interaction-models",
+    "title": "Wines of the PNW",
+    "section": "Interaction Models",
+    "text": "Interaction Models\nAdd an interaction between ‘points’ and ‘cherry’.\n\n# TODO: hint: Check the slides.\n\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE\n\n\nThe Interaction Variable\n\nTODO: interpret the coefficient on the interaction variable. Explain as you would to a non-technical manager."
+  },
+  {
+    "objectID": "homework1.html#applications",
+    "href": "homework1.html#applications",
+    "title": "Wines of the PNW",
+    "section": "Applications",
+    "text": "Applications\nDetermine which province (Oregon, California, or New York), does the ‘cherry’ feature in the data affect price most?\n\n# TODO: \n\n\nTODO: write your line-by-line explanation of the code here, and explain your answer."
+  },
+  {
+    "objectID": "homework1.html#on-accuracy",
+    "href": "homework1.html#on-accuracy",
+    "title": "Wines of the PNW",
+    "section": "On Accuracy",
+    "text": "On Accuracy\nImagine a model to distinguish New York wines from those in California and Oregon. After a few days of work, you take some measurements and note: “I’ve achieved 91% accuracy on my model!”\nShould you be impressed? Why or why not?\n\n# TODO: Use simple descriptive statistics from the data to justify your answer.\n\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "homework1.html#on-ethics",
+    "href": "homework1.html#on-ethics",
+    "title": "Wines of the PNW",
+    "section": "On Ethics",
+    "text": "On Ethics\nWhy is understanding this vignette important to use machine learning in an ethical manner?\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "homework1.html#pts",
+    "href": "homework1.html#pts",
+    "title": "Wines of the PNW",
+    "section": "(3pts)",
+    "text": "(3pts)\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html",
+    "href": "wine_of_pnw.html",
+    "title": "Wines of the PNW",
+    "section": "",
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages."
+  },
+  {
+    "objectID": "wine_of_pnw.html#linear-models",
+    "href": "wine_of_pnw.html#linear-models",
+    "title": "Wines of the PNW",
+    "section": "Linear Models",
+    "text": "Linear Models\nFirst run a linear regression model with log of price as the dependent variable and ‘points’ and ‘cherry’ as features (variables).\n\n# TODO: hint: m1 &lt;- lm(lprice ~ points + cherry)\n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE"
+  },
+  {
+    "objectID": "wine_of_pnw.html#interaction-models",
+    "href": "wine_of_pnw.html#interaction-models",
+    "title": "Wines of the PNW",
+    "section": "Interaction Models",
+    "text": "Interaction Models\nAdd an interaction between ‘points’ and ‘cherry’.\n\n# TODO: hint: Check the slides.\n\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE\n\n\nThe Interaction Variable\n\nTODO: interpret the coefficient on the interaction variable. Explain as you would to a non-technical manager."
+  },
+  {
+    "objectID": "wine_of_pnw.html#applications",
+    "href": "wine_of_pnw.html#applications",
+    "title": "Wines of the PNW",
+    "section": "Applications",
+    "text": "Applications\nDetermine which province (Oregon, California, or New York), does the ‘cherry’ feature in the data affect price most?\n\n# TODO: \n\n\nTODO: write your line-by-line explanation of the code here, and explain your answer."
+  },
+  {
+    "objectID": "wine_of_pnw.html#on-accuracy",
+    "href": "wine_of_pnw.html#on-accuracy",
+    "title": "Wines of the PNW",
+    "section": "On Accuracy",
+    "text": "On Accuracy\nImagine a model to distinguish New York wines from those in California and Oregon. After a few days of work, you take some measurements and note: “I’ve achieved 91% accuracy on my model!”\nShould you be impressed? Why or why not?\n\n# TODO: Use simple descriptive statistics from the data to justify your answer.\n\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html#on-ethics",
+    "href": "wine_of_pnw.html#on-ethics",
+    "title": "Wines of the PNW",
+    "section": "On Ethics",
+    "text": "On Ethics\nWhy is understanding this vignette important to use machine learning in an ethical manner?\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html#pts",
+    "href": "wine_of_pnw.html#pts",
+    "title": "Wines of the PNW",
+    "section": "(3pts)",
+    "text": "(3pts)\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nTODO: describe your reasoning here"
+  }
+]
