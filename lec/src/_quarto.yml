@@ -11,3 +11,7 @@ format:
         width: 1050
         height: 700
 
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render

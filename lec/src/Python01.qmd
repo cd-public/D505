@@ -5,433 +5,388 @@ author: "Calvin"
   
 jupyter: python3
 
+format: 
+    revealjs: 
+        drop:
+            engine: pyodide
+            
+revealjs-plugins:
+  - drop
+
 execute:
     echo: true
+    cache: true
     freeze: true  # never re-render during project render
 ---
 
-
 ## Agenda
 
-1. Python Overview
-2. Review of Regression
-3. Classification
-4. Basic Feature Engineering
+1.  Python Overview
+2.  Review of Regression
+3.  Classification
+4.  Basic Feature Engineering
 
 ## Quarto
 
 -   I switch from a R backend to a Python backend.
 -   I add the following below my title in my .qmd header:
-```
+    -   `jupyter: python3`
+
+```yml         
+title: "Machine Learning in Python"
+subtitle: "Applied Machine Learning"
+author: "Calvin"
+  
 jupyter: python3
 ```
-
-
 
 ## Pip
 
 -   In Python, we can typically install packages via `pip`
--   It is much typical to use `pip` at commandline.
-```bash
+-   It is more typical to use `pip` at commandline.
+
+``` bash
 python -m pip install sampleproject
 ```
--   Here is a "clean" way to do so from within the Python
+
+-   Here is a 'clean' way to do so from within the Python
+
 ```{python Pip}
 import subprocess  # A base package we need to install other packages
 import sys         # A base package we need to install other packages
 install = lambda package : subprocess.check_call([sys.executable, 
-                                                  "-m", 
-                                                  "pip", 
-                                                  "install", 
+                                                  '-m', 
+                                                  'pip', 
+                                                  'install', 
                                                   package])
 ```
 
-
 ## Packages
 
--   I'll build a list of packages at install them via a loop.
+-   I'll build a list of packages then install them via a loop.
+
 ```{python Packages}
-packages = ["pyreadr"]
+python_data_stack = ["numpy", "pandas", "matplotlib", "seaborn"]
+r_data_stack = ['pyreadr', 'statsmodels']
+packages = python_data_stack + r_data_stack + ["scikit-learn"]
 
 _ = [install(package) for package in packages]
 ```
+
 -   I use `_ =` to discard the result of the installation process.
     -   Stores cell result in a variable.
     -   I ignore the variable.
 
 ## Import
+
 -   Python packages use `import` rather than `library()`
+-   Python base data stack
 ```{python Import}
-import pyreadr
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 ```
+-   R & statistics
+```{python R}
+import pyreadr
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+```
+
+## ML Library
+-   There are 3.5 Python ML libraries that matter
+    -   Scikit-learn, mainline ML
+    -   Torch, deep learning
+    -   Tensorflow, deep learning
+    -   PySpark MLlib, MLOps
+```{python scikit}
+# Common to include parts of, not all of, sklearn
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+```
+
+## Many packages
+-   There's a lot of imports here, we could cut back but...
+-   We would typical use only `sklearn` not `stats_models`
+    -   SM=statisical learning, SK=machine learning
+    -   Use SM for equivalence with R.
 -   Typically use the module name as a function's prefix.
     -   This resolves name collisions, like `dplyr` and `stats`
-```r
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-```
+
+    ``` r
+    ✖ dplyr::filter() masks stats::filter()
+    ✖ dplyr::lag()    masks stats::lag()
+    ```
 
 ## Setup
 
-- We will work with a `wine` dataset that is enormous.
+-   We will use `pyreadr` to read in an R dataset.
+    -   This is atypical but not difficult.
 
 ```{python Setup}
-url = "https://cd-public.github.io/courses/rmls25/dat/"
-rds = "w_1k.rds" # or "w_1k.rds"
-pyreadr.download_file(url + rds, rds)
-wine = pyreadr.read_r(rds)[None]
-wine
+url = 'https://cd-public.github.io/courses/rmls25/dat/'
+rds = 'wine.rds'
+pyreadr.download_file(url + rds, rds) 
+wine = pyreadr.read_r(rds)[None]      
+wine.dropna(subset=['points','price'])
+str(wine.info()) # string for slide formatting
 ```
 
 # Review of Regression
 
 ## Single Variable
 
-- Pick the poshest province.
-```{r Single Variable}
-wine <- wine %>%
-  mutate(bordeaux = (province == "Bordeaux"))
-wine <- wine %>% drop_na(bordeaux)
-top_n(wine, 10, bordeaux)
+-   Pick the poshest province.
+
+```{python Single Variable}
+wine['bordeaux'] = wine['province'] == 'Bordeaux'
+wine.head(2)
 ```
 
 ## Regress
-- Take a quick regression model over the wine.
-```{r Regress}
-m1 <- lm(price ~ points, data = wine)
-get_regression_table(m1)
-```
-## Let's draw it
 
-```{r Lets draw it 1}
-#| echo: false
-wine %>%
-  mutate(m1 = predict(m1)) %>%
-  ggplot() +
-  geom_smooth(aes(points, price)) +
-  geom_line(aes(points, m1), size = 2, color = "orange") +
-  labs(
-    title = "Regression of Price on Points",
-    x = "Points", y = "Price"
-  )
+-   Take a quick regression model over the wine.
+
+```{python Regress}
+m1 = sm.OLS(wine['points'], wine['price']).fit()
+m1.summary()
 ```
 
-## Multiple regression
+## Sklearn
 
-```{r Multiple regression}
-m2 <- lm(price ~ points + bordeaux, data = wine)
-get_regression_table(m2)
+-   I'm much fonder of `sklearn` for this sort of thing.
+
+```{python Sklearn}
+s1 = LinearRegression().fit(wine[['points']],wine['price'])
+f'Intercept: {s1.intercept_}, Coefficients: {s1.coef_}'
 ```
 
 ## Let's draw it
 
-```{r Lets draw it 2}
-#| echo: false
-wine %>%
-  mutate(m2 = predict(m2)) %>%
-  ggplot() +
-  geom_smooth(aes(points, price)) +
-  geom_line(aes(x = points, y = m2, color = bordeaux), size = 2) +
-  labs(
-    title = "Multiple Regression of Price on Points and Bordeaux",
-    x = "Points", y = "Price"
-  )
-```
-
-## How about with an interaction?
-
-```{r Interaction}
-m3 <- lm(price ~ points * bordeaux, data = wine)
-get_regression_table(m3)
-```
-
-## Let's draw it
-```{r Lets draw it 3}
-#| echo: false
-wine %>%
-  mutate(m3 = predict(m3)) %>%
-  ggplot() +
-  geom_smooth(aes(points, price)) +
-  geom_line(aes(x = points, y = m3, color = bordeaux), size = 2) +
-  labs(
-    title = "Interaction Model: Price on Points and Bordeaux",
-    x = "Points", y = "Price"
-  )
-```
-
-
-## Model diagnostics 
-
-```{r Diagnostics}
-get_regression_summaries(m1)
-get_regression_summaries(m2)
-get_regression_summaries(m3)
-```
-
-# Moving to an ML framework
-
-## Split sample using Caret
-
-```{r Caret}
-set.seed(505)
-train_index <- createDataPartition(wine$price, times = 1, p = 0.8, list = FALSE)
-train <- wine[train_index, ]
-test <- wine[-train_index, ]
-head(test)
-```
-
-## Compare RMSE across models
-- Retrain on models on the training set
-```{r Models} 
-ms <- list(
-  lm(price ~ points, data = train),
-  lm(price ~ points + bordeaux, data = train),
-  lm(price ~ points * bordeaux, data = train)
-)
-```
-- Test them all under the same conditions.
-
-```{r RMSE}
-map(ms, function(m) {
-  get_regression_points(m, newdata = test) %>%
-    drop_na(residual) %>%
-    mutate(sq_residuals = residual^2) %>%
-    summarize(rmse = sqrt(mean(sq_residuals))) %>%
-    pluck("rmse")
-}) %>% unlist()
-```
-<!--
-## Compare RMSE across models
-
-```r
-get_regression_points(lm(price~points, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-```r
-get_regression_points(lm(price~points+bordeaux, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-
-```r
-get_regression_points(lm(price~points*bordeaux, data = train), newdata = test) %>%   
-  drop_na(residual) %>%  mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
--->
-## Group Exercise (30m)
-
-1. Load the wine data set
-1. Visualize the relationship of points and price
-1. **Bonus:** Color the observations based on whether the wine is from Bordeaux 
-1. **Bonus+:** Include regression lines
-1. **Bonus++:** Pick a non-Bordeaux category.
-
-<!--
-## Wine
-
-- Use the full `wine` dataset.
-```r
-wine <- wall %>% 
-  mutate(bordeaux=(province=="Bordeaux")) %>%
-  drop_na(points,price,bordeaux)
-```
--->
-
-## Plot
-- Points vs. price.
-```{r Naive Plot}
-wine %>%
-  ggplot(aes(x = points, y = price)) +
-  geom_smooth()
-```
-## Bonus
-- Color the Bordeaux region.
-```{r Bonus1}
-wine %>%
-  ggplot(aes(x = points, y = price, color = bordeaux)) +
-  geom_smooth()
-```
-## Bonus+
-- Include regression lines
-```{r Bonus2}
-wine %>%
-  mutate(m = predict(lm(price ~ points, data = wine))) %>%
-  ggplot() +
-  geom_smooth(aes(x = points, y = price, color = bordeaux)) +
-  geom_line(aes(x = points, y = m), colour = "magenta")
-```
-
-## Bonus++
-- Let's look at "reserve".
-```{r Bonus3}
-wine %>%
-  mutate(reserve = grepl("Reserve", designation)) %>%
-  ggplot(aes(x = points, y = price, color = reserve)) +
-  geom_smooth()
-```
-## Bonus#
-- Anglophones to Francophiles.
-```{r Bonus4}
-wine %>%
-  mutate(reservæ = grepl("Reserve", designation, ignore.case = TRUE) |
-    grepl("Reserva", designation, ignore.case = TRUE)) %>%
-  ggplot(aes(x = points, y = price, color = reservæ)) +
-  geom_smooth()
-```
-
-## RჂservæ
-- Cross the Alps.
-```{r Bonus5}
-wine %>%
-  mutate(rჂservæ = grepl("Reserve|Reserva|Riserva", designation, ignore.case = TRUE)) %>%
-  ggplot(aes(x = points, y = price, color = rჂservæ)) +
-  geom_smooth()
-```
-
-
-
-# Dinner break 
 :::: {.columns}
 
-::: {.column width="50%"}
-- On "rჂservæ"
-  - Ie or Iota (asomtavruli Ⴢ, nuskhuri ⴢ, mkhedruli ჲ, mtavruli Ჲ) is the 15th letter of the three [Georgian scripts](https://en.wikipedia.org/wiki/Georgian_scripts)
+::: {.column width='50%'}
+-   Python ggplot is `plotnine`
+-   I prefer Seaborn (`sns`)
+-   Also: `matplotlib`
+-   Also: `plotly`
 :::
 
-::: {.column width="50%"}
-![](images/nutcracker.png)
+::: {.column width='50%'}
+```{python Lets draw it 1}
+sns.lmplot(x='points', y='price', 
+           data=wine, scatter=True, 
+           x_bins=range(80,101))
+```
 :::
 
 ::::
 
+## Multiple regression
 
-# Classification and Ethics 
+-   We can literally use the exact same formula in `smf`
+-   I am unaccustomed to doing multiple regressions without interaction.
+    -   Moving on.
+
+```{python Interaction}
+m2 = smf.ols('price ~ points + bordeaux', data=wine).fit()
+m2.summary()
+```
+
+## How about with an interaction?
+
+```{python Interaction}
+m3 = smf.ols('price ~ points * bordeaux', data=wine).fit()
+m3.summary()
+```
+
+## Sklearinteraction
+
+-   `sklearn` defaults to multiple regression.
+
+```{python Interaction}
+wine['points_bordeaux'] = wine['points'] * wine['bordeaux']
+
+s3 = LinearRegression().fit(wine[['points','bordeaux']],
+                            wine['price'])
+f'Intercept: {s3.intercept_}, Coefficients: {s3.coef_}'
+```
+
+## Let's draw it
+
+```{python Lets draw it 3}
+sns.lmplot(x='points', y='price', 
+           data=wine, scatter=True, 
+           x_bins=range(80,101), hue='bordeaux')
+```
+
+# Moving to an ML framework
+
+## Split sample using Sklearn
+-   Vs R, with a proliferation of libraries, Python ML is concentrated.
+-   There are a few main libraries, `Sklearn` the first and most popular
+-   So modelling and partitioning are all in `sklearn`, vs `stats` and `caret`
+
+```{python Split}
+random_seed = 505
+train, test = train_test_split(wine, random_state=random_seed)
+print(test.head())
+```
+
+## Compare RMSE across models
+
+-   Retrain the models on the training set only
+
+```{python Models}
+formulas = ['price ~ points', 
+            'price ~ points + bordeaux', 
+            'price ~ points * bordeaux']
+ms = [smf.ols(f, data=train).fit() for f in formulas]
+```
+
+-   Test them all under the same conditions.
+
+```{python RMSE}
+def rmse(m):
+  residuals_sq = (test['price'] - m.predict(test)) ** 2
+  mse = np.mean(residuals_sq)
+  return mse ** .5
+
+[rmse(m) for m in ms]
+```
+
+## Exercise Problems
+
+-   *Bonus++. Pick a non-Bordeaux category.*
+    -   We write a quick reserve-checker and apply it.
+    -   Basically Python wasn't told all the data was textual
+        -   Use `str` and `lower`
+    -   Then use Pythonic `in` with a list of names
+-   `apply` is like `mutate`, in a way.
+
+```{python Bonus}
+is_reserve = lambda x: str(x).lower() in ['reserve','reserva','riserva']
+wine['reserve'] = wine['designation'].apply(is_reserve)
+```
+
+## via Seaborn
+
+```{python Poly}
+sns.lmplot(wine, x='points', y='price', x_bins=range(80,101), hue='reserve',
+           x_estimator=np.mean, order=2) # polynomail regression, why not
+```
+
+# Classification and Ethics
 
 ## The math of it...
 
-- Suppose I'm trying to predict sex based on height.
-  - Don't do this in real life (obviously).
-- We start by 
-  - defining the outcome and predictors, and...
-  - creating training and test data.
+-   This problem used a R library to get data.
+-   That R library is open source, 
+    -   It has reasonable documentation, and
+    -   It's GitHub is linked from documentation.
+-   I spent 30 seconds on a search engine to find it.
 
 ## Partition our Data
+-   The `.rda` file is at this url:
+    -   [https://github.com/rafalab/dslabs/blob/master/data/heights.rda](https://github.com/rafalab/dslabs/blob/master/data/heights.rda){style="font-size:smaller"}
+    -   Change `blob` to `raw` to [download directly](https://github.com/rafalab/dslabs/raw/master/data/heights.rda).
 
-```{r Partition}
-data(heights) # from library(dslabs)
-y <- heights$sex
-x <- heights$height
-set.seed(505)
-test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
-test_set <- heights[test_index, ]
-train_set <- heights[-test_index, ]
-summary(heights)
+```{python Partition}
+url = 'https://github.com/rafalab/dslabs/raw/master/data/'
+rds = 'heights.rda'
+pyreadr.download_file(url + rds, rds) 
+heights = pyreadr.read_r(rds)['heights']      
+random_seed = 505
+train, test = train_test_split(heights, random_state=random_seed)
 ```
 
 Note: this vignette is adapted from [this book](https://rafalab.github.io/dsbook/introduction-to-machine-learning.html)
 
 ## Guessing
-
-- Let’s start by developing the simplest possible machine algorithm: guessing the outcome.
-```{r Guessing}
-y_hat <- sample(c("Male", "Female"), length(test_index), replace = TRUE)
+-   Let’s start by developing the simplest possible machine algorithm: guessing the outcome.
+```{python Guessing}
+y_hat = np.random.choice(['Male', 'Female'], len(test))
 ```
 Recall:
 
 >[Y hat (written ŷ ) is the predicted value of y (the dependent variable) in a regression equation. It can also be considered to be the average value of the response variable.](https://www.statisticshowto.com/y-hat-definition/)
 
 ## Accuracy
-- The overall accuracy is simply defined as the overall proportion that is predicted correctly:
-```{r Accuracy}
-mean(y_hat == test_set$sex)
+-   The overall accuracy is simply defined as the overall proportion that is predicted correctly:
+```{python Accuracy}
+np.mean(y_hat == test['sex'])
 ```
-- What would we have expected the accuracy to be?
-  - What much would we have expected accuracy to deviate from that expectionation?
 
+-   What would we have expected the accuracy to be?
+    -   What much would we have expected accuracy to deviate from that expectionation?
 
 ## Let's do better...
 
-```{r Better}
-summary <- heights %>%
-  group_by(sex) %>%
-  summarize(mean(height), sd(height))
-summary
+```{python Better}
+hs = heights.groupby('sex')['height']
+hs.std(), hs.mean()
+
 ```
 
 ## A simple predictive model
 
-- Idea: Predict `"Male"` if observation is within 2 standard deviations
+-   Idea: Predict `'Male'` if observation is within 2 standard deviations
 
-```{r Predict}
-male_mean_less_2sd <- summary[2, ]["mean(height)"] - 2 * summary[2, ]["sd(height)"]
+```{python Predict}
+male_mean_less_2sd = hs.mean()['Male'] - 2*hs.std()['Male']
 
-y_hat <- ifelse(x > male_mean_less_2sd, "Male", "Female") %>%
-  factor(levels = levels(test_set$sex))
+y_hat = heights['height'].apply(lambda x : 'Male' if x > male_mean_less_2sd else 'Female')
 
-c(male_mean_less_2sd, mean(y == y_hat))
+print(male_mean_less_2sd, np.mean(heights['sex'] == y_hat))
 ```
 
-- The accuracy goes up from ~0.50 to about ~0.80!!
+-   The accuracy goes up from \~0.50 to about \~0.80!!
 
 ## Let's optimize
 
-```{r Optimize}
-cutoff <- seq(61, 70)
-get_accuracy <- function(x) {
-  y_hat <- ifelse(train_set$height > x, "Male", "Female")
-  mean(y_hat == train_set$sex)
-}
-accuracy <- map(cutoff, get_accuracy)
+```{python Optimize}
+cutoff = list(range(61,71))
 
-unlist(accuracy)
-```
+def get_accuracy(y):
+  f = lambda x : 'Male' if x > y else 'Female'
+  y_hat = heights['height'].apply(f)
+  return np.mean(heights['sex'] == y_hat)
 
-- Most are much higher than 0.5!! 
+accuracy = list(map(get_accuracy, cutoff))
 
-## Let's take a gander
-- Easier for me to see it.
-```{r Gander}
-plot(cutoff, accuracy)
+accuracy
 ```
 
 ## Optimal Cutoff
 
-```{r Best cutoff}
-best_cutoff <- cutoff[which.max(accuracy)]
-best_cutoff
+```{python Gander}
+best_cutoff = cutoff[np.argmax(accuracy)]
+_ = plt.plot(cutoff, accuracy), print('Optimal cutoff is', best_cutoff)
 ```
-- Should we be cutting at an integer?
+
+-   Should we be cutting at an integer?
 
 ## Apply & Evaluate
 
-```{r Cutoff test}
-y_hat <- ifelse(test_set$height > best_cutoff, "Male", "Female")
-mean(y_hat == test_set$sex)
+```{python Cutoff test}
+test['y_hat'] = test['height'].apply(lambda x : 'Male' if x > best_cutoff else 'Female')
+print('Accuracy is', np.mean(test['sex'] == test['y_hat']))
 ```
-
 
 ## Confusion matrix
-```{r Matrix}
-table(predicted = y_hat, actual = test_set$sex) %>%
-  as.data.frame() %>%
-  ggplot(aes(x = predicted, y = actual)) +
-  geom_tile(aes(fill = Freq), color = "white") +
-  scale_fill_gradient(low = "white", high = "blue") +
-  geom_text(aes(label = Freq), vjust = "center", color = "black", size = 24) +
-  labs(title = "Confusion Matrix", x = "Predicted", y = "Actual")
+```{python Matrix}
+ConfusionMatrixDisplay.from_predictions(test['sex'], test['y_hat'])
 ```
+*Took 7 lines / 350+ characters of handwritten ggplot*
 
 ## Accuracy by sex
 
-```{r Accuracy by sex}
-test_set %>%
-  mutate(y_hat = y_hat) %>%
-  group_by(sex) %>%
-  summarize(accuracy = mean(y_hat == sex))
+```{python Accuracy by sex}
+test['acc'] = test['sex'] == test['y_hat']
+test.groupby('sex')['acc'].mean()
 ```
-&nbsp;
 
 It's raining men.
 
@@ -441,188 +396,17 @@ It's raining men.
 :::: {.columns}
 
 ::: {.column width="50%"}
-```{r Boxes}
-heights %>%
-  ggplot() +
-  geom_boxplot(aes(height, sex))
+```{python Boxes}
+_ = sns.boxplot(heights, x='sex',y='height')
 ```
 :::
 
 ::: {.column width="50%"}
-```{r Pie}
-slices <- heights %>%
-  group_by(sex) %>%
-  tally()
-pie(slices$n, labels = slices$sex)
+```{python Pie}
+_ = plt.pie(heights['sex'].value_counts(), labels=['♀','♂'])
 ```
 :::
 
 ::::
 
-
-## Moral of the story
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/l5aZJBLAu1E?si=r1vMnz5WGl7tLjlq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-## Other ethical issues
-
-:::: {.columns}
-
-::: {.column width="50%"}
-- Demographic data
-- Profit optimizing
-- Autonomous cars
-- Recommendation engines
-:::
-
-::: {.column width="50%"}
-- Fair housing
-- Criminal sentencing
-- Choice of classification model
-- Drone warfare
-:::
-
-::::
-
-## Jameson on Ethics
-<blockquote>
-Reasonable people will disagree over subtle matters of right and wrong... thus, the important part of data ethics is committing to *consider* the ethical consequences of your choices. 
-
-The difference between "regular" ethics and data ethics is that algorithms scale really easily. Thus, seemingly small decisions can have wide-ranging impact.
-</blockquote>
-
-## Calvin on Ethics
-
-> No ethical \[computation\] under capitalism
-
-- Usage of data `|` computing is ethicial `iff` it challenges rather than strengthens existing power relations.
-
-
-# Vocabulary
-
-## ML Terms
-
-**Definition of ML:** using data to find a function that minimizes prediction error.
-
-:::: {.columns}
-
-::: {.column width="50%"}
-- Features
-- Variables
-- Outcome variable
-- Regression
-:::
-
-::: {.column width="50%"}
-- RMSE
-- Classification
-- Confusion matrix
-- Split Samples
-:::
-
-::::
-
-## **Features**  
-- **Definition:** Individual measurable properties or attributes of data.  
-- **Example:** Age, income, and education level in a dataset predicting loan approval.  
-
-## **Variables**  
-- **Definition:** Data points that can change and impact predictions.  
-- **Example:** Independent variables like weather, and dependent variables like crop yield.  
-
-## **Outcome Variable**  
-- **Definition:** The target or dependent variable the model predicts.  
-- **Example:** Predicting "passed" or "failed" for a student's exam result.  
-
-## Features vs. Variables  
-- **Features:** Inputs to the model, often selected or engineered from raw data.  
-  - Example: "Average monthly income" derived from raw transaction data.  
-- **Variables:** Broader term encompassing both inputs (independent) and outputs (dependent).  
-  - Example: "House price" (dependent variable) depends on features like size and location.
-
-## **Regression**  
-- **Definition:** Statistical method to model the relationship between variables.  
-- **Example:** Linear regression predicts house prices based on size and location.  
-
-## **RMSE (Root Mean Square Error)**  
-- **Definition:** A metric to measure prediction accuracy by averaging squared errors.  
-- **Example:** Lower RMSE in predicting drug response indicates a better model fit.  
-
-## **Classification**  
-- **Definition:** Task of predicting discrete categories or labels.  
-- **Example:** Classifying emails as "spam" or "not spam."  
-
-## **Confusion Matrix**  
-- **Definition:** A table showing model performance in classification tasks.  
-- **Example:** Matrix rows show true values; columns show predicted outcomes.  
-```{r Matrix Deux}
-#| echo: false
-table(predicted = y_hat, actual = test_set$sex) %>%
-  as.data.frame() %>%
-  ggplot(aes(x = predicted, y = actual)) +
-  geom_tile(aes(fill = Freq), color = "white") +
-  scale_fill_gradient(low = "white", high = "blue") +
-  geom_text(aes(label = Freq), vjust = "center", color = "black", size = 24) +
-  labs(title = "Confusion Matrix", x = "Predicted", y = "Actual")
-```
-
-## **Split Samples**  
-- **Definition:** Dividing data into training and testing subsets for validation.  
-- **Example:** 80% training, 20% testing ensures unbiased model evaluation.  
-```r
-test_set <- heights[test_index, ]
-train_set <- heights[-test_index, ]
-```
-
-
-# Bonus Slides:<br> Precision-recall
-
-## Precision-recall tradeoff
-
-- Precision: TP / (TP + FP)
-- Recall: TP / (TP + FN)
-- Imagine I have a fraud-detection model that gives 1,000 credit card transactions each a risk score.
-
-
-
-## Precision-recall tradeoff
-
-- Imagine I have a fraud-detection model that gives 1,000 credit card transactions each a risk score.
-- The company chooses a risk score cutoff of 77 (for some reason). 
-- There are 18 transactions with risk above 77. 12 are actually fraud. 20 fraudulent transactions have risk below 77.
-- What are precision, recall, and accuracy?
-
-
-## Precision-recall Exercise
-
-- Precision: TP / (TP + FP)
-- Recall: TP / (TP + FN)
-- 1,000 credit card transactions
-- The company chooses a risk score cutoff of 77
-- There are 18 transactions with risk above 77. 
-  - 12 are actually fraud. 
-  - 20 fraudulent transactions have risk below 77.
-- <span style="color:red;font-weight:bold">TODO</span> Calculate precision, recall, and accuracy.
-
-## Solutions
-```
-- Definitions
-  - Precision: TP / (TP + FP)
-  - Recall:    TP / (TP + FN)
-- Computation
-  - Precision: 12 / (12 + 06)  ~= 67%
-  - Recall:    12 / (12 + 20)  ~= 38%
-  - Accuracy: (12 + 962)/1000  ~= 97%
-```
-
-
-## Precision-recall tradeoff
-
-- Precision: TP / (TP + FP)
-- Recall: TP / (TP + FN)
-- Image: Hands-on machine learning, A. Geron
-
-![](images/precision_recall.png)
-
-
-
+# Machine Learning in Python

@@ -5,6 +5,7 @@ author: "Jameson > Hendrik > Calvin"
   
 execute:
     echo: true
+    cache: true
     freeze: true  # never re-render during project render
 ---
 
@@ -23,10 +24,41 @@ execute:
 ## Expectations and assignments
 
 1. Homework assignments
-2. Exams
+2. Exam
 3. Modeling Project
 4. Course Policies
 5. My expectations for you
+
+## Homeworks
+
+-   Create a `.rmd` or ideally `.qmd` file.
+-   Render it to `.html`.
+-   Publish both files on GitHub Pages.
+-   Send me a link from your `@willamette.edu` address.
+-   Consider sharing on e.g. your LinkedIn, or not.
+-   You may use R *or* Python
+    -   We introduce Python in a special King Day video lecture.
+
+## Midterm Exam
+
+-   I need to measure if I'm teaching well.
+-   Low stress for you.
+
+## Modeling Project
+
+-   Three part group project.
+-   We'll get there.
+
+## Course Policies
+
+-   Don't do anything you wouldn't do in 501/502/504
+-   LLMs are approved for use in this course.
+
+## My Expectations
+
+-   Professional carriage and mutual respect are paramount.
+-   Technical skills are secondary to interpersonal.
+-   Technical skills *support* interpersonal by facilitating insight.
 
 ## About me
 - BA Mathematics, BS Computer Science (UChicago)
@@ -209,26 +241,7 @@ map(ms, function(m) {
     pluck("rmse")
 }) %>% unlist()
 ```
-<!--
-## Compare RMSE across models
 
-```r
-get_regression_points(lm(price~points, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-```r
-get_regression_points(lm(price~points+bordeaux, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-
-```r
-get_regression_points(lm(price~points*bordeaux, data = train), newdata = test) %>%   
-  drop_na(residual) %>%  mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
--->
 ## Group Exercise (30m)
 
 1. Load the wine data set
@@ -236,17 +249,6 @@ get_regression_points(lm(price~points*bordeaux, data = train), newdata = test) %
 1. **Bonus:** Color the observations based on whether the wine is from Bordeaux 
 1. **Bonus+:** Include regression lines
 1. **Bonus++:** Pick a non-Bordeaux category.
-
-<!--
-## Wine
-
-- Use the full `wine` dataset.
-```r
-wine <- wall %>% 
-  mutate(bordeaux=(province=="Bordeaux")) %>%
-  drop_na(points,price,bordeaux)
-```
--->
 
 ## Plot
 - Points vs. price.
@@ -333,7 +335,7 @@ data(heights) # from library(dslabs)
 y <- heights$sex
 x <- heights$height
 set.seed(505)
-test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
+test_index <- createDataPartition(y, list = FALSE)
 test_set <- heights[test_index, ]
 train_set <- heights[-test_index, ]
 summary(heights)
@@ -342,8 +344,7 @@ summary(heights)
 Note: this vignette is adapted from [this book](https://rafalab.github.io/dsbook/introduction-to-machine-learning.html)
 
 ## Guessing
-
-- Let’s start by developing the simplest possible machine algorithm: guessing the outcome.
+-   Let’s start by developing the simplest possible machine algorithm: guessing the outcome.
 ```{r Guessing}
 y_hat <- sample(c("Male", "Female"), length(test_index), replace = TRUE)
 ```
@@ -352,7 +353,7 @@ Recall:
 >[Y hat (written ŷ ) is the predicted value of y (the dependent variable) in a regression equation. It can also be considered to be the average value of the response variable.](https://www.statisticshowto.com/y-hat-definition/)
 
 ## Accuracy
-- The overall accuracy is simply defined as the overall proportion that is predicted correctly:
+-   The overall accuracy is simply defined as the overall proportion that is predicted correctly:
 ```{r Accuracy}
 mean(y_hat == test_set$sex)
 ```

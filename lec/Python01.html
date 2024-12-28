@@ -98,6 +98,7 @@
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-drop/drop-runtime.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
@@ -385,11 +386,8 @@
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
   
-
   <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 </head>
 <body class="quarto-dark">
   <div class="reveal">
@@ -421,39 +419,48 @@ Calvin
 <h2>Quarto</h2>
 <ul>
 <li>I switch from a R backend to a Python backend.</li>
-<li>I add the following below my title in my .qmd header:</li>
+<li>I add the following below my title in my .qmd header:
+<ul>
+<li><code>jupyter: python3</code></li>
+</ul></li>
 </ul>
-<pre><code>jupyter: python3</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Machine Learning in Python"</span></span>
+<span id="cb1-2"><a></a><span class="fu">subtitle</span><span class="kw">:</span><span class="at"> </span><span class="st">"Applied Machine Learning"</span></span>
+<span id="cb1-3"><a></a><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">"Calvin"</span></span>
+<span id="cb1-4"><a></a><span class="at">  </span></span>
+<span id="cb1-5"><a></a><span class="fu">jupyter</span><span class="kw">:</span><span class="at"> python3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="pip" class="slide level2">
 <h2>Pip</h2>
 <ul>
 <li>In Python, we can typically install packages via <code>pip</code></li>
-<li>It is much typical to use <code>pip</code> at commandline.</li>
+<li>It is more typical to use <code>pip</code> at commandline.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a></a><span class="ex">python</span> <span class="at">-m</span> pip install sampleproject</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>Here is a “clean” way to do so from within the Python</li>
+<li>Here is a ‘clean’ way to do so from within the Python</li>
 </ul>
-<div id="6175f439" class="cell" data-execution_count="1">
+<div id="77ae9743" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">import</span> subprocess  <span class="co"># A base package we need to install other packages</span></span>
 <span id="cb3-2"><a></a><span class="im">import</span> sys         <span class="co"># A base package we need to install other packages</span></span>
 <span id="cb3-3"><a></a>install <span class="op">=</span> <span class="kw">lambda</span> package : subprocess.check_call([sys.executable, </span>
-<span id="cb3-4"><a></a>                                                  <span class="st">"-m"</span>, </span>
-<span id="cb3-5"><a></a>                                                  <span class="st">"pip"</span>, </span>
-<span id="cb3-6"><a></a>                                                  <span class="st">"install"</span>, </span>
+<span id="cb3-4"><a></a>                                                  <span class="st">'-m'</span>, </span>
+<span id="cb3-5"><a></a>                                                  <span class="st">'pip'</span>, </span>
+<span id="cb3-6"><a></a>                                                  <span class="st">'install'</span>, </span>
 <span id="cb3-7"><a></a>                                                  package])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
 <ul>
-<li>I’ll build a list of packages at install them via a loop.</li>
+<li>I’ll build a list of packages then install them via a loop.</li>
 </ul>
-<div id="92413d2b" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>packages <span class="op">=</span> [<span class="st">"pyreadr"</span>]</span>
-<span id="cb4-2"><a></a></span>
-<span id="cb4-3"><a></a>_ <span class="op">=</span> [install(package) <span class="cf">for</span> package <span class="kw">in</span> packages]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="80f989bc" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>python_data_stack <span class="op">=</span> [<span class="st">"numpy"</span>, <span class="st">"pandas"</span>, <span class="st">"matplotlib"</span>, <span class="st">"seaborn"</span>]</span>
+<span id="cb4-2"><a></a>r_data_stack <span class="op">=</span> [<span class="st">'pyreadr'</span>, <span class="st">'statsmodels'</span>]</span>
+<span id="cb4-3"><a></a>packages <span class="op">=</span> python_data_stack <span class="op">+</span> r_data_stack <span class="op">+</span> [<span class="st">"scikit-learn"</span>]</span>
+<span id="cb4-4"><a></a></span>
+<span id="cb4-5"><a></a>_ <span class="op">=</span> [install(package) <span class="cf">for</span> package <span class="kw">in</span> packages]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>I use <code>_ =</code> to discard the result of the installation process.
@@ -467,31 +474,116 @@ Calvin
 <h2>Import</h2>
 <ul>
 <li>Python packages use <code>import</code> rather than <code>library()</code></li>
+<li>Python base data stack</li>
 </ul>
-<div id="46d24d7f" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="im">import</span> pyreadr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="c45197d4" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-4"><a></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
+<li>R &amp; statistics</li>
+</ul>
+<div id="1d2108fa" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="im">import</span> pyreadr</span>
+<span id="cb6-2"><a></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb6-3"><a></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ml-library" class="slide level2">
+<h2>ML Library</h2>
+<ul>
+<li>There are 3.5 Python ML libraries that matter
+<ul>
+<li>Scikit-learn, mainline ML</li>
+<li>Torch, deep learning</li>
+<li>Tensorflow, deep learning</li>
+<li>PySpark MLlib, MLOps</li>
+</ul></li>
+</ul>
+<div id="da3c4df8" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Common to include parts of, not all of, sklearn</span></span>
+<span id="cb7-2"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb7-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb7-4"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="many-packages" class="slide level2">
+<h2>Many packages</h2>
+<ul>
+<li>There’s a lot of imports here, we could cut back but…</li>
+<li>We would typical use only <code>sklearn</code> not <code>stats_models</code>
+<ul>
+<li>SM=statisical learning, SK=machine learning</li>
+<li>Use SM for equivalence with R.</li>
+</ul></li>
 <li>Typically use the module name as a function’s prefix.
 <ul>
 <li>This resolves name collisions, like <code>dplyr</code> and <code>stats</code></li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>✖ dplyr<span class="sc">::</span><span class="fu">filter</span>() masks stats<span class="sc">::</span><span class="fu">filter</span>()</span>
-<span id="cb6-2"><a></a>✖ dplyr<span class="sc">::</span><span class="fu">lag</span>()    masks stats<span class="sc">::</span><span class="fu">lag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>✖ dplyr<span class="sc">::</span><span class="fu">filter</span>() masks stats<span class="sc">::</span><span class="fu">filter</span>()</span>
+<span id="cb8-2"><a></a>✖ dplyr<span class="sc">::</span><span class="fu">lag</span>()    masks stats<span class="sc">::</span><span class="fu">lag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
 <ul>
-<li>We will work with a <code>wine</code> dataset that is enormous.</li>
+<li>We will use <code>pyreadr</code> to read in an R dataset.
+<ul>
+<li>This is atypical but not difficult.</li>
+</ul></li>
 </ul>
-<div id="e37cb98f" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>url <span class="op">=</span> <span class="st">"https://cd-public.github.io/courses/rmls25/dat/"</span></span>
-<span id="cb7-2"><a></a>rds <span class="op">=</span> <span class="st">"wine.rds"</span> <span class="co"># or "w_1k.rds"</span></span>
-<span id="cb7-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds)</span>
-<span id="cb7-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]</span>
-<span id="cb7-5"><a></a>wine</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div id="bf98a59c" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/courses/rmls25/dat/'</span></span>
+<span id="cb9-2"><a></a>rds <span class="op">=</span> <span class="st">'wine.rds'</span></span>
+<span id="cb9-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
+<span id="cb9-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]      </span>
+<span id="cb9-5"><a></a>wine.dropna(subset<span class="op">=</span>[<span class="st">'points'</span>,<span class="st">'price'</span>])</span>
+<span id="cb9-6"><a></a><span class="bu">str</span>(wine.info()) <span class="co"># string for slide formatting</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 89556 entries, 0 to 89555
+Data columns (total 15 columns):
+ #   Column                 Non-Null Count  Dtype  
+---  ------                 --------------  -----  
+ 0   id                     89556 non-null  float64
+ 1   country                89503 non-null  object 
+ 2   description            89556 non-null  object 
+ 3   designation            64356 non-null  object 
+ 4   points                 89556 non-null  float64
+ 5   price                  89556 non-null  float64
+ 6   province               89503 non-null  object 
+ 7   region_1               71712 non-null  object 
+ 8   region_2               33081 non-null  object 
+ 9   taster_name            89556 non-null  object 
+ 10  taster_twitter_handle  84953 non-null  object 
+ 11  title                  89556 non-null  object 
+ 12  variety                89556 non-null  object 
+ 13  winery                 89556 non-null  object 
+ 14  year                   89556 non-null  float64
+dtypes: float64(4), object(11)
+memory usage: 10.2+ MB</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>'None'</code></pre>
+</div>
+</div>
+</section>
+<section>
+<section id="review-of-regression" class="title-slide slide level1 center">
+<h1>Review of Regression</h1>
+
+</section>
+<section id="single-variable" class="slide level2">
+<h2>Single Variable</h2>
+<ul>
+<li>Pick the poshest province.</li>
+</ul>
+<div id="eeae1ad2" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>wine[<span class="st">'bordeaux'</span>] <span class="op">=</span> wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">'Bordeaux'</span></span>
+<span id="cb12-2"><a></a>wine.head(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -526,6 +618,7 @@ Calvin
 <th data-quarto-table-cell-role="th">variety</th>
 <th data-quarto-table-cell-role="th">winery</th>
 <th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">bordeaux</th>
 </tr>
 </thead>
 <tbody>
@@ -546,6 +639,7 @@ Calvin
 <td>Portuguese Red</td>
 <td>Quinta dos Avidagos</td>
 <td>2011.0</td>
+<td>False</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
@@ -564,404 +658,630 @@ Calvin
 <td>Pinot Gris</td>
 <td>Rainstorm</td>
 <td>2013.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>3.0</td>
-<td>US</td>
-<td>Pineapple rind, lemon pith and orange blossom ...</td>
-<td>Reserve Late Harvest</td>
-<td>87.0</td>
-<td>13.0</td>
-<td>Michigan</td>
-<td>Lake Michigan Shore</td>
-<td>NaN</td>
-<td>Alexander Peartree</td>
-<td>NaN</td>
-<td>St. Julian 2013 Reserve Late Harvest Riesling ...</td>
-<td>Riesling</td>
-<td>St. Julian</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>4.0</td>
-<td>US</td>
-<td>Much like the regular bottling from 2012, this...</td>
-<td>Vintner's Reserve Wild Child Block</td>
-<td>87.0</td>
-<td>65.0</td>
-<td>Oregon</td>
-<td>Willamette Valley</td>
-<td>Willamette Valley</td>
-<td>Paul Gregutt</td>
-<td>@paulgwine</td>
-<td>Sweet Cheeks 2012 Vintner's Reserve Wild Child...</td>
-<td>Pinot Noir</td>
-<td>Sweet Cheeks</td>
-<td>2012.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>5.0</td>
-<td>Spain</td>
-<td>Blackberry and raspberry aromas show a typical...</td>
-<td>Ars In Vitro</td>
-<td>87.0</td>
-<td>15.0</td>
-<td>Northern Spain</td>
-<td>Navarra</td>
-<td>NaN</td>
-<td>Michael Schachner</td>
-<td>@wineschach</td>
-<td>Tandem 2011 Ars In Vitro Tempranillo-Merlot (N...</td>
-<td>Tempranillo-Merlot</td>
-<td>Tandem</td>
-<td>2011.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89551</td>
-<td>129966.0</td>
-<td>Germany</td>
-<td>Notes of honeysuckle and cantaloupe sweeten th...</td>
-<td>Brauneberger Juffer-Sonnenuhr Spätlese</td>
-<td>90.0</td>
-<td>28.0</td>
-<td>Mosel</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>Anna Lee C. Iijima</td>
-<td>NaN</td>
-<td>Dr. H. Thanisch (Erben Müller-Burggraef) 2013 ...</td>
-<td>Riesling</td>
-<td>Dr. H. Thanisch (Erben Müller-Burggraef)</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">89552</td>
-<td>129967.0</td>
-<td>US</td>
-<td>Citation is given as much as a decade of bottl...</td>
-<td>NaN</td>
-<td>90.0</td>
-<td>75.0</td>
-<td>Oregon</td>
-<td>Oregon</td>
-<td>Oregon Other</td>
-<td>Paul Gregutt</td>
-<td>@paulgwine</td>
-<td>Citation 2004 Pinot Noir (Oregon)</td>
-<td>Pinot Noir</td>
-<td>Citation</td>
-<td>2004.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89553</td>
-<td>129968.0</td>
-<td>France</td>
-<td>Well-drained gravel soil gives this wine its c...</td>
-<td>Kritt</td>
-<td>90.0</td>
-<td>30.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Gresser 2013 Kritt Gewurztraminer (Als...</td>
-<td>Gewürztraminer</td>
-<td>Domaine Gresser</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">89554</td>
-<td>129969.0</td>
-<td>France</td>
-<td>A dry style of Pinot Gris, this is crisp with ...</td>
-<td>NaN</td>
-<td>90.0</td>
-<td>32.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Marcel Deiss 2012 Pinot Gris (Alsace)</td>
-<td>Pinot Gris</td>
-<td>Domaine Marcel Deiss</td>
-<td>2012.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89555</td>
-<td>129970.0</td>
-<td>France</td>
-<td>Big, rich and off-dry, this is powered by inte...</td>
-<td>Lieu-dit Harth Cuvée Caroline</td>
-<td>90.0</td>
-<td>21.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Schoffit 2012 Lieu-dit Harth Cuvée Car...</td>
-<td>Gewürztraminer</td>
-<td>Domaine Schoffit</td>
-<td>2012.0</td>
+<td>False</td>
 </tr>
 </tbody>
 </table>
 
-<p>89556 rows × 15 columns</p>
 </div>
 </div>
 </div>
-</section>
-<section>
-<section id="review-of-regression" class="title-slide slide level1 center">
-<h1>Review of Regression</h1>
-
-</section>
-<section id="single-variable" class="slide level2">
-<h2>Single Variable</h2>
-<ul>
-<li>Pick the poshest province.</li>
-</ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource {r Single Variable} number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a></a>wine &lt;- wine %&gt;%</span>
-<span id="cb8-2"><a></a>  mutate(bordeaux = (province == "Bordeaux"))</span>
-<span id="cb8-3"><a></a>wine &lt;- wine %&gt;% drop_na(bordeaux)</span>
-<span id="cb8-4"><a></a>top_n(wine, 10, bordeaux)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="regress" class="slide level2">
 <h2>Regress</h2>
 <ul>
 <li>Take a quick regression model over the wine.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource {r Regress} number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a></a>m1 &lt;- lm(price ~ points, data = wine)</span>
-<span id="cb9-2"><a></a>get_regression_table(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="e480d6a6" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>m1 <span class="op">=</span> sm.OLS(wine[<span class="st">'points'</span>], wine[<span class="st">'price'</span>]).fit()</span>
+<span id="cb13-2"><a></a>m1.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>points</td>
+<td data-quarto-table-cell-role="th">R-squared (uncentered):</td>
+<td>0.414</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared (uncentered):</td>
+<td>0.414</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>6.331e+04</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Fri, 27 Dec 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>01:13:50</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-5.0481e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>89556</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>1.010e+06</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>89555</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>1.010e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>1</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">price</td>
+<td>1.0169</td>
+<td>0.004</td>
+<td>251.623</td>
+<td>0.000</td>
+<td>1.009</td>
+<td>1.025</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>199847.674</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>0.598</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.000</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>3451086699.000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>-20.492</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>963.819</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] R² is computed without centering (uncentered) since the model does not contain a constant.<br>[2] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</div>
+</div>
+</section>
+<section id="sklearn" class="slide level2">
+<h2>Sklearn</h2>
+<ul>
+<li>I’m much fonder of <code>sklearn</code> for this sort of thing.</li>
+</ul>
+<div id="091fe4ed" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>s1 <span class="op">=</span> LinearRegression().fit(wine[[<span class="st">'points'</span>]],wine[<span class="st">'price'</span>])</span>
+<span id="cb14-2"><a></a><span class="ss">f'Intercept: </span><span class="sc">{</span>s1<span class="sc">.</span>intercept_<span class="sc">}</span><span class="ss">, Coefficients: </span><span class="sc">{</span>s1<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>'Intercept: -489.2508038352233, Coefficients: [5.92019824]'</code></pre>
+</div>
+</div>
 </section>
 <section id="lets-draw-it" class="slide level2">
 <h2>Let’s draw it</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource {r Lets draw it 1} number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a></a>#| echo: false</span>
-<span id="cb10-2"><a></a>wine %&gt;%</span>
-<span id="cb10-3"><a></a>  mutate(m1 = predict(m1)) %&gt;%</span>
-<span id="cb10-4"><a></a>  ggplot() +</span>
-<span id="cb10-5"><a></a>  geom_smooth(aes(points, price)) +</span>
-<span id="cb10-6"><a></a>  geom_line(aes(points, m1), size = 2, color = "orange") +</span>
-<span id="cb10-7"><a></a>  labs(</span>
-<span id="cb10-8"><a></a>    title = "Regression of Price on Points",</span>
-<span id="cb10-9"><a></a>    x = "Points", y = "Price"</span>
-<span id="cb10-10"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Python ggplot is <code>plotnine</code></li>
+<li>I prefer Seaborn (<code>sns</code>)</li>
+<li>Also: <code>matplotlib</code></li>
+<li>Also: <code>plotly</code></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div id="44942438" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>sns.lmplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, </span>
+<span id="cb16-2"><a></a>           data<span class="op">=</span>wine, scatter<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb16-3"><a></a>           x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-11-output-1.png" width="470" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="multiple-regression" class="slide level2">
 <h2>Multiple regression</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource {r Multiple regression} number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a></a>m2 &lt;- lm(price ~ points + bordeaux, data = wine)</span>
-<span id="cb11-2"><a></a>get_regression_table(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="lets-draw-it-1" class="slide level2">
-<h2>Let’s draw it</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource {r Lets draw it 2} number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a></a>#| echo: false</span>
-<span id="cb12-2"><a></a>wine %&gt;%</span>
-<span id="cb12-3"><a></a>  mutate(m2 = predict(m2)) %&gt;%</span>
-<span id="cb12-4"><a></a>  ggplot() +</span>
-<span id="cb12-5"><a></a>  geom_smooth(aes(points, price)) +</span>
-<span id="cb12-6"><a></a>  geom_line(aes(x = points, y = m2, color = bordeaux), size = 2) +</span>
-<span id="cb12-7"><a></a>  labs(</span>
-<span id="cb12-8"><a></a>    title = "Multiple Regression of Price on Points and Bordeaux",</span>
-<span id="cb12-9"><a></a>    x = "Points", y = "Price"</span>
-<span id="cb12-10"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We can literally use the exact same formula in <code>smf</code></li>
+<li>I am unaccustomed to doing multiple regressions without interaction.
+<ul>
+<li>Moving on.</li>
+</ul></li>
+</ul>
+<div id="27474c2a" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>m2 <span class="op">=</span> smf.ols(<span class="st">'price ~ points + bordeaux'</span>, data<span class="op">=</span>wine).fit()</span>
+<span id="cb17-2"><a></a>m2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>price</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.165</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.165</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>8857.</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Fri, 27 Dec 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>01:13:56</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-4.5673e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>89556</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>9.135e+05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>89553</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>9.135e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>2</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>-491.8296</td>
+<td>3.970</td>
+<td>-123.897</td>
+<td>0.000</td>
+<td>-499.610</td>
+<td>-484.049</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bordeaux[T.True]</td>
+<td>8.7090</td>
+<td>0.661</td>
+<td>13.182</td>
+<td>0.000</td>
+<td>7.414</td>
+<td>10.004</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">points</td>
+<td>5.9451</td>
+<td>0.045</td>
+<td>132.878</td>
+<td>0.000</td>
+<td>5.857</td>
+<td>6.033</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>209113.996</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.653</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.000</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>5148121806.319</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>22.820</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>1176.693</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>2.66e+03</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br>[2] The condition number is large, 2.66e+03. This might indicate that there are<br>strong multicollinearity or other numerical problems.
+</div>
+</div>
 </section>
 <section id="how-about-with-an-interaction" class="slide level2">
 <h2>How about with an interaction?</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource {r Interaction} number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a></a>m3 &lt;- lm(price ~ points * bordeaux, data = wine)</span>
-<span id="cb13-2"><a></a>get_regression_table(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="6e27719b" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>m3 <span class="op">=</span> smf.ols(<span class="st">'price ~ points * bordeaux'</span>, data<span class="op">=</span>wine).fit()</span>
+<span id="cb18-2"><a></a>m3.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<caption>OLS Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>price</td>
+<td data-quarto-table-cell-role="th">R-squared:</td>
+<td>0.177</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>OLS</td>
+<td data-quarto-table-cell-role="th">Adj. R-squared:</td>
+<td>0.177</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>Least Squares</td>
+<td data-quarto-table-cell-role="th">F-statistic:</td>
+<td>6421.</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Fri, 27 Dec 2024</td>
+<td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>01:13:56</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-4.5609e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>89556</td>
+<td data-quarto-table-cell-role="th">AIC:</td>
+<td>9.122e+05</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>89552</td>
+<td data-quarto-table-cell-role="th">BIC:</td>
+<td>9.122e+05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>3</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">t</td>
+<td data-quarto-table-cell-role="th">P&gt;|t|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Intercept</td>
+<td>-460.8522</td>
+<td>4.034</td>
+<td>-114.233</td>
+<td>0.000</td>
+<td>-468.759</td>
+<td>-452.945</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bordeaux[T.True]</td>
+<td>-665.8277</td>
+<td>18.763</td>
+<td>-35.486</td>
+<td>0.000</td>
+<td>-702.604</td>
+<td>-629.052</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">points</td>
+<td>5.5958</td>
+<td>0.045</td>
+<td>123.063</td>
+<td>0.000</td>
+<td>5.507</td>
+<td>5.685</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">points:bordeaux[T.True]</td>
+<td>7.6585</td>
+<td>0.213</td>
+<td>35.972</td>
+<td>0.000</td>
+<td>7.241</td>
+<td>8.076</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class="simpletable caption-top" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Omnibus:</td>
+<td>207559.719</td>
+<td data-quarto-table-cell-role="th">Durbin-Watson:</td>
+<td>1.666</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Prob(Omnibus):</td>
+<td>0.000</td>
+<td data-quarto-table-cell-role="th">Jarque-Bera (JB):</td>
+<td>5054712547.121</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Skew:</td>
+<td>22.390</td>
+<td data-quarto-table-cell-role="th">Prob(JB):</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Kurtosis:</td>
+<td>1166.014</td>
+<td data-quarto-table-cell-role="th">Cond. No.</td>
+<td>1.27e+04</td>
+</tr>
+</tbody>
+</table>
+<br><br>Notes:<br>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br>[2] The condition number is large, 1.27e+04. This might indicate that there are<br>strong multicollinearity or other numerical problems.
+</div>
+</div>
 </section>
-<section id="lets-draw-it-2" class="slide level2">
+<section id="sklearinteraction" class="slide level2">
+<h2>Sklearinteraction</h2>
+<ul>
+<li><code>sklearn</code> defaults to multiple regression.</li>
+</ul>
+<div id="1d727b2f" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>wine[<span class="st">'points_bordeaux'</span>] <span class="op">=</span> wine[<span class="st">'points'</span>] <span class="op">*</span> wine[<span class="st">'bordeaux'</span>]</span>
+<span id="cb19-2"><a></a></span>
+<span id="cb19-3"><a></a>s3 <span class="op">=</span> LinearRegression().fit(wine[[<span class="st">'points'</span>,<span class="st">'bordeaux'</span>]],</span>
+<span id="cb19-4"><a></a>                            wine[<span class="st">'price'</span>])</span>
+<span id="cb19-5"><a></a><span class="ss">f'Intercept: </span><span class="sc">{</span>s3<span class="sc">.</span>intercept_<span class="sc">}</span><span class="ss">, Coefficients: </span><span class="sc">{</span>s3<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>'Intercept: -491.829643567971, Coefficients: [5.9451492  8.70900299]'</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-draw-it-1" class="slide level2">
 <h2>Let’s draw it</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource {r Lets draw it 3} number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a></a>#| echo: false</span>
-<span id="cb14-2"><a></a>wine %&gt;%</span>
-<span id="cb14-3"><a></a>  mutate(m3 = predict(m3)) %&gt;%</span>
-<span id="cb14-4"><a></a>  ggplot() +</span>
-<span id="cb14-5"><a></a>  geom_smooth(aes(points, price)) +</span>
-<span id="cb14-6"><a></a>  geom_line(aes(x = points, y = m3, color = bordeaux), size = 2) +</span>
-<span id="cb14-7"><a></a>  labs(</span>
-<span id="cb14-8"><a></a>    title = "Interaction Model: Price on Points and Bordeaux",</span>
-<span id="cb14-9"><a></a>    x = "Points", y = "Price"</span>
-<span id="cb14-10"><a></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="model-diagnostics" class="slide level2">
-<h2>Model diagnostics</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource {r Diagnostics} number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a></a>get_regression_summaries(m1)</span>
-<span id="cb15-2"><a></a>get_regression_summaries(m2)</span>
-<span id="cb15-3"><a></a>get_regression_summaries(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d418daa6" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>sns.lmplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, </span>
+<span id="cb21-2"><a></a>           data<span class="op">=</span>wine, scatter<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb21-3"><a></a>           x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>), hue<span class="op">=</span><span class="st">'bordeaux'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-15-output-1.png" width="546" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="moving-to-an-ml-framework" class="title-slide slide level1 center">
 <h1>Moving to an ML framework</h1>
 
 </section>
-<section id="split-sample-using-caret" class="slide level2">
-<h2>Split sample using Caret</h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource {r Caret} number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a></a>set.seed(505)</span>
-<span id="cb16-2"><a></a>train_index &lt;- createDataPartition(wine$price, times = 1, p = 0.8, list = FALSE)</span>
-<span id="cb16-3"><a></a>train &lt;- wine[train_index, ]</span>
-<span id="cb16-4"><a></a>test &lt;- wine[-train_index, ]</span>
-<span id="cb16-5"><a></a>head(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="split-sample-using-sklearn" class="slide level2">
+<h2>Split sample using Sklearn</h2>
+<ul>
+<li>Vs R, with a proliferation of libraries, Python ML is concentrated.</li>
+<li>There are a few main libraries, <code>Sklearn</code> the first and most popular</li>
+<li>So modelling and partitioning are all in <code>sklearn</code>, vs <code>stats</code> and <code>caret</code></li>
+</ul>
+<div id="cbd21b72" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>random_seed <span class="op">=</span> <span class="dv">505</span></span>
+<span id="cb22-2"><a></a>train, test <span class="op">=</span> train_test_split(wine, random_state<span class="op">=</span>random_seed)</span>
+<span id="cb22-3"><a></a><span class="bu">print</span>(test.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             id   country                                        description  \
+65856   95817.0        US  The appellation continues to impress with this...   
+71192  103509.0   Romania  This easy-drinking red wine has aromas of cher...   
+29519   43024.0  Portugal  A blend of Tinta Roriz and the local Jaen, thi...   
+23597   34478.0        US  This is the producer's annual unoaked version ...   
+42843   62706.0   Germany  Delicate quince and apple aromas are fringed w...   
+
+                     designation  points  price         province  \
+65856              Frank Johnson    90.0   14.0       California   
+71192                  Dreambird    86.0    7.0  Viile Timisului   
+29519       Beyra Colheita Tinto    87.0   12.0   Beira Interior   
+23597  Acero Don Miguel Vineyard    88.0   29.0       California   
+42843                        NaN    87.0   13.0            Mosel   
+
+                   region_1 region_2         taster_name  \
+65856      Dry Creek Valley   Sonoma      Virginie Boone   
+71192                   NaN      NaN        Jeff Jenssen   
+29519                   NaN      NaN          Roger Voss   
+23597  Russian River Valley   Sonoma      Virginie Boone   
+42843                   NaN      NaN  Anna Lee C. Iijima   
+
+      taster_twitter_handle  \
+65856               @vboone   
+71192        @worldwineguys   
+29519            @vossroger   
+23597               @vboone   
+42843                   NaN   
+
+                                                   title          variety  \
+65856  Wines Gone Wild 2014 Frank Johnson Sauvignon B...  Sauvignon Blanc   
+71192  Cramele Recas 2014 Dreambird Merlot (Viile Tim...           Merlot   
+29519  Rui Roboredo Madeira 2014 Beyra Colheita Tinto...   Portuguese Red   
+23597  Marimar Estate 2014 Acero Don Miguel Vineyard ...       Chardonnay   
+42843              Ulrich Langguth 2012 Riesling (Mosel)         Riesling   
+
+                     winery    year  bordeaux  points_bordeaux  
+65856       Wines Gone Wild  2014.0     False              0.0  
+71192         Cramele Recas  2014.0     False              0.0  
+29519  Rui Roboredo Madeira  2014.0     False              0.0  
+23597        Marimar Estate  2014.0     False              0.0  
+42843       Ulrich Langguth  2012.0     False              0.0  </code></pre>
+</div>
+</div>
 </section>
 <section id="compare-rmse-across-models" class="slide level2">
 <h2>Compare RMSE across models</h2>
 <ul>
-<li>Retrain on models on the training set</li>
+<li>Retrain the models on the training set only</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource {r Models} number-lines code-with-copy"><code class="sourceCode"><span id="cb17-1"><a></a>ms &lt;- list(</span>
-<span id="cb17-2"><a></a>  lm(price ~ points, data = train),</span>
-<span id="cb17-3"><a></a>  lm(price ~ points + bordeaux, data = train),</span>
-<span id="cb17-4"><a></a>  lm(price ~ points * bordeaux, data = train)</span>
-<span id="cb17-5"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2ea85b8f" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>formulas <span class="op">=</span> [<span class="st">'price ~ points'</span>, </span>
+<span id="cb24-2"><a></a>            <span class="st">'price ~ points + bordeaux'</span>, </span>
+<span id="cb24-3"><a></a>            <span class="st">'price ~ points * bordeaux'</span>]</span>
+<span id="cb24-4"><a></a>ms <span class="op">=</span> [smf.ols(f, data<span class="op">=</span>train).fit() <span class="cf">for</span> f <span class="kw">in</span> formulas]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ul>
 <li>Test them all under the same conditions.</li>
 </ul>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource {r RMSE} number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a></a>map(ms, function(m) {</span>
-<span id="cb18-2"><a></a>  get_regression_points(m, newdata = test) %&gt;%</span>
-<span id="cb18-3"><a></a>    drop_na(residual) %&gt;%</span>
-<span id="cb18-4"><a></a>    mutate(sq_residuals = residual^2) %&gt;%</span>
-<span id="cb18-5"><a></a>    summarize(rmse = sqrt(mean(sq_residuals))) %&gt;%</span>
-<span id="cb18-6"><a></a>    pluck("rmse")</span>
-<span id="cb18-7"><a></a>}) %&gt;% unlist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<!--
-## Compare RMSE across models
-
-```r
-get_regression_points(lm(price~points, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-```r
-get_regression_points(lm(price~points+bordeaux, data = train), newdata = test) %>% 
-  drop_na(residual) %>%   mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
-
-```r
-get_regression_points(lm(price~points*bordeaux, data = train), newdata = test) %>%   
-  drop_na(residual) %>%  mutate(sq_residuals = residual^2) %>% 
-  summarize(rmse = sqrt(mean(sq_residuals))) %>% pluck("rmse")
-```
--->
+<div id="451bea2a" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a><span class="kw">def</span> rmse(m):</span>
+<span id="cb25-2"><a></a>  residuals_sq <span class="op">=</span> (test[<span class="st">'price'</span>] <span class="op">-</span> m.predict(test)) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb25-3"><a></a>  mse <span class="op">=</span> np.mean(residuals_sq)</span>
+<span id="cb25-4"><a></a>  <span class="cf">return</span> mse <span class="op">**</span> <span class="fl">.5</span></span>
+<span id="cb25-5"><a></a></span>
+<span id="cb25-6"><a></a>[rmse(m) <span class="cf">for</span> m <span class="kw">in</span> ms]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>[np.float64(38.253198876742374),
+ np.float64(38.208086530739),
+ np.float64(37.80098647775707)]</code></pre>
+</div>
+</div>
 </section>
-<section id="group-exercise-30m" class="slide level2">
-<h2>Group Exercise (30m)</h2>
-<ol type="1">
-<li>Load the wine data set</li>
-<li>Visualize the relationship of points and price</li>
-<li><strong>Bonus:</strong> Color the observations based on whether the wine is from Bordeaux</li>
-<li><strong>Bonus+:</strong> Include regression lines</li>
-<li><strong>Bonus++:</strong> Pick a non-Bordeaux category.</li>
-</ol>
-<!--
-## Wine
-
-- Use the full `wine` dataset.
-```r
-wine <- wall %>% 
-  mutate(bordeaux=(province=="Bordeaux")) %>%
-  drop_na(points,price,bordeaux)
-```
--->
-</section>
-<section id="plot" class="slide level2">
-<h2>Plot</h2>
+<section id="exercise-problems" class="slide level2">
+<h2>Exercise Problems</h2>
 <ul>
-<li>Points vs.&nbsp;price.</li>
-</ul>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource {r Naive Plot} number-lines code-with-copy"><code class="sourceCode"><span id="cb19-1"><a></a>wine %&gt;%</span>
-<span id="cb19-2"><a></a>  ggplot(aes(x = points, y = price)) +</span>
-<span id="cb19-3"><a></a>  geom_smooth()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="bonus" class="slide level2">
-<h2>Bonus</h2>
+<li><em>Bonus++. Pick a non-Bordeaux category.</em>
 <ul>
-<li>Color the Bordeaux region.</li>
-</ul>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource {r Bonus1} number-lines code-with-copy"><code class="sourceCode"><span id="cb20-1"><a></a>wine %&gt;%</span>
-<span id="cb20-2"><a></a>  ggplot(aes(x = points, y = price, color = bordeaux)) +</span>
-<span id="cb20-3"><a></a>  geom_smooth()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="bonus-1" class="slide level2">
-<h2>Bonus+</h2>
+<li>We write a quick reserve-checker and apply it.</li>
+<li>Basically Python wasn’t told all the data was textual
 <ul>
-<li>Include regression lines</li>
-</ul>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource {r Bonus2} number-lines code-with-copy"><code class="sourceCode"><span id="cb21-1"><a></a>wine %&gt;%</span>
-<span id="cb21-2"><a></a>  mutate(m = predict(lm(price ~ points, data = wine))) %&gt;%</span>
-<span id="cb21-3"><a></a>  ggplot() +</span>
-<span id="cb21-4"><a></a>  geom_smooth(aes(x = points, y = price, color = bordeaux)) +</span>
-<span id="cb21-5"><a></a>  geom_line(aes(x = points, y = m), colour = "magenta")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="bonus-2" class="slide level2">
-<h2>Bonus++</h2>
-<ul>
-<li>Let’s look at “reserve”.</li>
-</ul>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource {r Bonus3} number-lines code-with-copy"><code class="sourceCode"><span id="cb22-1"><a></a>wine %&gt;%</span>
-<span id="cb22-2"><a></a>  mutate(reserve = grepl("Reserve", designation)) %&gt;%</span>
-<span id="cb22-3"><a></a>  ggplot(aes(x = points, y = price, color = reserve)) +</span>
-<span id="cb22-4"><a></a>  geom_smooth()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="bonus-3" class="slide level2">
-<h2>Bonus</h2>
-<ul>
-<li>Anglophones to Francophiles.</li>
-</ul>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource {r Bonus4} number-lines code-with-copy"><code class="sourceCode"><span id="cb23-1"><a></a>wine %&gt;%</span>
-<span id="cb23-2"><a></a>  mutate(reservæ = grepl("Reserve", designation, ignore.case = TRUE) |</span>
-<span id="cb23-3"><a></a>    grepl("Reserva", designation, ignore.case = TRUE)) %&gt;%</span>
-<span id="cb23-4"><a></a>  ggplot(aes(x = points, y = price, color = reservæ)) +</span>
-<span id="cb23-5"><a></a>  geom_smooth()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="rⴢservæ" class="slide level2">
-<h2>RჂservæ</h2>
-<ul>
-<li>Cross the Alps.</li>
-</ul>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource {r Bonus5} number-lines code-with-copy"><code class="sourceCode"><span id="cb24-1"><a></a>wine %&gt;%</span>
-<span id="cb24-2"><a></a>  mutate(rჂservæ = grepl("Reserve|Reserva|Riserva", designation, ignore.case = TRUE)) %&gt;%</span>
-<span id="cb24-3"><a></a>  ggplot(aes(x = points, y = price, color = rჂservæ)) +</span>
-<span id="cb24-4"><a></a>  geom_smooth()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section></section>
-<section id="dinner-break" class="title-slide slide level1 center">
-<h1>Dinner break</h1>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li>On “rჂservæ”
-<ul>
-<li>Ie or Iota (asomtavruli Ⴢ, nuskhuri ⴢ, mkhedruli ჲ, mtavruli Ჲ) is the 15th letter of the three <a href="https://en.wikipedia.org/wiki/Georgian_scripts">Georgian scripts</a></li>
+<li>Use <code>str</code> and <code>lower</code></li>
 </ul></li>
+<li>Then use Pythonic <code>in</code> with a list of names</li>
+</ul></li>
+<li><code>apply</code> is like <code>mutate</code>, in a way.</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<p><img data-src="images/nutcracker.png"></p>
-</div></div>
+<div id="cfcda512" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>is_reserve <span class="op">=</span> <span class="kw">lambda</span> x: <span class="bu">str</span>(x).lower() <span class="kw">in</span> [<span class="st">'reserve'</span>,<span class="st">'reserva'</span>,<span class="st">'riserva'</span>]</span>
+<span id="cb27-2"><a></a>wine[<span class="st">'reserve'</span>] <span class="op">=</span> wine[<span class="st">'designation'</span>].<span class="bu">apply</span>(is_reserve)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-
+<section id="via-seaborn" class="slide level2">
+<h2>via Seaborn</h2>
+<div id="c4e8af69" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>sns.lmplot(wine, x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>), hue<span class="op">=</span><span class="st">'reserve'</span>,</span>
+<span id="cb28-2"><a></a>           x_estimator<span class="op">=</span>np.mean, order<span class="op">=</span><span class="dv">2</span>) <span class="co"># polynomail regression, why not</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-20-output-1.png" width="548" height="470"></p>
+</figure>
+</div>
+</div>
+</div>
+</section></section>
 <section>
 <section id="classification-and-ethics" class="title-slide slide level1 center">
 <h1>Classification and Ethics</h1>
@@ -970,27 +1290,32 @@ wine <- wall %>%
 <section id="the-math-of-it" class="slide level2">
 <h2>The math of it…</h2>
 <ul>
-<li>Suppose I’m trying to predict sex based on height.
+<li>This problem used a R library to get data.</li>
+<li>That R library is open source,
 <ul>
-<li>Don’t do this in real life (obviously).</li>
+<li>It has reasonable documentation, and</li>
+<li>It’s GitHub is linked from documentation.</li>
 </ul></li>
-<li>We start by
-<ul>
-<li>defining the outcome and predictors, and…</li>
-<li>creating training and test data.</li>
-</ul></li>
+<li>I spent 30 seconds on a search engine to find it.</li>
 </ul>
 </section>
 <section id="partition-our-data" class="slide level2">
 <h2>Partition our Data</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource {r Partition} number-lines code-with-copy"><code class="sourceCode"><span id="cb25-1"><a></a>data(heights) # from library(dslabs)</span>
-<span id="cb25-2"><a></a>y &lt;- heights$sex</span>
-<span id="cb25-3"><a></a>x &lt;- heights$height</span>
-<span id="cb25-4"><a></a>set.seed(505)</span>
-<span id="cb25-5"><a></a>test_index &lt;- createDataPartition(y, times = 1, p = 0.5, list = FALSE)</span>
-<span id="cb25-6"><a></a>test_set &lt;- heights[test_index, ]</span>
-<span id="cb25-7"><a></a>train_set &lt;- heights[-test_index, ]</span>
-<span id="cb25-8"><a></a>summary(heights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The <code>.rda</code> file is at this url:
+<ul>
+<li><a href="https://github.com/rafalab/dslabs/blob/master/data/heights.rda" style="font-size:smaller">https://github.com/rafalab/dslabs/blob/master/data/heights.rda</a></li>
+<li>Change <code>blob</code> to <code>raw</code> to <a href="https://github.com/rafalab/dslabs/raw/master/data/heights.rda">download directly</a>.</li>
+</ul></li>
+</ul>
+<div id="5f70baf4" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>url <span class="op">=</span> <span class="st">'https://github.com/rafalab/dslabs/raw/master/data/'</span></span>
+<span id="cb29-2"><a></a>rds <span class="op">=</span> <span class="st">'heights.rda'</span></span>
+<span id="cb29-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
+<span id="cb29-4"><a></a>heights <span class="op">=</span> pyreadr.read_r(rds)[<span class="st">'heights'</span>]      </span>
+<span id="cb29-5"><a></a>random_seed <span class="op">=</span> <span class="dv">505</span></span>
+<span id="cb29-6"><a></a>train, test <span class="op">=</span> train_test_split(heights, random_state<span class="op">=</span>random_seed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Note: this vignette is adapted from <a href="https://rafalab.github.io/dsbook/introduction-to-machine-learning.html">this book</a></p>
 </section>
 <section id="guessing" class="slide level2">
@@ -998,7 +1323,9 @@ wine <- wall %>%
 <ul>
 <li>Let’s start by developing the simplest possible machine algorithm: guessing the outcome.</li>
 </ul>
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource {r Guessing} number-lines code-with-copy"><code class="sourceCode"><span id="cb26-1"><a></a>y_hat &lt;- sample(c("Male", "Female"), length(test_index), replace = TRUE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="ee34d70d" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>y_hat <span class="op">=</span> np.random.choice([<span class="st">'Male'</span>, <span class="st">'Female'</span>], <span class="bu">len</span>(test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Recall:</p>
 <blockquote>
 <p><a href="https://www.statisticshowto.com/y-hat-definition/">Y hat (written ŷ ) is the predicted value of y (the dependent variable) in a regression equation. It can also be considered to be the average value of the response variable.</a></p>
@@ -1009,7 +1336,12 @@ wine <- wall %>%
 <ul>
 <li>The overall accuracy is simply defined as the overall proportion that is predicted correctly:</li>
 </ul>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource {r Accuracy} number-lines code-with-copy"><code class="sourceCode"><span id="cb27-1"><a></a>mean(y_hat == test_set$sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a1545014" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>np.mean(y_hat <span class="op">==</span> test[<span class="st">'sex'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>np.float64(0.49809885931558934)</code></pre>
+</div>
+</div>
 <ul>
 <li>What would we have expected the accuracy to be?
 <ul>
@@ -1019,305 +1351,157 @@ wine <- wall %>%
 </section>
 <section id="lets-do-better" class="slide level2">
 <h2>Let’s do better…</h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource {r Better} number-lines code-with-copy"><code class="sourceCode"><span id="cb28-1"><a></a>summary &lt;- heights %&gt;%</span>
-<span id="cb28-2"><a></a>  group_by(sex) %&gt;%</span>
-<span id="cb28-3"><a></a>  summarize(mean(height), sd(height))</span>
-<span id="cb28-4"><a></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="42155306" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>hs <span class="op">=</span> heights.groupby(<span class="st">'sex'</span>)[<span class="st">'height'</span>]</span>
+<span id="cb33-2"><a></a>hs.std(), hs.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>(sex
+ Female    3.760656
+ Male      3.611024
+ Name: height, dtype: float64,
+ sex
+ Female    64.939424
+ Male      69.314755
+ Name: height, dtype: float64)</code></pre>
+</div>
+</div>
 </section>
 <section id="a-simple-predictive-model" class="slide level2">
 <h2>A simple predictive model</h2>
 <ul>
-<li>Idea: Predict <code>"Male"</code> if observation is within 2 standard deviations</li>
+<li>Idea: Predict <code>'Male'</code> if observation is within 2 standard deviations</li>
 </ul>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource {r Predict} number-lines code-with-copy"><code class="sourceCode"><span id="cb29-1"><a></a>male_mean_less_2sd &lt;- summary[2, ]["mean(height)"] - 2 * summary[2, ]["sd(height)"]</span>
-<span id="cb29-2"><a></a></span>
-<span id="cb29-3"><a></a>y_hat &lt;- ifelse(x &gt; male_mean_less_2sd, "Male", "Female") %&gt;%</span>
-<span id="cb29-4"><a></a>  factor(levels = levels(test_set$sex))</span>
-<span id="cb29-5"><a></a></span>
-<span id="cb29-6"><a></a>c(male_mean_less_2sd, mean(y == y_hat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="90371d31" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>male_mean_less_2sd <span class="op">=</span> hs.mean()[<span class="st">'Male'</span>] <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>hs.std()[<span class="st">'Male'</span>]</span>
+<span id="cb35-2"><a></a></span>
+<span id="cb35-3"><a></a>y_hat <span class="op">=</span> heights[<span class="st">'height'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x : <span class="st">'Male'</span> <span class="cf">if</span> x <span class="op">&gt;</span> male_mean_less_2sd <span class="cf">else</span> <span class="st">'Female'</span>)</span>
+<span id="cb35-4"><a></a></span>
+<span id="cb35-5"><a></a><span class="bu">print</span>(male_mean_less_2sd, np.mean(heights[<span class="st">'sex'</span>] <span class="op">==</span> y_hat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>62.09270759210095 0.7933333333333333</code></pre>
+</div>
+</div>
 <ul>
 <li>The accuracy goes up from ~0.50 to about ~0.80!!</li>
 </ul>
 </section>
 <section id="lets-optimize" class="slide level2">
 <h2>Let’s optimize</h2>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource {r Optimize} number-lines code-with-copy"><code class="sourceCode"><span id="cb30-1"><a></a>cutoff &lt;- seq(61, 70)</span>
-<span id="cb30-2"><a></a>get_accuracy &lt;- function(x) {</span>
-<span id="cb30-3"><a></a>  y_hat &lt;- ifelse(train_set$height &gt; x, "Male", "Female")</span>
-<span id="cb30-4"><a></a>  mean(y_hat == train_set$sex)</span>
-<span id="cb30-5"><a></a>}</span>
-<span id="cb30-6"><a></a>accuracy &lt;- map(cutoff, get_accuracy)</span>
-<span id="cb30-7"><a></a></span>
-<span id="cb30-8"><a></a>unlist(accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>Most are much higher than 0.5!!</li>
-</ul>
-</section>
-<section id="lets-take-a-gander" class="slide level2">
-<h2>Let’s take a gander</h2>
-<ul>
-<li>Easier for me to see it.</li>
-</ul>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource {r Gander} number-lines code-with-copy"><code class="sourceCode"><span id="cb31-1"><a></a>plot(cutoff, accuracy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0b55679c" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>cutoff <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">61</span>,<span class="dv">71</span>))</span>
+<span id="cb37-2"><a></a></span>
+<span id="cb37-3"><a></a><span class="kw">def</span> get_accuracy(y):</span>
+<span id="cb37-4"><a></a>  f <span class="op">=</span> <span class="kw">lambda</span> x : <span class="st">'Male'</span> <span class="cf">if</span> x <span class="op">&gt;</span> y <span class="cf">else</span> <span class="st">'Female'</span></span>
+<span id="cb37-5"><a></a>  y_hat <span class="op">=</span> heights[<span class="st">'height'</span>].<span class="bu">apply</span>(f)</span>
+<span id="cb37-6"><a></a>  <span class="cf">return</span> np.mean(heights[<span class="st">'sex'</span>] <span class="op">==</span> y_hat)</span>
+<span id="cb37-7"><a></a></span>
+<span id="cb37-8"><a></a>accuracy <span class="op">=</span> <span class="bu">list</span>(<span class="bu">map</span>(get_accuracy, cutoff))</span>
+<span id="cb37-9"><a></a></span>
+<span id="cb37-10"><a></a>accuracy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>[np.float64(0.7819047619047619),
+ np.float64(0.7933333333333333),
+ np.float64(0.8085714285714286),
+ np.float64(0.8266666666666667),
+ np.float64(0.8266666666666667),
+ np.float64(0.8019047619047619),
+ np.float64(0.7371428571428571),
+ np.float64(0.6819047619047619),
+ np.float64(0.5914285714285714),
+ np.float64(0.5085714285714286)]</code></pre>
+</div>
+</div>
 </section>
 <section id="optimal-cutoff" class="slide level2">
 <h2>Optimal Cutoff</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource {r Best cutoff} number-lines code-with-copy"><code class="sourceCode"><span id="cb32-1"><a></a>best_cutoff &lt;- cutoff[which.max(accuracy)]</span>
-<span id="cb32-2"><a></a>best_cutoff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a8f4f5e2" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>best_cutoff <span class="op">=</span> cutoff[np.argmax(accuracy)]</span>
+<span id="cb39-2"><a></a>_ <span class="op">=</span> plt.plot(cutoff, accuracy), <span class="bu">print</span>(<span class="st">'Optimal cutoff is'</span>, best_cutoff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal cutoff is 64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-27-output-2.png" width="802" height="411"></p>
+</figure>
+</div>
+</div>
+</div>
 <ul>
 <li>Should we be cutting at an integer?</li>
 </ul>
 </section>
 <section id="apply-evaluate" class="slide level2">
 <h2>Apply &amp; Evaluate</h2>
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource {r Cutoff test} number-lines code-with-copy"><code class="sourceCode"><span id="cb33-1"><a></a>y_hat &lt;- ifelse(test_set$height &gt; best_cutoff, "Male", "Female")</span>
-<span id="cb33-2"><a></a>mean(y_hat == test_set$sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d378b323" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>test[<span class="st">'y_hat'</span>] <span class="op">=</span> test[<span class="st">'height'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x : <span class="st">'Male'</span> <span class="cf">if</span> x <span class="op">&gt;</span> best_cutoff <span class="cf">else</span> <span class="st">'Female'</span>)</span>
+<span id="cb41-2"><a></a><span class="bu">print</span>(<span class="st">'Accuracy is'</span>, np.mean(test[<span class="st">'sex'</span>] <span class="op">==</span> test[<span class="st">'y_hat'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Accuracy is 0.8365019011406845</code></pre>
+</div>
+</div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource {r Matrix} number-lines code-with-copy"><code class="sourceCode"><span id="cb34-1"><a></a>table(predicted = y_hat, actual = test_set$sex) %&gt;%</span>
-<span id="cb34-2"><a></a>  as.data.frame() %&gt;%</span>
-<span id="cb34-3"><a></a>  ggplot(aes(x = predicted, y = actual)) +</span>
-<span id="cb34-4"><a></a>  geom_tile(aes(fill = Freq), color = "white") +</span>
-<span id="cb34-5"><a></a>  scale_fill_gradient(low = "white", high = "blue") +</span>
-<span id="cb34-6"><a></a>  geom_text(aes(label = Freq), vjust = "center", color = "black", size = 24) +</span>
-<span id="cb34-7"><a></a>  labs(title = "Confusion Matrix", x = "Predicted", y = "Actual")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="60438092" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a></a>ConfusionMatrixDisplay.from_predictions(test[<span class="st">'sex'</span>], test[<span class="st">'y_hat'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-29-output-1.png" width="555" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>Took 7 lines / 350+ characters of handwritten ggplot</em></p>
 </section>
 <section id="accuracy-by-sex" class="slide level2">
 <h2>Accuracy by sex</h2>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource {r Accuracy by sex} number-lines code-with-copy"><code class="sourceCode"><span id="cb35-1"><a></a>test_set %&gt;%</span>
-<span id="cb35-2"><a></a>  mutate(y_hat = y_hat) %&gt;%</span>
-<span id="cb35-3"><a></a>  group_by(sex) %&gt;%</span>
-<span id="cb35-4"><a></a>  summarize(accuracy = mean(y_hat == sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>&nbsp;</p>
+<div id="cd5cfbcd" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>test[<span class="st">'acc'</span>] <span class="op">=</span> test[<span class="st">'sex'</span>] <span class="op">==</span> test[<span class="st">'y_hat'</span>]</span>
+<span id="cb44-2"><a></a>test.groupby(<span class="st">'sex'</span>)[<span class="st">'acc'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>sex
+Female    0.423077
+Male      0.938389
+Name: acc, dtype: float64</code></pre>
+</div>
+</div>
 <p>It’s raining men.</p>
 </section>
 <section id="debrief" class="slide level2">
 <h2>Debrief</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource {r Boxes} number-lines code-with-copy"><code class="sourceCode"><span id="cb36-1"><a></a>heights %&gt;%</span>
-<span id="cb36-2"><a></a>  ggplot() +</span>
-<span id="cb36-3"><a></a>  geom_boxplot(aes(height, sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f5198ce0" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a>_ <span class="op">=</span> sns.boxplot(heights, x<span class="op">=</span><span class="st">'sex'</span>,y<span class="op">=</span><span class="st">'height'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-31-output-1.png" width="808" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource {r Pie} number-lines code-with-copy"><code class="sourceCode"><span id="cb37-1"><a></a>slices &lt;- heights %&gt;%</span>
-<span id="cb37-2"><a></a>  group_by(sex) %&gt;%</span>
-<span id="cb37-3"><a></a>  tally()</span>
-<span id="cb37-4"><a></a>pie(slices$n, labels = slices$sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d6f6a10b" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a></a>_ <span class="op">=</span> plt.pie(heights[<span class="st">'sex'</span>].value_counts(), labels<span class="op">=</span>[<span class="st">'♀'</span>,<span class="st">'♂'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python01_files/figure-revealjs/cell-32-output-1.png" width="389" height="389"></p>
+</figure>
+</div>
+</div>
+</div>
 </div></div>
-</section>
-<section id="moral-of-the-story" class="slide level2">
-<h2>Moral of the story</h2>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/l5aZJBLAu1E?si=r1vMnz5WGl7tLjlq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
-</section>
-<section id="other-ethical-issues" class="slide level2">
-<h2>Other ethical issues</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li>Demographic data</li>
-<li>Profit optimizing</li>
-<li>Autonomous cars</li>
-<li>Recommendation engines</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>Fair housing</li>
-<li>Criminal sentencing</li>
-<li>Choice of classification model</li>
-<li>Drone warfare</li>
-</ul>
-</div></div>
-</section>
-<section id="jameson-on-ethics" class="slide level2">
-<h2>Jameson on Ethics</h2>
-<blockquote>
-<p>Reasonable people will disagree over subtle matters of right and wrong… thus, the important part of data ethics is committing to <em>consider</em> the ethical consequences of your choices.</p>
-The difference between “regular” ethics and data ethics is that algorithms scale really easily. Thus, seemingly small decisions can have wide-ranging impact.
-</blockquote>
-</section>
-<section id="calvin-on-ethics" class="slide level2">
-<h2>Calvin on Ethics</h2>
-<blockquote>
-<p>No ethical [computation] under capitalism</p>
-</blockquote>
-<ul>
-<li>Usage of data <code>|</code> computing is ethicial <code>iff</code> it challenges rather than strengthens existing power relations.</li>
-</ul>
 </section></section>
-<section>
-<section id="vocabulary" class="title-slide slide level1 center">
-<h1>Vocabulary</h1>
-
-</section>
-<section id="ml-terms" class="slide level2">
-<h2>ML Terms</h2>
-<p><strong>Definition of ML:</strong> using data to find a function that minimizes prediction error.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<ul>
-<li>Features</li>
-<li>Variables</li>
-<li>Outcome variable</li>
-<li>Regression</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<ul>
-<li>RMSE</li>
-<li>Classification</li>
-<li>Confusion matrix</li>
-<li>Split Samples</li>
-</ul>
-</div></div>
-</section>
-<section id="features" class="slide level2">
-<h2><strong>Features</strong></h2>
-<ul>
-<li><strong>Definition:</strong> Individual measurable properties or attributes of data.<br>
-</li>
-<li><strong>Example:</strong> Age, income, and education level in a dataset predicting loan approval.</li>
-</ul>
-</section>
-<section id="variables" class="slide level2">
-<h2><strong>Variables</strong></h2>
-<ul>
-<li><strong>Definition:</strong> Data points that can change and impact predictions.<br>
-</li>
-<li><strong>Example:</strong> Independent variables like weather, and dependent variables like crop yield.</li>
-</ul>
-</section>
-<section id="outcome-variable" class="slide level2">
-<h2><strong>Outcome Variable</strong></h2>
-<ul>
-<li><strong>Definition:</strong> The target or dependent variable the model predicts.<br>
-</li>
-<li><strong>Example:</strong> Predicting “passed” or “failed” for a student’s exam result.</li>
-</ul>
-</section>
-<section id="features-vs.-variables" class="slide level2">
-<h2>Features vs.&nbsp;Variables</h2>
-<ul>
-<li><strong>Features:</strong> Inputs to the model, often selected or engineered from raw data.
-<ul>
-<li>Example: “Average monthly income” derived from raw transaction data.<br>
-</li>
-</ul></li>
-<li><strong>Variables:</strong> Broader term encompassing both inputs (independent) and outputs (dependent).
-<ul>
-<li>Example: “House price” (dependent variable) depends on features like size and location.</li>
-</ul></li>
-</ul>
-</section>
-<section id="regression" class="slide level2">
-<h2><strong>Regression</strong></h2>
-<ul>
-<li><strong>Definition:</strong> Statistical method to model the relationship between variables.<br>
-</li>
-<li><strong>Example:</strong> Linear regression predicts house prices based on size and location.</li>
-</ul>
-</section>
-<section id="rmse-root-mean-square-error" class="slide level2">
-<h2><strong>RMSE (Root Mean Square Error)</strong></h2>
-<ul>
-<li><strong>Definition:</strong> A metric to measure prediction accuracy by averaging squared errors.<br>
-</li>
-<li><strong>Example:</strong> Lower RMSE in predicting drug response indicates a better model fit.</li>
-</ul>
-</section>
-<section id="classification" class="slide level2">
-<h2><strong>Classification</strong></h2>
-<ul>
-<li><strong>Definition:</strong> Task of predicting discrete categories or labels.<br>
-</li>
-<li><strong>Example:</strong> Classifying emails as “spam” or “not spam.”</li>
-</ul>
-</section>
-<section id="confusion-matrix-1" class="slide level2">
-<h2><strong>Confusion Matrix</strong></h2>
-<ul>
-<li><strong>Definition:</strong> A table showing model performance in classification tasks.<br>
-</li>
-<li><strong>Example:</strong> Matrix rows show true values; columns show predicted outcomes.</li>
-</ul>
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource {r Matrix Deux} number-lines code-with-copy"><code class="sourceCode"><span id="cb38-1"><a></a>#| echo: false</span>
-<span id="cb38-2"><a></a>table(predicted = y_hat, actual = test_set$sex) %&gt;%</span>
-<span id="cb38-3"><a></a>  as.data.frame() %&gt;%</span>
-<span id="cb38-4"><a></a>  ggplot(aes(x = predicted, y = actual)) +</span>
-<span id="cb38-5"><a></a>  geom_tile(aes(fill = Freq), color = "white") +</span>
-<span id="cb38-6"><a></a>  scale_fill_gradient(low = "white", high = "blue") +</span>
-<span id="cb38-7"><a></a>  geom_text(aes(label = Freq), vjust = "center", color = "black", size = 24) +</span>
-<span id="cb38-8"><a></a>  labs(title = "Confusion Matrix", x = "Predicted", y = "Actual")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="split-samples" class="slide level2">
-<h2><strong>Split Samples</strong></h2>
-<ul>
-<li><strong>Definition:</strong> Dividing data into training and testing subsets for validation.<br>
-</li>
-<li><strong>Example:</strong> 80% training, 20% testing ensures unbiased model evaluation.<br>
-</li>
-</ul>
-<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a>test_set <span class="ot">&lt;-</span> heights[test_index, ]</span>
-<span id="cb39-2"><a></a>train_set <span class="ot">&lt;-</span> heights[<span class="sc">-</span>test_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section></section>
-<section>
-<section id="bonus-slides-precision-recall" class="title-slide slide level1 center">
-<h1>Bonus Slides:<br> Precision-recall</h1>
-
-</section>
-<section id="precision-recall-tradeoff" class="slide level2">
-<h2>Precision-recall tradeoff</h2>
-<ul>
-<li>Precision: TP / (TP + FP)</li>
-<li>Recall: TP / (TP + FN)</li>
-<li>Imagine I have a fraud-detection model that gives 1,000 credit card transactions each a risk score.</li>
-</ul>
-</section>
-<section id="precision-recall-tradeoff-1" class="slide level2">
-<h2>Precision-recall tradeoff</h2>
-<ul>
-<li>Imagine I have a fraud-detection model that gives 1,000 credit card transactions each a risk score.</li>
-<li>The company chooses a risk score cutoff of 77 (for some reason).</li>
-<li>There are 18 transactions with risk above 77. 12 are actually fraud. 20 fraudulent transactions have risk below 77.</li>
-<li>What are precision, recall, and accuracy?</li>
-</ul>
-</section>
-<section id="precision-recall-exercise" class="slide level2">
-<h2>Precision-recall Exercise</h2>
-<ul>
-<li>Precision: TP / (TP + FP)</li>
-<li>Recall: TP / (TP + FN)</li>
-<li>1,000 credit card transactions</li>
-<li>The company chooses a risk score cutoff of 77</li>
-<li>There are 18 transactions with risk above 77.
-<ul>
-<li>12 are actually fraud.</li>
-<li>20 fraudulent transactions have risk below 77.</li>
-</ul></li>
-<li><span style="color:red;font-weight:bold">TODO</span> Calculate precision, recall, and accuracy.</li>
-</ul>
-</section>
-<section id="solutions" class="slide level2">
-<h2>Solutions</h2>
-<pre><code>- Definitions
-  - Precision: TP / (TP + FP)
-  - Recall:    TP / (TP + FN)
-- Computation
-  - Precision: 12 / (12 + 06)  ~= 67%
-  - Recall:    12 / (12 + 20)  ~= 38%
-  - Accuracy: (12 + 962)/1000  ~= 97%</code></pre>
-</section>
-<section id="precision-recall-tradeoff-2" class="slide level2">
-<h2>Precision-recall tradeoff</h2>
-<ul>
-<li>Precision: TP / (TP + FP)</li>
-<li>Recall: TP / (TP + FN)</li>
-<li>Image: Hands-on machine learning, A. Geron</li>
-</ul>
+<section id="machine-learning-in-python" class="title-slide slide level1 center">
+<h1>Machine Learning in Python</h1>
 
 
-
-<img data-src="images/precision_recall.png" class="r-stretch"></section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -1332,6 +1516,7 @@ The difference between “regular” ethics and data ethics is that algorithms s
   <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-drop/drop-runtime.js"></script>
   <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -1354,6 +1539,7 @@ The difference between “regular” ethics and data ethics is that algorithms s
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'drop': {"button":true,"shortcut":"`","engine":"pyodide","webr":{"packages":[]},"pyodide":{"packages":[]}},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1524,7 +1710,7 @@ The difference between “regular” ethics and data ethics is that algorithms s
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealDrop, QuartoSupport,
 
           RevealMath,
           RevealNotes,

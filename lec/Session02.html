@@ -422,12 +422,12 @@ Jameson &gt; Hendrik &gt; Calvin
 <span id="cb1-3"><a></a>       <span class="fu">options</span>(<span class="at">repos=</span>r)</span>
 <span id="cb1-4"><a></a>})</span>
 <span id="cb1-5"><a></a><span class="co"># Old</span></span>
-<span id="cb1-6"><a></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb1-7"><a></a><span class="fu">install.packages</span>(<span class="st">"caret"</span>)</span>
+<span id="cb1-6"><a></a><span class="co"># install.packages("tidyverse")</span></span>
+<span id="cb1-7"><a></a><span class="co"># install.packages("caret")</span></span>
 <span id="cb1-8"><a></a><span class="co"># New?</span></span>
 <span id="cb1-9"><a></a><span class="fu">install.packages</span>(<span class="st">"fastDummies"</span>)</span>
 <span id="cb1-10"><a></a><span class="co"># Just for the slides</span></span>
-<span id="cb1-11"><a></a><span class="fu">install.packages</span>(<span class="st">"thematic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a></a><span class="co"># install.packages("thematic")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>You will have some but perhaps not others.</li>
 </ul>
@@ -1003,11 +1003,11 @@ Jameson &gt; Hendrik &gt; Calvin
 <div class="cell-output cell-output-stdout">
 <pre><code>     lprice          points           fr             cab         
  Min.   :1.386   Min.   : 80.00   Mode :logical   Mode :logical  
- 1st Qu.:2.833   1st Qu.: 87.00   FALSE:59513     FALSE:65205    
- Median :3.219   Median : 89.00   TRUE :12090     TRUE :6398     
- Mean   :3.314   Mean   : 88.64                                  
+ 1st Qu.:2.833   1st Qu.: 87.00   FALSE:59533     FALSE:65203    
+ Median :3.219   Median : 89.00   TRUE :12070     TRUE :6400     
+ Mean   :3.315   Mean   : 88.65                                  
  3rd Qu.:3.738   3rd Qu.: 91.00                                  
- Max.   :8.102   Max.   :100.00                                  </code></pre>
+ Max.   :7.824   Max.   :100.00                                  </code></pre>
 </div>
 </div>
 </section>
@@ -1031,11 +1031,11 @@ Jameson &gt; Hendrik &gt; Calvin
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57282, 57282, 57282, 57283, 57283, 57283, ... 
+Summary of sample sizes: 57281, 57283, 57282, 57284, 57282, 57282, ... 
 Resampling results:
 
   RMSE       Rsquared   MAE      
-  0.5114639  0.3935319  0.4030508
+  0.5094069  0.3955502  0.4016868
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1047,21 +1047,21 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">print</span>(m1<span class="sc">$</span>resample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        RMSE  Rsquared       MAE   Resample
-1  0.5146601 0.3853599 0.4059389 Fold1.Rep1
-2  0.5094933 0.3935665 0.4014247 Fold2.Rep1
-3  0.5077189 0.3996866 0.4008294 Fold3.Rep1
-4  0.5061893 0.3958357 0.3993910 Fold4.Rep1
-5  0.5192489 0.3933709 0.4077061 Fold5.Rep1
-6  0.5078214 0.4044637 0.4009670 Fold1.Rep2
-7  0.5109179 0.3910638 0.4034304 Fold2.Rep2
-8  0.5135655 0.3964864 0.4056476 Fold3.Rep2
-9  0.5149233 0.3882239 0.4035995 Fold4.Rep2
-10 0.5100689 0.3873541 0.4015906 Fold5.Rep2
-11 0.5115516 0.3908095 0.4042859 Fold1.Rep3
-12 0.5078380 0.3900568 0.4009942 Fold2.Rep3
-13 0.5142245 0.4009447 0.4037128 Fold3.Rep3
-14 0.5126319 0.3920606 0.4021288 Fold4.Rep3
-15 0.5111053 0.3936950 0.4041146 Fold5.Rep3</code></pre>
+1  0.5050570 0.3974420 0.3983319 Fold1.Rep1
+2  0.5147500 0.3919909 0.4045014 Fold2.Rep1
+3  0.5116323 0.3870877 0.4032167 Fold3.Rep1
+4  0.5086963 0.4022081 0.4013298 Fold4.Rep1
+5  0.5068981 0.3988173 0.4010734 Fold5.Rep1
+6  0.5107712 0.3947978 0.4027170 Fold1.Rep2
+7  0.5092317 0.3919118 0.4021115 Fold2.Rep2
+8  0.5126777 0.3911989 0.4040957 Fold3.Rep2
+9  0.5029024 0.4062731 0.3961931 Fold4.Rep2
+10 0.5114262 0.3936230 0.4033014 Fold5.Rep2
+11 0.5098401 0.3947984 0.4024767 Fold1.Rep3
+12 0.5134853 0.3903323 0.4064414 Fold2.Rep3
+13 0.5059101 0.4035328 0.3996089 Fold3.Rep3
+14 0.5076320 0.3990091 0.3993792 Fold4.Rep3
+15 0.5101927 0.3902303 0.4005241 Fold5.Rep3</code></pre>
 </div>
 </div>
 </section>
@@ -1079,11 +1079,11 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57282, 57282, 57282, 57283, 57283, 57283, ... 
+Summary of sample sizes: 57281, 57283, 57282, 57284, 57282, 57282, ... 
 Resampling results:
 
   RMSE       Rsquared   MAE      
-  0.5114639  0.3935319  0.4030508
+  0.5094069  0.3955502  0.4016868
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1093,7 +1093,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">postResample</span>(<span class="at">pred =</span> <span class="fu">predict</span>(m1, wino_te), <span class="at">obs =</span> wino_te<span class="sc">$</span>lprice)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     RMSE  Rsquared       MAE 
-0.5076998 0.4035000 0.3997605 </code></pre>
+0.5158986 0.3955532 0.4049303 </code></pre>
 </div>
 </div>
 </div></div>
@@ -1160,13 +1160,13 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <li>Careful - a destructive update to <code>wino</code>!</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a></a>  <span class="fu">dummy_cols</span>(<span class="at">remove_selected_columns =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a></a>  <span class="fu">rename_with</span>(<span class="at">.fn =</span> <span class="cf">function</span>(s) {</span>
-<span id="cb30-4"><a></a>    s <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a></a>      <span class="fu">tolower</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a></a>      <span class="fu">str_replace</span>(<span class="st">"-| "</span>, <span class="st">"_"</span>)</span>
-<span id="cb30-7"><a></a>  }) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>renamer <span class="ot">&lt;-</span> <span class="cf">function</span>(s) {</span>
+<span id="cb30-2"><a></a>  s <span class="sc">%&gt;%</span> <span class="fu">tolower</span>() <span class="sc">%&gt;%</span> <span class="fu">str_replace</span>(<span class="st">"-| "</span>, <span class="st">"_"</span>)</span>
+<span id="cb30-3"><a></a>}</span>
+<span id="cb30-4"><a></a></span>
+<span id="cb30-5"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span></span>
+<span id="cb30-6"><a></a>  <span class="fu">dummy_cols</span>(<span class="at">remove_selected_columns =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a></a>  <span class="fu">rename_with</span>(<span class="at">.fn =</span> renamer) <span class="sc">%&gt;%</span></span>
 <span id="cb30-8"><a></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">"other"</span>))</span>
 <span id="cb30-9"><a></a><span class="fu">head</span>(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1238,11 +1238,11 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57282, 57282, 57284, 57283, 57281, 57281, ... 
+Summary of sample sizes: 57283, 57283, 57283, 57282, 57281, 57282, ... 
 Resampling results:
 
-  RMSE       Rsquared  MAE      
-  0.4889463  0.445219  0.3801405
+  RMSE       Rsquared   MAE     
+  0.4893917  0.4463272  0.380097
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1255,7 +1255,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <span id="cb37-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     RMSE  Rsquared       MAE 
-0.4880452 0.4509507 0.3788557 </code></pre>
+0.4862957 0.4465611 0.3797848 </code></pre>
 </div>
 </div>
 </div></div>
@@ -1309,23 +1309,78 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <li>Use the model corresponding to the optimal <span class="math inline">\(S_i\)</span>.</li>
 </ol>
 </section>
+<section id="size-drop" class="slide level2">
+<h2>Size Drop</h2>
+<ul>
+<li>It did not seem like 2024 <code>r</code> could handle 90k wine samples.</li>
+<li>We drop to the 1k data set for this demonstration.</li>
+<li>There are ways to address performance.
+<ul>
+<li>I say: Out-of-scope.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>wino <span class="ot">&lt;-</span> wino[<span class="fu">sample</span>(<span class="fu">nrow</span>(wino), <span class="dv">1000</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="partition-again" class="slide level2">
+<h2>Partition Again</h2>
+<ul>
+<li>Partition</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>lprice, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-2"><a></a>wino_tr <span class="ot">&lt;-</span> wino[wine_index, ]</span>
+<span id="cb41-3"><a></a>wino_te <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="caret-rfe" class="slide level2">
 <h2>Caret RFE</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>x <span class="ot">&lt;-</span> <span class="fu">select</span>(wino_tr, <span class="sc">-</span>lprice)</span>
-<span id="cb40-2"><a></a>y <span class="ot">&lt;-</span> wino_tr<span class="sc">$</span>lprice</span>
-<span id="cb40-3"><a></a></span>
-<span id="cb40-4"><a></a>control <span class="ot">&lt;-</span> <span class="fu">rfeControl</span>(<span class="at">functions =</span> rfFuncs, <span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">2</span>)</span>
-<span id="cb40-5"><a></a><span class="co"># run the RFE algorithm</span></span>
-<span id="cb40-6"><a></a>results <span class="ot">&lt;-</span> <span class="fu">rfe</span>(x, y, <span class="at">sizes =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), <span class="at">rfeControl =</span> control)</span>
-<span id="cb40-7"><a></a><span class="co"># summarize the results</span></span>
-<span id="cb40-8"><a></a><span class="fu">print</span>(results)</span>
-<span id="cb40-9"><a></a><span class="co"># list the chosen features</span></span>
-<span id="cb40-10"><a></a><span class="fu">predictors</span>(results)</span>
-<span id="cb40-11"><a></a><span class="co"># plot the results</span></span>
-<span id="cb40-12"><a></a><span class="fu">plot</span>(results, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"g"</span>, <span class="st">"o"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>control <span class="ot">&lt;-</span> <span class="fu">rfeControl</span>(<span class="at">functions =</span> rfFuncs, <span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">2</span>)</span>
+<span id="cb42-2"><a></a><span class="co"># run the RFE algorithm</span></span>
+<span id="cb42-3"><a></a>results <span class="ot">&lt;-</span> <span class="fu">rfe</span>(<span class="fu">select</span>(wino_tr, <span class="sc">-</span>lprice), wino_tr<span class="sc">$</span>lprice, <span class="at">sizes =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), <span class="at">rfeControl =</span> control)</span>
+<span id="cb42-4"><a></a><span class="co"># summarize the results</span></span>
+<span id="cb42-5"><a></a><span class="fu">print</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Recursive feature selection
+
+Outer resampling method: Cross-Validated (2 fold) 
+
+Resampling performance over subset size:
+
+ Variables   RMSE Rsquared    MAE  RMSESD RsquaredSD    MAESD Selected
+         1 0.5112   0.3909 0.4019 0.01567    0.03006 0.003842         
+         2 0.5244   0.3795 0.4158 0.01992    0.04985 0.011290         
+         3 0.5317   0.3974 0.4230 0.01826    0.06426 0.008711         
+         9 0.4853   0.4557 0.3789 0.01672    0.02408 0.009817        *
+
+The top 5 variables (out of 9):
+   points, country_italy, country_us, variety_pinot_noir, variety_chardonnay</code></pre>
+</div>
 </div>
 </section>
+<section id="see-results" class="slide level2">
+<h2>See Results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a><span class="fu">predictors</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "points"                     "country_italy"             
+[3] "country_us"                 "variety_pinot_noir"        
+[5] "variety_chardonnay"         "country_france"            
+[7] "variety_cabernet_sauvignon" "variety_red_blend"         
+[9] "country_spain"             </code></pre>
+</div>
+</div>
+</section>
+<section id="plot-results" class="slide level2">
+<h2>Plot Results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a><span class="fu">plot</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="Session02_files/figure-revealjs/Plot Results-1.png" width="960" class="r-stretch"></section>
 <section id="practical-workflow" class="slide level2">
 <h2>Practical Workflow</h2>
 <div class="cell" data-layout-align="default">
@@ -1472,7 +1527,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </ul>
 </section>
 <section id="constant-variance" class="slide level2">
-<h2>2. Constant variance /</h2>
+<h2>2. Constant variance</h2>
 <ul>
 <li><p>Or <em>homoscedasticity</em></p></li>
 <li><p><strong>The variance of the errors do not depend on the values of the features.</strong></p></li>

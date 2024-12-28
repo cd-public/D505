@@ -5,6 +5,7 @@ author: "Jameson > Hendrik > Calvin"
   
 execute:
     echo: true
+    cache: true
     freeze: true  # never re-render during project render
 ---
 
@@ -26,12 +27,12 @@ local({r <- getOption("repos")
        options(repos=r)
 })
 # Old
-install.packages("tidyverse")
-install.packages("caret")
+# install.packages("tidyverse")
+# install.packages("caret")
 # New?
 install.packages("fastDummies")
 # Just for the slides
-install.packages("thematic")
+# install.packages("thematic")
 ```
 
 -   You will have some but perhaps not others.
@@ -409,13 +410,13 @@ head(wino)
 ## Add Dummy Columns
 - Careful - a destructive update to `wino`!
 ```{r Format}
+renamer <- function(s) {
+  s %>% tolower() %>% str_replace("-| ", "_")
+}
+
 wino <- wino %>%
   dummy_cols(remove_selected_columns = TRUE) %>%
-  rename_with(.fn = function(s) {
-    s %>%
-      tolower() %>%
-      str_replace("-| ", "_")
-  }) %>%
+  rename_with(.fn = renamer) %>%
   select(-ends_with("other"))
 head(wino)
 ```
@@ -511,21 +512,42 @@ plot(varImp(m2, scale = TRUE))
 7. Determine the appropriate number of predictors.
 8. Use the model corresponding to the optimal $S_i$.
 
+## Size Drop
+-   It did not seem like 2024 `r` could handle 90k wine samples.
+-   We drop to the 1k data set for this demonstration.
+-   There are ways to address performance.
+    -   I say: Out-of-scope.
+```{r 1k}
+wino <- wino[sample(nrow(wino), 1000), ]
+```
+
+## Partition Again
+-   Partition
+```{r Repartition}
+wine_index <- createDataPartition(wino$lprice, p = 0.8, list = FALSE)
+wino_tr <- wino[wine_index, ]
+wino_te <- wino[-wine_index, ]
+```
+
 ## Caret RFE
 
-```{r eval=FALSE}
-x <- select(wino_tr, -lprice)
-y <- wino_tr$lprice
-
+```{r RFE}
 control <- rfeControl(functions = rfFuncs, method = "cv", number = 2)
 # run the RFE algorithm
-results <- rfe(x, y, sizes = c(1:3), rfeControl = control)
+results <- rfe(select(wino_tr, -lprice), wino_tr$lprice, sizes = c(1:3), rfeControl = control)
 # summarize the results
 print(results)
-# list the chosen features
+```
+
+## See Results
+```{r See Results}
 predictors(results)
-# plot the results
-plot(results, type = c("g", "o"))
+```
+
+## Plot Results
+
+```{r Plot Results}
+plot(results)
 ```
 
 ## Practical Workflow
@@ -604,7 +626,7 @@ digraph feature_engineering_pipeline {
 -   If y is actually quadratic in x, then y is linear in x\^2! 
     -   That's feature engineering.
 
-## 2.  Constant variance /
+## 2.  Constant variance
 
 -   Or *homoscedasticity*
 
