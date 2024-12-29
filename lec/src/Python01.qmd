@@ -11,6 +11,14 @@ execute:
     freeze: true  # never re-render during project render
 ---
 
+## Prerequisite
+
+- I assume a Python/VS Code/Quarto workflow.
+    - Review [this document](Python00.html)
+- I assume familiarity with Machine Learning in R
+    - Review [these slides](Session01.html)
+
+
 ## Agenda
 
 1.  Python Overview
@@ -56,6 +64,7 @@ install = lambda package : subprocess.check_call([sys.executable,
 ## Packages
 
 -   I'll build a list of packages then install them via a loop.
+    -   Some (numpy, matplotlib) required for Quarto.
 
 ```{python Packages}
 python_data_stack = ["numpy", "pandas", "matplotlib", "seaborn"]
@@ -65,9 +74,8 @@ packages = python_data_stack + r_data_stack + ["scikit-learn"]
 _ = [install(package) for package in packages]
 ```
 
--   I use `_ =` to discard the result of the installation process.
-    -   Stores cell result in a variable.
-    -   I ignore the variable.
+-   I use `_ =` to discard the result of the process.
+    -   This ignores errors - remove to debug.
 
 ## Import
 
