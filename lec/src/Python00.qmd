@@ -136,11 +136,17 @@ plt.show()
 
 ## Cleanup
 
-1. To test whether the process worked, open `hello.qmd` in VS Code.
-2. Quarto Render `hello.qmd` either by pressing [>] or by using ctrl+shift+k.
-3. After a moment, a document will be rendered.
-4. Prefix the .md document with a .qmd header:
+### Quarto Preview
 
+1. To test whether the process worked, open `hello.qmd` in VS Code.
+2. Quarto preview `hello.qmd` either by pressing [>] or by using ctrl+shift+k.
+3. After a moment, a document will be displayed, in VS Code and if you wish, in browser.
+
+### Render .md
+
+*To make this document.*
+
+1. Prefix the .md document with a .qmd header:
 ```qmd
 ---
 title: "Python, VS Code, Quarto"
@@ -150,4 +156,8 @@ format:
 jupyter: python3
 ---
 ```
-5. Render the document!
+2. Rename from *fname*.md to *fname*.qmd
+    - I did this by creating a new file and using copy+paste
+3. Use `quarto render fname.qmd` either:
+    - In the VS Code integrated terminal, or
+    - At the command line, e.g. Windows Key+"terminal"

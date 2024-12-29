@@ -311,10 +311,18 @@ Figure&nbsp;1: A line plot on a polar axis
 </section>
 <section id="cleanup" class="level2">
 <h2 class="anchored" data-anchor-id="cleanup">Cleanup</h2>
+<section id="quarto-preview" class="level3">
+<h3 class="anchored" data-anchor-id="quarto-preview">Quarto Preview</h3>
 <ol type="1">
 <li>To test whether the process worked, open <code>hello.qmd</code> in VS Code.</li>
-<li>Quarto Render <code>hello.qmd</code> either by pressing [&gt;] or by using ctrl+shift+k.</li>
-<li>After a moment, a document will be rendered.</li>
+<li>Quarto preview <code>hello.qmd</code> either by pressing [&gt;] or by using ctrl+shift+k.</li>
+<li>After a moment, a document will be displayed, in VS Code and if you wish, in browser.</li>
+</ol>
+</section>
+<section id="render-.md" class="level3">
+<h3 class="anchored" data-anchor-id="render-.md">Render .md</h3>
+<p><em>To make this document.</em></p>
+<ol type="1">
 <li>Prefix the .md document with a .qmd header:</li>
 </ol>
 <pre class="qmd"><code>---
@@ -324,11 +332,20 @@ format:
     code-fold: true
 jupyter: python3
 ---</code></pre>
-<ol start="5" type="1">
-<li>Render the document!</li>
+<ol start="2" type="1">
+<li>Rename from <em>fname</em>.md to <em>fname</em>.qmd
+<ul>
+<li>I did this by creating a new file and using copy+paste</li>
+</ul></li>
+<li>Use <code>quarto render fname.qmd</code> either:
+<ul>
+<li>In the VS Code integrated terminal, or</li>
+<li>At the command line, e.g.&nbsp;Windows Key+“terminal”</li>
+</ul></li>
 </ol>
 
 
+</section>
 </section>
 </section>
 
