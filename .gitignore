@@ -16,3 +16,4 @@ lec/src/*.quarto_ipynb
 lec/search.json
 lec/src/*_cache/
 lec/src/.quarto/
+lec/index.html

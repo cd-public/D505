@@ -1,0 +1,153 @@
+---
+title: "Python, VS Code, Quarto"
+format:
+  html:
+    theme: darkly
+    code-fold: true
+jupyter: python3
+---
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ExpLC4r4H9M?si=MLYwcLljQ4oYeQlN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+# Python, VS Code, Quarto
+
+## Install Python
+
+### Search Engine
+
+1. Search "Python for VS Code"
+2. Go to [https://code.visualstudio.com/docs/languages/python](https://code.visualstudio.com/docs/languages/python)
+3. Click "Python Tutorial"
+4. Click "Install Python for python.org"
+
+### Python.org
+
+1. Click "Download Python 3.XX.X"
+2. Open the installer from Downloads
+3. Check both boxes when the "Setup" prompt comes up.
+4. After the install, select "Disable path length limit"
+
+### Test Python
+
+- Windows Key
+- Type "terminal"
+- In terminal, type "python"
+- In Python, type:
+
+```py
+print("hello world")
+```
+
+## Install VS Code
+
+### Aside
+
+- It is of great benefit to us as learners that VS Code includes "Copilot" (LLM) integration.
+
+### Install
+
+1. Go to [https://code.visualstudio.com/](https://code.visualstudio.com/)
+2. Click "Download for Windows"
+3. Open the installer from Downloads
+4. Check all four boxes when the "Setup" prompt comes up.
+5. After the install, select "Launch Visual Studio Code"
+
+### VS Code Setup
+
+1. Use Copilot, or don't.
+2. Choose your theme
+3. Select "Browse Language Extensions"
+	-	Select "Python"
+        -   Keep this window open
+	-	Select "Jupyter"
+	-	Optionally, look into [R in Visual Studio Code](https://code.visualstudio.com/docs/languages/r)
+4. Click through the remaining options.
+
+### Python extension setup
+
+1. Create a new Python project
+2. Create a new folder, likely Documents/DATA505
+3. Create a file "hello.py":
+
+```{.py filename="hello.py"}
+# hello.py
+
+print("hello world")
+```
+4. Click the [>] button to run the file, which should print out to the terminal:
+```email
+hello world
+```
+5. Return to the Python tutorial.
+    - Click "CSelect Python Interpreter"
+    - Select the version of Python you installed earlier.
+
+## Install Quarto
+
+### Search Engine
+
+1. Search "Quarto"
+2. Go to [https://quarto.org/](https://quarto.org/)
+3. Click "Get Started"
+4. Click "Download Quarto CLI"
+
+### Install Quarto
+
+1. Run the Installer
+    -   All default options are fine.
+2. Install the VS Code Extension.
+    -   Go to [https://marketplace.visualstudio.com/items?itemName=quarto.quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)
+    -   Click the "Install" button.
+    -   Allow the installation in VS Code and your browser.
+3. Setup Python for Quarto
+
+## Install Jupyter
+
+*To work with .qmd files, Python needs a package akin to R "languageserver"
+
+1. Go to [https://quarto.org/docs/get-started/hello/vscode.html](https://quarto.org/docs/get-started/hello/vscode.html)
+2. Run the following terminal command:
+    -   If you lost your terminal, create a new one from the menu.
+```terminal
+py -m pip install jupyter matplotlib plotly
+```
+    -   This will take a moment.
+3. Following the Quarto tutorial, make `hello.qmd`
+4. Click "Run Cell" in `hello.qmd` on this cell:
+```{python}
+#| label: fig-polar
+#| fig-cap: "A line plot on a polar axis"
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+fig, ax = plt.subplots(
+  subplot_kw = {'projection': 'polar'} 
+)
+ax.plot(theta, r)
+ax.set_rticks([0.5, 1, 1.5, 2])
+ax.grid(True)
+plt.show()
+```
+5. When prompted, install the `ipykernel`
+6. I restarted VS Code.
+
+## Cleanup
+
+1. To test whether the process worked, open `hello.qmd` in VS Code.
+2. Quarto Render `hello.qmd` either by pressing [>] or by using ctrl+shift+k.
+3. After a moment, a document will be rendered.
+4. Prefix the .md document with a .qmd header:
+
+```qmd
+---
+title: "Python, VS Code, Quarto"
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+```
+5. Render the document!
