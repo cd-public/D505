@@ -23,7 +23,9 @@ table.rmdtable th {
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(tidymodels)
 library(tidyverse)
-bank <- read_rds("../exams/BankChurners.rds") %>% 
+library(themis)
+
+bank <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/BankChurners.rds"))) %>% 
   mutate(Churn = as_factor(Churn)) %>%
   mutate(Churn = fct_relevel(Churn, "yes","no")) %>%
   mutate(log_Total_Trans_Amt = log(Total_Trans_Amt)) %>% 
@@ -264,14 +266,14 @@ tree_res %>%
 
 ```{r}
 tree_res %>%
-  show_best("roc_auc")
+  show_best()
 ```
 
 ## Finalize, fit and pull our optimized model
 
 ```{r}
 best_tree <- tree_res %>%
-  select_best("roc_auc")
+  select_best()
 
 final_wf <- 
   tree_wf %>% 
