@@ -15,7 +15,7 @@ format:
 
 **Abstract:**
 
-This is a technical blog post of **both** an HTML file *and* [.qmd file](src/homework1.qmd) hosted on GitHub pages.
+This is a technical blog post of **both** an HTML file *and* [.qmd file](src/wine_of_pnw.qmd) hosted on GitHub pages.
 
 # Setup
 
@@ -101,8 +101,7 @@ Why is understanding this vignette important to use machine learning in an ethic
 
 > <span style="color:red;font-weight:bold">TODO</span>: *describe your reasoning here*
 
-## (3pts)
-
+## Ignorance is no excuse
 Imagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?
 
 > <span style="color:red;font-weight:bold">TODO</span>: *describe your reasoning here*

@@ -96,5 +96,12 @@
     "title": "Wines of the PNW",
     "section": "(3pts)",
     "text": "(3pts)\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html#ignorance-is-no-excuse",
+    "href": "wine_of_pnw.html#ignorance-is-no-excuse",
+    "title": "Wines of the PNW",
+    "section": "Ignorance is no excuse",
+    "text": "Ignorance is no excuse\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nTODO: describe your reasoning here"
   }
 ]
