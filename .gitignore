@@ -6,4 +6,3 @@ lec/index.html
 lec/src/*.rds
 lec/src/*_cache/*
 lec/src/*_freeze/*
-lec/site_libs/*/*.min*
