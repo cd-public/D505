@@ -1003,9 +1003,9 @@ Jameson &gt; Hendrik &gt; Calvin
 <div class="cell-output cell-output-stdout">
 <pre><code>     lprice          points           fr             cab         
  Min.   :1.386   Min.   : 80.00   Mode :logical   Mode :logical  
- 1st Qu.:2.833   1st Qu.: 87.00   FALSE:59455     FALSE:65221    
- Median :3.219   Median : 89.00   TRUE :12148     TRUE :6382     
- Mean   :3.315   Mean   : 88.65                                  
+ 1st Qu.:2.833   1st Qu.: 87.00   FALSE:59491     FALSE:65267    
+ Median :3.219   Median : 89.00   TRUE :12112     TRUE :6336     
+ Mean   :3.315   Mean   : 88.64                                  
  3rd Qu.:3.738   3rd Qu.: 91.00                                  
  Max.   :8.102   Max.   :100.00                                  </code></pre>
 </div>
@@ -1031,11 +1031,11 @@ Jameson &gt; Hendrik &gt; Calvin
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57282, 57282, 57282, 57283, 57283, 57282, ... 
+Summary of sample sizes: 57283, 57281, 57283, 57281, 57284, 57283, ... 
 Resampling results:
 
-  RMSE       Rsquared  MAE      
-  0.5110322  0.395869  0.4025061
+  RMSE       Rsquared   MAE      
+  0.5118305  0.3949086  0.4030389
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1047,21 +1047,21 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">print</span>(m1<span class="sc">$</span>resample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        RMSE  Rsquared       MAE   Resample
-1  0.5050570 0.3974420 0.3983319 Fold1.Rep1
-2  0.5147500 0.3919909 0.4045014 Fold2.Rep1
-3  0.5116323 0.3870877 0.4032167 Fold3.Rep1
-4  0.5086963 0.4022081 0.4013298 Fold4.Rep1
-5  0.5068981 0.3988173 0.4010734 Fold5.Rep1
-6  0.5107712 0.3947978 0.4027170 Fold1.Rep2
-7  0.5092317 0.3919118 0.4021115 Fold2.Rep2
-8  0.5126777 0.3911989 0.4040957 Fold3.Rep2
-9  0.5029024 0.4062731 0.3961931 Fold4.Rep2
-10 0.5114262 0.3936230 0.4033014 Fold5.Rep2
-11 0.5098401 0.3947984 0.4024767 Fold1.Rep3
-12 0.5134853 0.3903323 0.4064414 Fold2.Rep3
-13 0.5059101 0.4035328 0.3996089 Fold3.Rep3
-14 0.5076320 0.3990091 0.3993792 Fold4.Rep3
-15 0.5101927 0.3902303 0.4005241 Fold5.Rep3</code></pre>
+1  0.5123392 0.3922985 0.4043151 Fold1.Rep1
+2  0.5042570 0.4047914 0.3967808 Fold2.Rep1
+3  0.5113161 0.3952375 0.4036083 Fold3.Rep1
+4  0.5150833 0.3929527 0.4040149 Fold4.Rep1
+5  0.5161066 0.3894547 0.4064822 Fold5.Rep1
+6  0.5076583 0.4047581 0.4000936 Fold1.Rep2
+7  0.5113980 0.3918123 0.4025944 Fold2.Rep2
+8  0.5141958 0.3868834 0.4057213 Fold3.Rep2
+9  0.5159584 0.3844734 0.4047169 Fold4.Rep2
+10 0.5099482 0.4065265 0.4020638 Fold5.Rep2
+11 0.5136715 0.3919605 0.4037877 Fold1.Rep3
+12 0.5091766 0.4083246 0.4017391 Fold2.Rep3
+13 0.5096613 0.3943860 0.4020641 Fold3.Rep3
+14 0.5133633 0.3908561 0.4036423 Fold4.Rep3
+15 0.5133237 0.3889129 0.4039583 Fold5.Rep3</code></pre>
 </div>
 </div>
 </section>
@@ -1079,11 +1079,11 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57281, 57283, 57282, 57284, 57282, 57282, ... 
+Summary of sample sizes: 57283, 57281, 57283, 57281, 57284, 57283, ... 
 Resampling results:
 
   RMSE       Rsquared   MAE      
-  0.5094069  0.3955502  0.4016868
+  0.5118305  0.3949086  0.4030389
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1093,7 +1093,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">postResample</span>(<span class="at">pred =</span> <span class="fu">predict</span>(m1, wino_te), <span class="at">obs =</span> wino_te<span class="sc">$</span>lprice)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     RMSE  Rsquared       MAE 
-0.5158986 0.3955532 0.4049303 </code></pre>
+0.5062471 0.3981322 0.3998714 </code></pre>
 </div>
 </div>
 </div></div>
@@ -1238,11 +1238,11 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 
 No pre-processing
 Resampling: Cross-Validated (5 fold, repeated 3 times) 
-Summary of sample sizes: 57283, 57283, 57283, 57282, 57281, 57282, ... 
+Summary of sample sizes: 57284, 57282, 57282, 57282, 57282, 57282, ... 
 Resampling results:
 
-  RMSE       Rsquared   MAE     
-  0.4893917  0.4463272  0.380097
+  RMSE       Rsquared   MAE      
+  0.4897934  0.4442954  0.3806687
 
 Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 </div>
@@ -1255,7 +1255,7 @@ Tuning parameter 'intercept' was held constant at a value of TRUE</code></pre>
 <span id="cb37-4"><a></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     RMSE  Rsquared       MAE 
-0.4862957 0.4465611 0.3797848 </code></pre>
+0.4847853 0.4545390 0.3780214 </code></pre>
 </div>
 </div>
 </div></div>
@@ -1350,14 +1350,14 @@ Outer resampling method: Cross-Validated (2 fold)
 
 Resampling performance over subset size:
 
- Variables   RMSE Rsquared    MAE  RMSESD RsquaredSD    MAESD Selected
-         1 0.5112   0.3909 0.4019 0.01567    0.03006 0.003842         
-         2 0.5244   0.3795 0.4158 0.01992    0.04985 0.011290         
-         3 0.5317   0.3974 0.4230 0.01826    0.06426 0.008711         
-         9 0.4853   0.4557 0.3789 0.01672    0.02408 0.009817        *
+ Variables   RMSE Rsquared    MAE    RMSESD RsquaredSD    MAESD Selected
+         1 0.5108   0.4494 0.4043 0.0037128   0.001091 0.006783         
+         2 0.5215   0.4643 0.4035 0.0083677   0.015668 0.004914         
+         3 0.5439   0.4479 0.4209 0.0095033   0.021913 0.006884         
+         9 0.4882   0.5096 0.3796 0.0003617   0.004904 0.003946        *
 
 The top 5 variables (out of 9):
-   points, country_italy, country_us, variety_pinot_noir, variety_chardonnay</code></pre>
+   points, country_us, variety_pinot_noir, country_italy, variety_cabernet_sauvignon</code></pre>
 </div>
 </div>
 </section>
@@ -1366,10 +1366,10 @@ The top 5 variables (out of 9):
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a><span class="fu">predictors</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "points"                     "country_italy"             
-[3] "country_us"                 "variety_pinot_noir"        
-[5] "variety_chardonnay"         "country_france"            
-[7] "variety_cabernet_sauvignon" "variety_red_blend"         
+<pre><code>[1] "points"                     "country_us"                
+[3] "variety_pinot_noir"         "country_italy"             
+[5] "variety_cabernet_sauvignon" "country_france"            
+[7] "variety_chardonnay"         "variety_red_blend"         
 [9] "country_spain"             </code></pre>
 </div>
 </div>
