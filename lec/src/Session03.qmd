@@ -230,9 +230,7 @@ get_regression_points(model) %>%
 ## Setup
 
 ```{r}
-#wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/pinot.rds")))
-wine <- readRDS("../../dat/pinot_orig.rds")
-
+wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/pinot_orig.rds")))
 ```
 
 # Preprocessing
