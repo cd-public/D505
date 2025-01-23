@@ -4,6 +4,55 @@
     "href": "wine_features.html",
     "title": "Wine Features",
     "section": "",
-    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages.\n\nSetup\n\nChange the author of this RMD file to be yourself and delete this line.\nModify if necessary the below code so that you can successfully load wine.rds then delete this line.\nIn the space provided after the R chunk, explain what thecode is doing (line by line) then delete this line.\nGet your GitHub Pages ready.\n\nStep Up Code:\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nLoading required package: lattice\n\nAttaching package: 'caret'\n\nThe following object is masked from 'package:purrr':\n\n    lift\n\nlibrary(fastDummies)\nwine &lt;- readRDS(gzcon(url(\"https://github.com/cd-public/DSLM-505/raw/master/dat/wine.rds\")))\n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\n\nFeature Engineering\nWe begin by engineering an number of features.\n\nCreate a total of 10 features (including points).\nRemove all rows with a missing value.\nEnsure only log(price) and engineering features are the only columns that remain in the wino dataframe.\n\n\nwino &lt;- wine %&gt;% \n  mutate(lprice=log(price))\n  # engineer features here\n\n\n\nCaret\nWe now use a train/test split to evaluate the features.\n\nUse the Caret library to partition the wino dataframe into an 80/20 split.\nRun a linear regression with bootstrap resampling.\nReport RMSE on the test partition of the data.\n\n\n# TODO: hint: Check the slides.\n\n\n\nVariable selection\nWe now graph the importance of your 10 features.\n\n# TODO: hint: Check the slides."
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages.\n\nSetup\n\nChange the author of this RMD file to be yourself and delete this line.\nModify if necessary the below code so that you can successfully load wine.rds then delete this line.\nIn the space provided after the R chunk, explain what thecode is doing (line by line) then delete this line.\nGet your GitHub Pages ready.\n\nStep Up Code:\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(caret)\n\nLoading required package: lattice\n\nAttaching package: 'caret'\n\nThe following object is masked from 'package:purrr':\n\n    lift\n\nlibrary(fastDummies)\nwine &lt;- readRDS(gzcon(url(\"https://github.com/cd-public/D505/raw/master/dat/wine.rds\")))\n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\n\nFeature Engineering\nWe begin by engineering an number of features.\n\nCreate a total of 10 features (including points).\nRemove all rows with a missing value.\nEnsure only log(price) and engineering features are the only columns that remain in the wino dataframe.\n\n\nwino &lt;- wine %&gt;% \n  mutate(lprice=log(price))\n  # engineer features here\n\n\n\nCaret\nWe now use a train/test split to evaluate the features.\n\nUse the Caret library to partition the wino dataframe into an 80/20 split.\nRun a linear regression with bootstrap resampling.\nReport RMSE on the test partition of the data.\n\n\n# TODO: hint: Check the slides.\n\n\n\nVariable selection\nWe now graph the importance of your 10 features.\n\n# TODO: hint: Check the slides."
+  },
+  {
+    "objectID": "wine_of_pnw.html",
+    "href": "wine_of_pnw.html",
+    "title": "Wines of the PNW",
+    "section": "",
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages."
+  },
+  {
+    "objectID": "wine_of_pnw.html#linear-models",
+    "href": "wine_of_pnw.html#linear-models",
+    "title": "Wines of the PNW",
+    "section": "Linear Models",
+    "text": "Linear Models\nFirst run a linear regression model with log of price as the dependent variable and ‘points’ and ‘cherry’ as features (variables).\n\n# TODO: hint: m1 &lt;- lm(lprice ~ points + cherry)\n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE"
+  },
+  {
+    "objectID": "wine_of_pnw.html#interaction-models",
+    "href": "wine_of_pnw.html#interaction-models",
+    "title": "Wines of the PNW",
+    "section": "Interaction Models",
+    "text": "Interaction Models\nAdd an interaction between ‘points’ and ‘cherry’.\n\n# TODO: hint: Check the slides.\n\n\nTODO: write your line-by-line explanation of the code here\n\n\nTODO: report and explain the RMSE\n\n\nThe Interaction Variable\n\nTODO: interpret the coefficient on the interaction variable. Explain as you would to a non-technical manager."
+  },
+  {
+    "objectID": "wine_of_pnw.html#applications",
+    "href": "wine_of_pnw.html#applications",
+    "title": "Wines of the PNW",
+    "section": "Applications",
+    "text": "Applications\nDetermine which province (Oregon, California, or New York), does the ‘cherry’ feature in the data affect price most?\n\n# TODO: \n\n\nTODO: write your line-by-line explanation of the code here, and explain your answer."
+  },
+  {
+    "objectID": "wine_of_pnw.html#on-accuracy",
+    "href": "wine_of_pnw.html#on-accuracy",
+    "title": "Wines of the PNW",
+    "section": "On Accuracy",
+    "text": "On Accuracy\nImagine a model to distinguish New York wines from those in California and Oregon. After a few days of work, you take some measurements and note: “I’ve achieved 91% accuracy on my model!”\nShould you be impressed? Why or why not?\n\n# TODO: Use simple descriptive statistics from the data to justify your answer.\n\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html#on-ethics",
+    "href": "wine_of_pnw.html#on-ethics",
+    "title": "Wines of the PNW",
+    "section": "On Ethics",
+    "text": "On Ethics\nWhy is understanding this vignette important to use machine learning in an ethical manner?\n\nTODO: describe your reasoning here"
+  },
+  {
+    "objectID": "wine_of_pnw.html#ignorance-is-no-excuse",
+    "href": "wine_of_pnw.html#ignorance-is-no-excuse",
+    "title": "Wines of the PNW",
+    "section": "Ignorance is no excuse",
+    "text": "Ignorance is no excuse\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nTODO: describe your reasoning here"
   }
 ]

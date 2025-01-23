@@ -45,7 +45,7 @@ from sklearn.ensemble import RandomForestRegressor
 -   `pyreadr` to read in an R dataset.
 
 ```{python Setup}
-url = 'https://cd-public.github.io/courses/rmls25/dat/'
+url = 'https://cd-public.github.io/D505/dat/'
 rds = 'wine.rds'
 pyreadr.download_file(url + rds, rds) 
 wine = pyreadr.read_r(rds)[None]      

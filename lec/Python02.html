@@ -417,7 +417,7 @@ Calvin
 <ul>
 <li>Python base data stack</li>
 </ul>
-<div id="2c6ac15c" class="cell" data-execution_count="2">
+<div id="0e7a3927" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -426,13 +426,13 @@ Calvin
 <ul>
 <li>R compatibility</li>
 </ul>
-<div id="507c043f" class="cell" data-execution_count="3">
+<div id="f11bc126" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">import</span> pyreadr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="ml-library" class="slide level2">
 <h2>ML Library</h2>
-<div id="1542947a" class="cell" data-execution_count="4">
+<div id="01cf2248" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb3-2"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb3-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> RepeatedKFold, cross_val_score</span>
@@ -446,8 +446,8 @@ Calvin
 <ul>
 <li><code>pyreadr</code> to read in an R dataset.</li>
 </ul>
-<div id="dd5a3c97" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/courses/rmls25/dat/'</span></span>
+<div id="a4a312fe" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/D505/dat/'</span></span>
 <span id="cb4-2"><a></a>rds <span class="op">=</span> <span class="st">'wine.rds'</span></span>
 <span id="cb4-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
 <span id="cb4-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]      </span>
@@ -711,7 +711,7 @@ Calvin
 </section>
 <section id="categorical-example-1" class="slide level2">
 <h2>Categorical Example 1</h2>
-<div id="7bf8d602" class="cell" data-execution_count="6">
+<div id="20a93398" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>wine[<span class="st">'roger'</span>] <span class="op">=</span> wine[<span class="st">'taster_name'</span>] <span class="op">==</span> <span class="st">"Roger Voss"</span></span>
 <span id="cb5-2"><a></a>wine[<span class="st">'pinot_gris'</span>] <span class="op">=</span> wine[<span class="st">'variety'</span>] <span class="op">==</span> <span class="st">"Pinot Gris"</span></span>
 <span id="cb5-3"><a></a>means <span class="op">=</span> wine.groupby([<span class="st">'roger'</span>,<span class="st">'pinot_gris'</span>])[<span class="st">'points'</span>].mean().reset_index()</span>
@@ -727,7 +727,7 @@ Calvin
 </section>
 <section id="categorical-example-2" class="slide level2">
 <h2>Categorical Example 2</h2>
-<div id="0e410b91" class="cell" data-execution_count="7">
+<div id="9829621e" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>filtered <span class="op">=</span> wine[wine[<span class="st">'province'</span>]<span class="op">==</span><span class="st">'Oregon'</span>]</span>
 <span id="cb6-2"><a></a>sns.lineplot(filtered.groupby(<span class="st">'year'</span>)[<span class="st">'price'</span>].mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -752,7 +752,7 @@ Calvin
 </section>
 <section id="year-on-year-change-example" class="slide level2">
 <h2>Year-on-Year Change Example</h2>
-<div id="0846febf" class="cell" data-execution_count="8">
+<div id="4c8c2158" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>wino <span class="op">=</span> wine.groupby([<span class="st">'winery'</span>, <span class="st">'year'</span>]).agg(</span>
 <span id="cb7-2"><a></a>    avg_score<span class="op">=</span>(<span class="st">'points'</span>, <span class="st">'mean'</span>),</span>
 <span id="cb7-3"><a></a>    num_reviews<span class="op">=</span>(<span class="st">'id'</span>, <span class="st">'nunique'</span>)</span>
@@ -887,7 +887,7 @@ Calvin
 </section>
 <section id="few-dummies" class="slide level2">
 <h2>Few Dummies</h2>
-<div id="c2620d4a" class="cell" data-execution_count="9">
+<div id="d10cbb84" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>wino <span class="op">=</span> wine[[<span class="st">'taster_name'</span>]]</span>
 <span id="cb8-2"><a></a>wino <span class="op">=</span> pd.get_dummies(wino, columns<span class="op">=</span>[<span class="st">'taster_name'</span>])</span>
 <span id="cb8-3"><a></a>wino <span class="op">=</span> wino.iloc[:, :<span class="dv">4</span>]</span>
@@ -966,7 +966,7 @@ Calvin
 <ul>
 <li>Can use <code>siuba</code> for <code>fct_lump</code> or write custom:</li>
 </ul>
-<div id="ab0c4fd1" class="cell" data-execution_count="10">
+<div id="7432b677" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>wino <span class="op">=</span> wine[[<span class="st">'variety'</span>]]</span>
 <span id="cb9-2"><a></a>wino <span class="op">=</span> pd.get_dummies(wino, columns<span class="op">=</span>[<span class="st">'variety'</span>])</span>
 <span id="cb9-3"><a></a>wino.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1153,7 +1153,7 @@ Calvin
 </section>
 <section id="what-about-numerical-features" class="slide level2">
 <h2>What about numerical features?</h2>
-<div id="679528ca" class="cell" data-execution_count="11">
+<div id="0b7e5401" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>sns.histplot(wine[<span class="st">'price'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1166,7 +1166,7 @@ Calvin
 </section>
 <section id="take-the-natural-log" class="slide level2">
 <h2>Take the natural log</h2>
-<div id="d7600f46" class="cell" data-execution_count="12">
+<div id="90b50158" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>wine[<span class="st">'log_price'</span>] <span class="op">=</span> np.log(wine[<span class="st">'price'</span>])</span>
 <span id="cb11-2"><a></a>sns.histplot(wine[<span class="st">'log_price'</span>], bins<span class="op">=</span><span class="dv">30</span>, kde<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1400,7 +1400,7 @@ Calvin
 <ul>
 <li>Follow <a href="https://topepo.github.io/caret">this link</a> for the full documentation on caret.</li>
 </ul>
-<div id="74e86092" class="cell" data-execution_count="13">
+<div id="413fa1aa" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>wino <span class="op">=</span> wine.copy()</span>
 <span id="cb14-2"><a></a>wino[<span class="st">'fr'</span>] <span class="op">=</span> (wino[<span class="st">'country'</span>] <span class="op">==</span> <span class="st">"France"</span>)</span>
 <span id="cb14-3"><a></a>wino[<span class="st">'cab'</span>] <span class="op">=</span> wino[<span class="st">'variety'</span>].<span class="bu">str</span>.contains(<span class="st">"Cabernet"</span>)</span>
@@ -1421,7 +1421,7 @@ Calvin
 <ul>
 <li>Single line train/test split with sklearn.</li>
 </ul>
-<div id="d87569e5" class="cell" data-execution_count="14">
+<div id="80658962" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>wino_tr, wino_te <span class="op">=</span> train_test_split(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -1430,7 +1430,7 @@ Calvin
 <ul>
 <li>Configure <code>train</code> to cross validate</li>
 </ul>
-<div id="1987a145" class="cell" data-execution_count="15">
+<div id="81f32937" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>model <span class="op">=</span> LinearRegression()</span>
 <span id="cb16-2"><a></a>cv <span class="op">=</span> RepeatedKFold(n_splits<span class="op">=</span><span class="dv">5</span>, n_repeats<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb16-3"><a></a>scores <span class="op">=</span> cross_val_score(model,</span>
@@ -1863,19 +1863,19 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <h2>Train vs.&nbsp;test</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="fad81a46" class="cell" data-execution_count="16">
+<div id="fcb01d4f" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>y_pred <span class="op">=</span> model.predict(wino_tr.drop(columns<span class="op">=</span>[<span class="st">'lprice'</span>]))</span>
 <span id="cb17-2"><a></a>mean_squared_error(wino_tr[<span class="st">'lprice'</span>], y_pred) <span class="op">**</span> <span class="fl">.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>0.5095189898084861</code></pre>
+<pre><code>0.5090287461511128</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="6f68322a" class="cell" data-execution_count="17">
+<div id="35f9606f" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>y_pred <span class="op">=</span> model.predict(wino_te.drop(columns<span class="op">=</span>[<span class="st">'lprice'</span>]))</span>
 <span id="cb19-2"><a></a>mean_squared_error(wino_te[<span class="st">'lprice'</span>], y_pred) <span class="op">**</span> <span class="fl">.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>0.5139350075179424</code></pre>
+<pre><code>0.515398063975159</code></pre>
 </div>
 </div>
 </div></div>
@@ -1903,7 +1903,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </section>
 <section id="engineer-9-features" class="slide level2">
 <h2>Engineer 9 features</h2>
-<div id="2ac51a3c" class="cell" data-execution_count="18">
+<div id="d97ce9a3" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>wino <span class="op">=</span> wine.copy()</span>
 <span id="cb21-2"><a></a>top_countries <span class="op">=</span> wino[<span class="st">'country'</span>].value_counts().nlargest(<span class="dv">4</span>).index</span>
 <span id="cb21-3"><a></a>top_varieties <span class="op">=</span> wino[<span class="st">'variety'</span>].value_counts().nlargest(<span class="dv">4</span>).index</span>
@@ -1920,13 +1920,13 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <ul>
 <li>Careful - a destructive update to <code>wino</code>!</li>
 </ul>
-<div id="02fa11ff" class="cell" data-execution_count="19">
+<div id="bf5ba9aa" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>wino <span class="op">=</span> wino.loc[:, <span class="op">~</span>wino.columns.<span class="bu">str</span>.contains(<span class="st">'Other'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="factor" class="slide level2">
 <h2>Factor</h2>
-<div id="5de5b142" class="cell" data-execution_count="20">
+<div id="c4269c81" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="kw">def</span> do_model(df, y_name):</span>
 <span id="cb23-2"><a></a>    df_tr, df_te <span class="op">=</span> train_test_split(wino)</span>
 <span id="cb23-3"><a></a>    model <span class="op">=</span> LinearRegression()</span>
@@ -1944,11 +1944,11 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </section>
 <section id="basic-model" class="slide level2">
 <h2>Basic Model</h2>
-<div id="8e613ff7" class="cell" data-execution_count="21">
+<div id="a2ce5a8f" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>model, tr, te <span class="op">=</span> do_model(wino, <span class="st">'lprice'</span>)</span>
 <span id="cb24-2"><a></a>tr, te</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>(0.7844575778027297, 0.7926640702330077)</code></pre>
+<pre><code>(0.784691706538571, 0.7883205370122466)</code></pre>
 </div>
 </div>
 </section>
@@ -1957,7 +1957,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <ul>
 <li>Importance depends on model used…</li>
 </ul>
-<div id="92599f85" class="cell" data-execution_count="22">
+<div id="41b7cb17" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>plt.bar(wino.columns.drop(<span class="st">'lprice'</span>), model.coef_)</span>
 <span id="cb26-2"><a></a>_ <span class="op">=</span> plt.xticks(rotation<span class="op">=</span><span class="dv">90</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -2021,13 +2021,13 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <ul>
 <li>Partition</li>
 </ul>
-<div id="e46ac364" class="cell" data-execution_count="23">
+<div id="ebd938e9" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>wino_tr, wino_te <span class="op">=</span> train_test_split(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="caret-rfe" class="slide level2">
 <h2>Caret RFE</h2>
-<div id="cfc96d41" class="cell" data-execution_count="24">
+<div id="3c75c74d" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>model <span class="op">=</span> RandomForestRegressor()</span>
 <span id="cb29-2"><a></a>rfe <span class="op">=</span> RFE(estimator<span class="op">=</span>model, n_features_to_select<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb29-3"><a></a>rfe.fit(wino_tr.drop(columns<span class="op">=</span>[<span class="st">'lprice'</span>]), wino_tr[<span class="st">'lprice'</span>])</span>

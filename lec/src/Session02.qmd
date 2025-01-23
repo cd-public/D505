@@ -58,7 +58,7 @@ thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
     -   You are welcome to work with the [full dataset](https://cd-public.github.io/courses/rmls25/dat/wine.rds)!
 
 ```{r Setup}
-wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/wine.rds")))
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/wine.rds")))
 # performance concession
 # wall <- wine
 # wine = wall[sample(nrow(wall), 100), ]

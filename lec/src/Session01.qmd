@@ -117,9 +117,7 @@ thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
   - You are welcome to work with the [full dataset](https://cd-public.github.io/courses/rmls25/dat/wine.rds)!
 
 ```{r Setup}
-wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/wine.rds")))
-# performance concession
-# wine <- readRDS(gzcon(url("https://cd-public.github.io/courses/rmls25/dat/w_1k.rds")))
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/wine.rds")))
 wine <- wine %>% drop_na(points, price)
 summary(wine)
 ```

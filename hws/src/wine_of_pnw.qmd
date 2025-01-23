@@ -28,7 +28,7 @@ This is a technical blog post of **both** an HTML file *and* [.qmd file](src/win
 ```r
 library(tidyverse) # change r to {r} to run this block, then remove this comment
 
-wine <- readRDS(gzcon(url("https://github.com/cd-public/DSLM-505/raw/master/dat/wine.rds"))) %>%
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/wine.rds"))) %>%
   filter(province=="Oregon" | province=="California" | province=="New York") %>% 
   mutate(cherry=as.integer(str_detect(description,"[Cc]herry"))) %>% 
   mutate(lprice=log(price)) %>% 

@@ -452,7 +452,7 @@ Calvin
 <ul>
 <li>Here is a ‘clean’ way to do so from within the Python</li>
 </ul>
-<div id="681b43f8" class="cell" data-execution_count="1">
+<div id="ff24e53c" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">import</span> subprocess  <span class="co"># A base package we need to install other packages</span></span>
 <span id="cb3-2"><a></a><span class="im">import</span> sys         <span class="co"># A base package we need to install other packages</span></span>
 <span id="cb3-3"><a></a>install <span class="op">=</span> <span class="kw">lambda</span> package : subprocess.check_call([sys.executable, </span>
@@ -470,7 +470,7 @@ Calvin
 <li>Some (numpy, matplotlib) required for Quarto.</li>
 </ul></li>
 </ul>
-<div id="b123617d" class="cell" data-execution_count="2">
+<div id="731a6009" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>python_data_stack <span class="op">=</span> [<span class="st">"numpy"</span>, <span class="st">"pandas"</span>, <span class="st">"matplotlib"</span>, <span class="st">"seaborn"</span>]</span>
 <span id="cb4-2"><a></a>r_data_stack <span class="op">=</span> [<span class="st">'pyreadr'</span>, <span class="st">'statsmodels'</span>]</span>
 <span id="cb4-3"><a></a>packages <span class="op">=</span> python_data_stack <span class="op">+</span> r_data_stack <span class="op">+</span> [<span class="st">"scikit-learn"</span>]</span>
@@ -490,7 +490,7 @@ Calvin
 <li>Python packages use <code>import</code> rather than <code>library()</code></li>
 <li>Python base data stack</li>
 </ul>
-<div id="2c76274d" class="cell" data-execution_count="3">
+<div id="d785d3e9" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -499,7 +499,7 @@ Calvin
 <ul>
 <li>R &amp; statistics</li>
 </ul>
-<div id="f84df379" class="cell" data-execution_count="4">
+<div id="882bf551" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="im">import</span> pyreadr</span>
 <span id="cb6-2"><a></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb6-3"><a></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -516,7 +516,7 @@ Calvin
 <li>PySpark MLlib, MLOps</li>
 </ul></li>
 </ul>
-<div id="1a29bb14" class="cell" data-execution_count="5">
+<div id="563ba303" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="co"># Common to include parts of, not all of, sklearn</span></span>
 <span id="cb7-2"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb7-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
@@ -548,8 +548,8 @@ Calvin
 <li>This is atypical but not difficult.</li>
 </ul></li>
 </ul>
-<div id="3422f645" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/courses/rmls25/dat/'</span></span>
+<div id="687e541f" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/D505/dat/'</span></span>
 <span id="cb9-2"><a></a>rds <span class="op">=</span> <span class="st">'wine.rds'</span></span>
 <span id="cb9-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
 <span id="cb9-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]      </span>
@@ -594,7 +594,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Pick the poshest province.</li>
 </ul>
-<div id="bd0aa791" class="cell" data-execution_count="7">
+<div id="a0f6028b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>wine[<span class="st">'bordeaux'</span>] <span class="op">=</span> wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">'Bordeaux'</span></span>
 <span id="cb12-2"><a></a>wine.head(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -686,7 +686,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Take a quick regression model over the wine.</li>
 </ul>
-<div id="9ff6e6eb" class="cell" data-execution_count="8">
+<div id="37e2d65a" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>m1 <span class="op">=</span> sm.OLS(wine[<span class="st">'points'</span>], wine[<span class="st">'price'</span>]).fit()</span>
 <span id="cb13-2"><a></a>m1.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
@@ -713,13 +713,13 @@ memory usage: 10.2+ MB</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 22 Jan 2025</td>
+<td>Thu, 23 Jan 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.00</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>17:05:40</td>
+<td>12:17:43</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-5.0481e+05</td>
 </tr>
@@ -812,7 +812,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>I’m much fonder of <code>sklearn</code> for this sort of thing.</li>
 </ul>
-<div id="d369ce9a" class="cell" data-execution_count="9">
+<div id="100f80a9" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>s1 <span class="op">=</span> LinearRegression().fit(wine[[<span class="st">'points'</span>]],wine[<span class="st">'price'</span>])</span>
 <span id="cb14-2"><a></a><span class="ss">f'Intercept: </span><span class="sc">{</span>s1<span class="sc">.</span>intercept_<span class="sc">}</span><span class="ss">, Coefficients: </span><span class="sc">{</span>s1<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -831,7 +831,7 @@ memory usage: 10.2+ MB</code></pre>
 <li>Also: <code>plotly</code></li>
 </ul>
 </div><div class="column" style="width:50%;">
-<div id="efcd5396" class="cell" data-execution_count="10">
+<div id="83c43bdf" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>sns.lmplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, </span>
 <span id="cb16-2"><a></a>           data<span class="op">=</span>wine, scatter<span class="op">=</span><span class="va">True</span>, </span>
 <span id="cb16-3"><a></a>           x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -854,7 +854,7 @@ memory usage: 10.2+ MB</code></pre>
 <li>Moving on.</li>
 </ul></li>
 </ul>
-<div id="b7632267" class="cell" data-execution_count="11">
+<div id="49cd5fda" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>m2 <span class="op">=</span> smf.ols(<span class="st">'price ~ points + bordeaux'</span>, data<span class="op">=</span>wine).fit()</span>
 <span id="cb17-2"><a></a>m2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
@@ -881,13 +881,13 @@ memory usage: 10.2+ MB</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 22 Jan 2025</td>
+<td>Thu, 23 Jan 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.00</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>17:05:46</td>
+<td>12:17:49</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-4.5673e+05</td>
 </tr>
@@ -995,7 +995,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="how-about-with-an-interaction" class="slide level2">
 <h2>How about with an interaction?</h2>
-<div id="4320c36f" class="cell" data-execution_count="12">
+<div id="8c50a1f1" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>m3 <span class="op">=</span> smf.ols(<span class="st">'price ~ points * bordeaux'</span>, data<span class="op">=</span>wine).fit()</span>
 <span id="cb18-2"><a></a>m3.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
@@ -1022,13 +1022,13 @@ memory usage: 10.2+ MB</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Wed, 22 Jan 2025</td>
+<td>Thu, 23 Jan 2025</td>
 <td data-quarto-table-cell-role="th">Prob (F-statistic):</td>
 <td>0.00</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>17:05:46</td>
+<td>12:17:49</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-4.5609e+05</td>
 </tr>
@@ -1148,7 +1148,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li><code>sklearn</code> defaults to multiple regression.</li>
 </ul>
-<div id="0f177f91" class="cell" data-execution_count="13">
+<div id="f8948d90" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>wine[<span class="st">'points_bordeaux'</span>] <span class="op">=</span> wine[<span class="st">'points'</span>] <span class="op">*</span> wine[<span class="st">'bordeaux'</span>]</span>
 <span id="cb19-2"><a></a></span>
 <span id="cb19-3"><a></a>s3 <span class="op">=</span> LinearRegression().fit(wine[[<span class="st">'points'</span>,<span class="st">'bordeaux'</span>]],</span>
@@ -1161,7 +1161,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="lets-draw-it-1" class="slide level2">
 <h2>Let’s draw it</h2>
-<div id="2879077d" class="cell" data-execution_count="14">
+<div id="bdb5e7a8" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>sns.lmplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, </span>
 <span id="cb21-2"><a></a>           data<span class="op">=</span>wine, scatter<span class="op">=</span><span class="va">True</span>, </span>
 <span id="cb21-3"><a></a>           x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>), hue<span class="op">=</span><span class="st">'bordeaux'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1186,7 +1186,7 @@ memory usage: 10.2+ MB</code></pre>
 <li>There are a few main libraries, <code>Sklearn</code> the first and most popular</li>
 <li>So modelling and partitioning are all in <code>sklearn</code>, vs <code>stats</code> and <code>caret</code></li>
 </ul>
-<div id="b8afba2f" class="cell" data-execution_count="15">
+<div id="21740eb8" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>random_seed <span class="op">=</span> <span class="dv">505</span></span>
 <span id="cb22-2"><a></a>train, test <span class="op">=</span> train_test_split(wine, random_state<span class="op">=</span>random_seed)</span>
 <span id="cb22-3"><a></a><span class="bu">print</span>(test.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1240,7 +1240,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Retrain the models on the training set only</li>
 </ul>
-<div id="19335dc2" class="cell" data-execution_count="16">
+<div id="6739024b" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>formulas <span class="op">=</span> [<span class="st">'price ~ points'</span>, </span>
 <span id="cb24-2"><a></a>            <span class="st">'price ~ points + bordeaux'</span>, </span>
 <span id="cb24-3"><a></a>            <span class="st">'price ~ points * bordeaux'</span>]</span>
@@ -1249,7 +1249,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Test them all under the same conditions.</li>
 </ul>
-<div id="688eb432" class="cell" data-execution_count="17">
+<div id="66dc72d8" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a><span class="kw">def</span> rmse(m):</span>
 <span id="cb25-2"><a></a>  residuals_sq <span class="op">=</span> (test[<span class="st">'price'</span>] <span class="op">-</span> m.predict(test)) <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb25-3"><a></a>  mse <span class="op">=</span> np.mean(residuals_sq)</span>
@@ -1277,14 +1277,14 @@ memory usage: 10.2+ MB</code></pre>
 </ul></li>
 <li><code>apply</code> is like <code>mutate</code>, in a way.</li>
 </ul>
-<div id="6c95d64b" class="cell" data-execution_count="18">
+<div id="e63a1747" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a>is_reserve <span class="op">=</span> <span class="kw">lambda</span> x: <span class="bu">str</span>(x).lower() <span class="kw">in</span> [<span class="st">'reserve'</span>,<span class="st">'reserva'</span>,<span class="st">'riserva'</span>]</span>
 <span id="cb27-2"><a></a>wine[<span class="st">'reserve'</span>] <span class="op">=</span> wine[<span class="st">'designation'</span>].<span class="bu">apply</span>(is_reserve)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="via-seaborn" class="slide level2">
 <h2>via Seaborn</h2>
-<div id="f68f01bc" class="cell" data-execution_count="19">
+<div id="76e933e3" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>sns.lmplot(wine, x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'price'</span>, x_bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">80</span>,<span class="dv">101</span>), hue<span class="op">=</span><span class="st">'reserve'</span>,</span>
 <span id="cb28-2"><a></a>           x_estimator<span class="op">=</span>np.mean, order<span class="op">=</span><span class="dv">2</span>) <span class="co"># polynomail regression, why not</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -1322,7 +1322,7 @@ memory usage: 10.2+ MB</code></pre>
 <li>Change <code>blob</code> to <code>raw</code> to <a href="https://github.com/rafalab/dslabs/raw/master/data/heights.rda">download directly</a>.</li>
 </ul></li>
 </ul>
-<div id="98c96240" class="cell" data-execution_count="20">
+<div id="1ab0f873" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>url <span class="op">=</span> <span class="st">'https://github.com/rafalab/dslabs/raw/master/data/'</span></span>
 <span id="cb29-2"><a></a>rds <span class="op">=</span> <span class="st">'heights.rda'</span></span>
 <span id="cb29-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
@@ -1337,7 +1337,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Let’s start by developing the simplest possible machine algorithm: guessing the outcome.</li>
 </ul>
-<div id="4366e873" class="cell" data-execution_count="21">
+<div id="b0c3baa9" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>y_hat <span class="op">=</span> np.random.choice([<span class="st">'Male'</span>, <span class="st">'Female'</span>], <span class="bu">len</span>(test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Recall:</p>
@@ -1350,10 +1350,10 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>The overall accuracy is simply defined as the overall proportion that is predicted correctly:</li>
 </ul>
-<div id="f1332127" class="cell" data-execution_count="22">
+<div id="ffbbbbf3" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a>np.mean(y_hat <span class="op">==</span> test[<span class="st">'sex'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
-<pre><code>np.float64(0.4600760456273764)</code></pre>
+<pre><code>np.float64(0.5019011406844106)</code></pre>
 </div>
 </div>
 <ul>
@@ -1365,7 +1365,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="lets-do-better" class="slide level2">
 <h2>Let’s do better…</h2>
-<div id="3b181b60" class="cell" data-execution_count="23">
+<div id="6b63f20a" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>hs <span class="op">=</span> heights.groupby(<span class="st">'sex'</span>)[<span class="st">'height'</span>]</span>
 <span id="cb33-2"><a></a>hs.std(), hs.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
@@ -1385,7 +1385,7 @@ memory usage: 10.2+ MB</code></pre>
 <ul>
 <li>Idea: Predict <code>'Male'</code> if observation is within 2 standard deviations</li>
 </ul>
-<div id="b33d2230" class="cell" data-execution_count="24">
+<div id="3496c688" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>male_mean_less_2sd <span class="op">=</span> hs.mean()[<span class="st">'Male'</span>] <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>hs.std()[<span class="st">'Male'</span>]</span>
 <span id="cb35-2"><a></a></span>
 <span id="cb35-3"><a></a>y_hat <span class="op">=</span> heights[<span class="st">'height'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x : <span class="st">'Male'</span> <span class="cf">if</span> x <span class="op">&gt;</span> male_mean_less_2sd <span class="cf">else</span> <span class="st">'Female'</span>)</span>
@@ -1401,7 +1401,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="lets-optimize" class="slide level2">
 <h2>Let’s optimize</h2>
-<div id="ce495c73" class="cell" data-execution_count="25">
+<div id="8bf43921" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>cutoff <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">61</span>,<span class="dv">71</span>))</span>
 <span id="cb37-2"><a></a></span>
 <span id="cb37-3"><a></a><span class="kw">def</span> get_accuracy(y):</span>
@@ -1428,7 +1428,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="optimal-cutoff" class="slide level2">
 <h2>Optimal Cutoff</h2>
-<div id="56bf5ee1" class="cell" data-execution_count="26">
+<div id="124d4cea" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>best_cutoff <span class="op">=</span> cutoff[np.argmax(accuracy)]</span>
 <span id="cb39-2"><a></a>_ <span class="op">=</span> plt.plot(cutoff, accuracy), <span class="bu">print</span>(<span class="st">'Optimal cutoff is'</span>, best_cutoff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1448,7 +1448,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="apply-evaluate" class="slide level2">
 <h2>Apply &amp; Evaluate</h2>
-<div id="04932a8e" class="cell" data-execution_count="27">
+<div id="707d5af0" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a></a>test[<span class="st">'y_hat'</span>] <span class="op">=</span> test[<span class="st">'height'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x : <span class="st">'Male'</span> <span class="cf">if</span> x <span class="op">&gt;</span> best_cutoff <span class="cf">else</span> <span class="st">'Female'</span>)</span>
 <span id="cb41-2"><a></a><span class="bu">print</span>(<span class="st">'Accuracy is'</span>, np.mean(test[<span class="st">'sex'</span>] <span class="op">==</span> test[<span class="st">'y_hat'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1458,7 +1458,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
-<div id="8d5272ae" class="cell" data-execution_count="28">
+<div id="8fd6a0fd" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a></a>ConfusionMatrixDisplay.from_predictions(test[<span class="st">'sex'</span>], test[<span class="st">'y_hat'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1472,7 +1472,7 @@ memory usage: 10.2+ MB</code></pre>
 </section>
 <section id="accuracy-by-sex" class="slide level2">
 <h2>Accuracy by sex</h2>
-<div id="93bb6695" class="cell" data-execution_count="29">
+<div id="9ae9e292" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>test[<span class="st">'acc'</span>] <span class="op">=</span> test[<span class="st">'sex'</span>] <span class="op">==</span> test[<span class="st">'y_hat'</span>]</span>
 <span id="cb44-2"><a></a>test.groupby(<span class="st">'sex'</span>)[<span class="st">'acc'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="29">
@@ -1488,7 +1488,7 @@ Name: acc, dtype: float64</code></pre>
 <h2>Debrief</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="244d6ba7" class="cell" data-execution_count="30">
+<div id="19bbf8e7" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a>_ <span class="op">=</span> sns.boxplot(heights, x<span class="op">=</span><span class="st">'sex'</span>,y<span class="op">=</span><span class="st">'height'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1499,7 +1499,7 @@ Name: acc, dtype: float64</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="3feca09a" class="cell" data-execution_count="31">
+<div id="c7b914af" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a></a>_ <span class="op">=</span> plt.pie(heights[<span class="st">'sex'</span>].value_counts(), labels<span class="op">=</span>[<span class="st">'♀'</span>,<span class="st">'♂'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>

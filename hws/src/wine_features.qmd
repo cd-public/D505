@@ -29,7 +29,7 @@ This is a technical blog post of **both** an HTML file *and* [.qmd file](src/win
 library(tidyverse)
 library(caret)
 library(fastDummies)
-wine <- readRDS(gzcon(url("https://github.com/cd-public/DSLM-505/raw/master/dat/wine.rds")))
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/wine.rds")))
 ```
 
 **Explanataion:**

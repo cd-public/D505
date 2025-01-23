@@ -126,7 +126,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
     -   This is atypical but not difficult.
 
 ```{python Setup}
-url = 'https://cd-public.github.io/courses/rmls25/dat/'
+url = 'https://cd-public.github.io/D505/dat/'
 rds = 'wine.rds'
 pyreadr.download_file(url + rds, rds) 
 wine = pyreadr.read_r(rds)[None]      
