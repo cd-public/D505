@@ -48,7 +48,7 @@ pyreadr.download_file(url + rds, rds)
 wine = pyreadr.read_r(rds)[None]      
 wine = wine[wine['province'].isin(['Oregon', 'California', 'New York'])]
 wine['cherry'] = wine['description'].apply(lambda x: 'herry' in x)
-wine['lprice'] = wine['price'].apply(lambda x: np.log(x))
+wine['lprice'] = wine['price'].apply(np.log)
 wine = wine[['lprice', 'points', 'cherry', 'province']]
 ```
 
