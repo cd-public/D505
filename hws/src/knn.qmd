@@ -1,0 +1,78 @@
+---
+title: $K$NN
+author: "Your name here!"
+date: "02/10/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme: superhero  
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+**Directions:**
+
+**Abstract:**
+
+This is a technical blog post of **both** an HTML file *and* [.qmd file](src/wine_features.qmd) hosted on GitHub pages.
+
+# 1. Setup
+
+```{r}
+library(tidyverse)
+library(caret)
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/pinot.rds")))
+```
+
+## 2. $K$NN Concepts
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain how the choice of K affects the quality of your prediction when using a $K$ Nearest Neighbors algorithm.*
+
+## 3. Feature Engineering
+
+1. Remove the taster_name column from the data.
+2. Create a version of the year column that is a *factor* (instead of numeric).
+3. Create dummy variables that indicate the presence of "cherry", "chocolate" and "earth" in the description.
+  - Take care to handle upper and lower case characters.
+4. Create 3 new features that represent the interaction between time and the cherry, chocolate and earth inidicators.
+5. Remove the description column from the data.
+
+```{r}
+# your code here
+```
+## 4. Preprocessing
+
+1. Preprocess the dataframe from the previous code block using BoxCox, centering and scaling of the numeric features
+2. Create dummy variables for the `year` factor column
+
+```{r}
+# your code here
+```
+
+
+## 5. Running $K$NN
+
+1. Split the dataframe into an 80/20 training and test set
+2. Use Caret to run a $K$NN model that uses your engineered features to predict province
+  - use 5-fold cross validated subsampling 
+  - allow Caret to try 15 different values for K
+3. Display the confusion matrix on the test data
+
+
+```{r}
+
+```
+
+## 6. Kappa
+
+How do we determine rather a Kappa value is represents a good or bad outcome?
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+
+## 7. Improvement
+
+How can we interpret a the confusion matrix, and how can we improve in our predictions?
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
