@@ -159,5 +159,54 @@
     "title": "Wines of the PNW",
     "section": "Ignorance is no excuse",
     "text": "Ignorance is no excuse\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nNo - the only approach to resolve an ethical problem to is to “do the right thing” - which in this case is to take concrete actions to ensure the best possible outcomes for the individuals in question and nation-state/region as a whole. Modeling is insufficient to achieve a outcome consistent with ethical standards, which requires concrete actions with material implications. For example, one could share the results of a model on background with a reporter to apply political pressure the presidential administration to pressure the government to pursue verifiably sound industrial and economic policy."
+  },
+  {
+    "objectID": "knn.html",
+    "href": "knn.html",
+    "title": "\\(K\\)NN",
+    "section": "",
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages."
+  },
+  {
+    "objectID": "knn.html#knn-concepts",
+    "href": "knn.html#knn-concepts",
+    "title": "\\(K\\)NN",
+    "section": "2. \\(K\\)NN Concepts",
+    "text": "2. \\(K\\)NN Concepts\n\nTODO: Explain how the choice of K affects the quality of your prediction when using a \\(K\\) Nearest Neighbors algorithm."
+  },
+  {
+    "objectID": "knn.html#feature-engineering",
+    "href": "knn.html#feature-engineering",
+    "title": "\\(K\\)NN",
+    "section": "3. Feature Engineering",
+    "text": "3. Feature Engineering\n\nRemove the taster_name column from the data.\nCreate a version of the year column that is a factor (instead of numeric).\nCreate dummy variables that indicate the presence of “cherry”, “chocolate” and “earth” in the description.\n\n\nTake care to handle upper and lower case characters.\n\n\nCreate 3 new features that represent the interaction between time and the cherry, chocolate and earth inidicators.\nRemove the description column from the data.\n\n\n# your code here"
+  },
+  {
+    "objectID": "knn.html#preprocessing",
+    "href": "knn.html#preprocessing",
+    "title": "\\(K\\)NN",
+    "section": "4. Preprocessing",
+    "text": "4. Preprocessing\n\nPreprocess the dataframe from the previous code block using BoxCox, centering and scaling of the numeric features\nCreate dummy variables for the year factor column\n\n\n# your code here"
+  },
+  {
+    "objectID": "knn.html#running-knn",
+    "href": "knn.html#running-knn",
+    "title": "\\(K\\)NN",
+    "section": "5. Running \\(K\\)NN",
+    "text": "5. Running \\(K\\)NN\n\nSplit the dataframe into an 80/20 training and test set\nUse Caret to run a \\(K\\)NN model that uses your engineered features to predict province\n\n\nuse 5-fold cross validated subsampling\nallow Caret to try 15 different values for K\n\n\nDisplay the confusion matrix on the test data"
+  },
+  {
+    "objectID": "knn.html#kappa",
+    "href": "knn.html#kappa",
+    "title": "\\(K\\)NN",
+    "section": "6. Kappa",
+    "text": "6. Kappa\nHow do we determine rather a Kappa value is represents a good or bad outcome?\n\nTODO: Explain"
+  },
+  {
+    "objectID": "knn.html#improvement",
+    "href": "knn.html#improvement",
+    "title": "\\(K\\)NN",
+    "section": "7. Improvement",
+    "text": "7. Improvement\nHow can we interpret a the confusion matrix, and how can we improve in our predictions?\n\nTODO: Explain"
   }
 ]
