@@ -405,12 +405,40 @@ Jameson &gt; Hendrik &gt; Calvin
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
 <ol type="1">
-<li>Review of Homework 2</li>
+<li>Review of Homeworks</li>
 <li>A human understanding of regression</li>
 <li>Dinner break</li>
 <li>Preprocessing and BoxCox</li>
-<li>The KNN algorithm and the Confusion Matrix</li>
+<li>The <span class="math inline">\(K\)</span>NN algorithm and the Confusion Matrix</li>
 </ol>
+</section>
+<section>
+<section id="homework" class="title-slide slide level1 center">
+<h1>Homework</h1>
+
+</section>
+<section id="hw1" class="slide level2">
+<h2>HW1</h2>
+<ul>
+<li>We need to work on writing quality.</li>
+<li>We need to work on RMSE intepretation.</li>
+<li>We need to work on using <code>summary</code> responsibly.</li>
+<li>We need to work on applying lecture topics to leading questions.</li>
+<li>We would benefit from use of the <a href="https://quarto.org/docs/reference/formats/html.html"><code>embed-resources</code></a> option in Quarto.</li>
+</ul>
+</section>
+<section id="hw2" class="slide level2">
+<h2>HW2</h2>
+<ul>
+<li>Think</li>
+<li>Pair</li>
+<li>Share</li>
+</ul>
+</section></section>
+<section>
+<section id="today" class="title-slide slide level1 center">
+<h1>Today</h1>
+
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
@@ -420,10 +448,13 @@ Jameson &gt; Hendrik &gt; Calvin
 <span id="cb1-3"><a></a><span class="fu">library</span>(class)</span>
 <span id="cb1-4"><a></a><span class="fu">library</span>(caret)</span>
 <span id="cb1-5"><a></a><span class="fu">library</span>(fastDummies)</span>
-<span id="cb1-6"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/wine.rds"</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb1-7"><a></a>  <span class="fu">mutate</span>(<span class="at">lprice =</span> <span class="fu">log</span>(price))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a></a><span class="fu">library</span>(thematic)</span>
+<span id="cb1-7"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
+<span id="cb1-8"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span>
+<span id="cb1-9"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/wine.rds"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb1-10"><a></a>  <span class="fu">mutate</span>(<span class="at">lprice =</span> <span class="fu">log</span>(price))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
+</section></section>
 <section>
 <section id="reporting-impact-from-regressions" class="title-slide slide level1 center">
 <h1>Reporting Impact from Regressions</h1>
@@ -451,10 +482,10 @@ Jameson &gt; Hendrik &gt; Calvin
 <section id="exercise" class="slide level2">
 <h2>Exercise</h2>
 <ol type="1">
-<li>Calculate the correlation between log(price) and points</li>
-<li>by variety</li>
-<li>for Oregon Chardonnay, Pinot Noir and Pinot Gris</li>
-<li>in the same tibble</li>
+<li>Calculate the correlation between <span class="math inline">\(\log\)</span>(price) and points…</li>
+<li>…by variety…</li>
+<li>…for Oregon Chardonnay, Pinot Noir and Pinot Gris…</li>
+<li>…in the same tibble!</li>
 </ol>
 </section>
 <section id="solution" class="slide level2">
@@ -515,10 +546,12 @@ Jameson &gt; Hendrik &gt; Calvin
 <span id="cb9-2"><a></a>pct <span class="ot">=</span> (<span class="fu">exp</span>(<span class="fu">coef</span>(model)[<span class="st">"points"</span>]) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Since we logged the DV, a 1 point ratings increase = <code>9.85</code>% increase in price on average.</p>
-<p>Note: <span class="math display">\[ (e^x-1)*100 \]</span></p>
+<p>Note: <span class="math display">\[
+(e^x-1)*100
+\]</span></p>
 </section>
-<section id="even-moar-awesomer-with-some-code-fu" class="slide level2">
-<h2>Even moar awesomer with some code fu</h2>
+<section id="pretty-print" class="slide level2">
+<h2>Pretty Print</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="cf">for</span>(v <span class="cf">in</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>, <span class="st">"Pinot Gris"</span>,<span class="st">"Pinot Noir"</span>)){</span>
 <span id="cb10-2"><a></a>  m <span class="ot">&lt;-</span> <span class="fu">lm</span>(lprice<span class="sc">~</span>points, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>, variety<span class="sc">==</span>v))</span>
@@ -532,8 +565,8 @@ Jameson &gt; Hendrik &gt; Calvin
 </div>
 </div>
 </section>
-<section id="logged-feature" class="slide level2">
-<h2>Logged feature</h2>
+<section id="log-feature" class="slide level2">
+<h2><span class="math inline">\(\log\)</span> feature</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(price<span class="sc">~</span>lpoints, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">lpoints=</span><span class="fu">log</span>(points)))</span>
 <span id="cb12-2"><a></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -547,16 +580,34 @@ Coefficients:
 (Intercept)      lpoints  
     -1419.0        324.4  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>inc <span class="ot">=</span> <span class="fu">coef</span>(model)[<span class="st">"lpoints"</span>]<span class="sc">/</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Since we logged the IV (feature), a 1% ratings increase = <code>3.24</code> increase in price on average.</p>
-<p>Note: <span class="math display">\[ x/100 \]</span></p>
+<ul>
+<li>What does the <em>sign</em> (positive or negative) tell us?</li>
+<li>Was <span class="math inline">\(\log\)</span> appropriate here?</li>
+</ul>
+</section>
+<section id="percentages" class="slide level2">
+<h2>Percentages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="fu">coef</span>(model)[<span class="st">"lpoints"</span>]<span class="sc">/</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> lpoints 
+3.243706 </code></pre>
+</div>
+</div>
+<ul>
+<li>Since we logged the IV (feature), a 1% ratings increase is a ~3.24 increase in price on average.</li>
+<li>What are the units on that?</li>
+</ul>
+<p>Note: <span class="math display">\[
+x/100
+\]</span></p>
 </section>
 <section id="loglog-also-elasticity" class="slide level2">
 <h2>LogLog (also elasticity)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lprice<span class="sc">~</span>lpoints, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">lpoints=</span><span class="fu">log</span>(points)))</span>
-<span id="cb15-2"><a></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lprice<span class="sc">~</span>lpoints, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">lpoints=</span><span class="fu">log</span>(points)))</span>
+<span id="cb16-2"><a></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -573,30 +624,95 @@ Coefficients:
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
 <ul>
-<li>Only the dependent/response variable is log-transformed. Exponentiate the coefficient, subtract one from this number, and multiply by 100. This gives the percent increase (or decrease) in the response for every one-unit increase in the independent variable. Example: the coefficient is 0.198. (exp(0.198) – 1) * 100 = 21.9. For every one-unit increase in the independent variable, our dependent variable increases by about 22%.</li>
-<li>Only independent/predictor variable(s) is log-transformed. Divide the coefficient by 100. This tells us that a 1% increase in the independent variable increases (or decreases) the dependent variable by (coefficient/100) units. Example: the coefficient is 0.198. 0.198/100 = 0.00198. For every 1% increase in the independent variable, our dependent variable increases by about 0.002.</li>
-<li>Both dependent/response variable and independent/predictor variable(s) are log-transformed. Interpret the coefficient as the percent increase in the dependent variable for every 1% increase in the independent variable. Example: the coefficient is 0.198. For every 1% increase in the independent variable, our dependent variable increases by about 0.20%.</li>
+<li>Only the dependent/response variable is log-transformed.
+<ul>
+<li>Exponentiate the coefficient.</li>
+<li>Subtract one from this number</li>
+<li>Multiply by 100.</li>
+</ul></li>
+<li>This gives the percent increase (or decrease).</li>
+</ul>
+</section>
+<section id="units" class="slide level2">
+<h2>Units</h2>
+<ul>
+<li>Change is per one-unit increase in the independent variable.
+<ul>
+<li>Here, independent is points.</li>
+<li>Dependent is price.</li>
+</ul></li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>Example: the coefficient is 0.198. <span class="math display">\[
+\exp(0.198) – 1) * 100 \approx 22
+\]</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="fu">exp</span>(.<span class="dv">198</span>)<span class="sc">-</span> <span class="dv">1</span> <span class="sc">*</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -98.78104</code></pre>
+</div>
+</div>
+<ul>
+<li>For every one-unit increase in the independent variable, our dependent variable increases by about 22%.</li>
+</ul>
+</section>
+<section id="independent" class="slide level2">
+<h2>Independent</h2>
+<ul>
+<li>For every 1% increase in the independent variable…</li>
+<li>… our dependent variable increases by about 0.002…</li>
+<li>… which is about 22% of 1%</li>
+</ul>
+</section>
+<section id="dependent" class="slide level2">
+<h2>Dependent</h2>
+<ul>
+<li>Can <span class="math inline">\(\log\)</span> both of the:
+<ul>
+<li>Dependent/response variable, and</li>
+<li>Independent/predictor variable(s).</li>
+</ul></li>
+<li>The coefficient is the ratio between percent changes.</li>
+</ul>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>Example: the coefficient is 0.198.
+<ul>
+<li>For every 1% increase in the independent variable…</li>
+<li>Our dependent variable increases by about 0.20%.</li>
+<li>That is, 20% of 1% or .2 times 1%.</li>
+</ul></li>
+<li>A $30 bottle of wine scoring 90 would be worth $30.06 as a 91.
+<ul>
+<li>We should probably transform scores from [80-100] to [0-20]</li>
+</ul></li>
 </ul>
 </section>
 <section id="graphing-points-by-variety" class="slide level2">
 <h2>Graphing points by variety</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a>wine <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a></a>  <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a></a>  <span class="fu">filter</span>(variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-4"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(variety,points))<span class="sc">+</span></span>
-<span id="cb17-5"><a></a>    <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>wine <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a></a>  <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a></a>  <span class="fu">filter</span>(variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(variety,points))<span class="sc">+</span></span>
+<span id="cb20-5"><a></a>    <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Session03_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="Session03_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
 <section id="summary-1" class="slide level2">
 <h2>Summary</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>(tmp <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a></a>  <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-3"><a></a>  <span class="fu">filter</span>(variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-4"><a></a>  <span class="fu">group_by</span>(variety) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-5"><a></a>  <span class="fu">summarise</span>(<span class="at">mean=</span><span class="fu">mean</span>(points)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a>(tmp <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a></a>  <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a></a>  <span class="fu">filter</span>(variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a></a>  <span class="fu">group_by</span>(variety) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a></a>  <span class="fu">summarise</span>(<span class="at">mean=</span><span class="fu">mean</span>(points)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   variety     mean
@@ -606,18 +722,16 @@ Coefficients:
 3 Pinot Noir  89.5</code></pre>
 </div>
 </div>
-<p>Note:</p>
-<ol type="1">
-<li>The difference between Pinot Gris and Chardonnay is -1.2402471</li>
-<li>The difference between Pinot Noir and Chardonnay is -0.2555915</li>
-</ol>
+<ul>
+<li>What are the percentage differences here?</li>
+</ul>
 </section>
 <section id="regression" class="slide level2">
 <h2>Regression</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(points<span class="sc">~</span>variety, </span>
-<span id="cb20-2"><a></a>            <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>,variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)))</span>
-<span id="cb20-3"><a></a><span class="fu">get_regression_table</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(points<span class="sc">~</span>variety, </span>
+<span id="cb23-2"><a></a>            <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>,variety <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Chardonnay"</span>,<span class="st">"Pinot Noir"</span>,<span class="st">"Pinot Gris"</span>)))</span>
+<span id="cb23-3"><a></a><span class="fu">get_regression_table</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 7
   term                estimate std_error statistic p_value lower_ci upper_ci
@@ -627,7 +741,9 @@ Coefficients:
 3 variety: Pinot Noir   -0.256     0.132     -1.94   0.053   -0.515    0.003</code></pre>
 </div>
 </div>
-<p>What is the equation for this regression?</p>
+<ul>
+<li>What types of variables are we considering here?</li>
+</ul>
 </section>
 <section id="assumptions-of-linear-regression" class="slide level2">
 <h2>Assumptions of linear regression</h2>
@@ -646,35 +762,40 @@ Coefficients:
 </section>
 <section id="independence" class="slide level2">
 <h2>Independence</h2>
-<p>Given our original model of <span class="math inline">\(log(price)=m*Points+b\)</span>…</p>
-<h3 id="are-there-any-problems-with-independence">…are there any problems with independence?</h3>
+<ul>
+<li><p>Given our original model of <span class="math display">\[
+\log(\text{price})=m*\text{Points}+b
+\]</span></p></li>
+<li><p>are there any problems with independence?</p></li>
+<li><p>How could we check?</p></li>
+</ul>
 </section>
 <section id="normality" class="slide level2">
 <h2>Normality</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lprice<span class="sc">~</span>points, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>))</span>
-<span id="cb22-2"><a></a><span class="fu">get_regression_points</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-3"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(residual))<span class="sc">+</span></span>
-<span id="cb22-4"><a></a>    <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(lprice<span class="sc">~</span>points, <span class="fu">filter</span>(wine,province<span class="sc">==</span><span class="st">"Oregon"</span>))</span>
+<span id="cb25-2"><a></a><span class="fu">get_regression_points</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(residual))<span class="sc">+</span></span>
+<span id="cb25-4"><a></a>    <span class="fu">geom_histogram</span>(<span class="at">color=</span><span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Session03_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<img data-src="Session03_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="equality-of-variance" class="slide level2">
 <h2>Equality of variance</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="fu">get_regression_points</span>(model) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-2"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(points, residual))<span class="sc">+</span></span>
-<span id="cb23-3"><a></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">get_regression_points</span>(model) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(points, residual))<span class="sc">+</span></span>
+<span id="cb26-3"><a></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Session03_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
+<img data-src="Session03_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
 <section id="no-equality-in-the-variance" class="slide level2">
 <h2>No equality in the variance</h2>
-<p><a href="https://moderndive.com/5-regression.html"><em>Credit:</em> Modern Dive</a></p>
+<p><a href="https://moderndive.com/5-regression.html"><em>Credit:</em> Modern Dive</a> (click)</p>
 
 <img data-src="./images/unequal-variance.png" class="r-stretch"></section></section>
-<section id="dinner-and-vitural-high-fives" class="title-slide slide level1 center">
-<h1>Dinner (and vitural high fives)</h1>
+<section id="dinner" class="title-slide slide level1 center">
+<h1>Dinner</h1>
 
 <img data-src="./images/comic3.png" class="r-stretch"></section>
 
@@ -685,30 +806,134 @@ Coefficients:
 </section>
 <section id="setup-1" class="slide level2">
 <h2>Setup</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot_orig.rds"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section></section>
-<section>
-<section id="preprocessing" class="title-slide slide level1 center">
-<h1>Preprocessing</h1>
-<p>Box-Cox transformations use MLE to estimate <span class="math inline">\(\lambda\)</span></p>
-<p><span class="math inline">\(x^{*} = \frac{x^{\lambda}-1}{\lambda\: \tilde{x}^{\lambda-1}}\)</span></p>
 <ul>
-<li>when <span class="math inline">\(\lambda=1\)</span>, there is no transformation</li>
-<li>when <span class="math inline">\(\lambda=0\)</span>, it is log transformed</li>
-<li>when <span class="math inline">\(\lambda=0.5\)</span>, it is square root</li>
-<li>when <span class="math inline">\(\lambda=-1\)</span>, it is an inverse</li>
+<li>Pivot to pinot.
+<ul>
+<li>Say “<span class="math inline">\(\pi^0\)</span>”</li>
+</ul></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot_orig.rds"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="preprocessing" class="slide level2">
+<h2>Preprocessing</h2>
+<ul>
+<li>Box-Cox transformations use maximum likelihood estimate to estimate value for <span class="math inline">\(\lambda\)</span></li>
+</ul>
+<p><span class="math display">\[
+y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
+\]</span></p>
+<ul>
+<li>The goal is to make data seem more like a normal distribution.</li>
+</ul>
+</section>
+<section id="examples" class="slide level2">
+<h2>Examples</h2>
+<ul>
+<li>When <span class="math inline">\(\lambda=1\)</span>, there is no transformation</li>
+</ul>
+<p><span class="math display">\[
+y(1) = \frac{x^{\lambda}-1}{\lambda} =
+      \frac{x^{1}-1}{1} =
+        x-1 \approx x
+\]</span></p>
+<p><span class="math display">\[
+f = y(-1) \implies f(x) \approx x
+\]</span></p>
+</section>
+<section id="examples-1" class="slide level2">
+<h2>Examples</h2>
+<ul>
+<li>When <span class="math inline">\(\lambda=0\)</span>, it is log transformed</li>
+</ul>
+<p><span class="math display">\[
+y(0) = \frac{x^{\lambda}-1}{\lambda} =
+      \frac{x^{0}-1}{0}
+\]</span></p>
+<p><span class="math display">\[
+f = y(0) \implies f(x) \approx \log(x)
+\]</span></p>
+<ul>
+<li>Zero is a special case, but using a little thing called “calculus” this sorta makes sense.</li>
+<li>Basically, negative infinity at 0, then increase slowly once positive.</li>
+</ul>
+</section>
+<section id="examples-2" class="slide level2">
+<h2>Examples</h2>
+<p><span class="math display">\[
+y(1) = \frac{x^{\lambda}-1}{\lambda} =
+      \frac{x^{.5}-1}{.5} =
+      2\times(\sqrt{x}-1) \approx \sqrt{x}
+\]</span></p>
+<p><span class="math display">\[
+f = y(.5) \implies f(x) \approx \sqrt{x}
+\]</span></p>
+</section>
+<section id="examples-3" class="slide level2">
+<h2>Examples</h2>
+<ul>
+<li>When <span class="math inline">\(\lambda=-1\)</span>, it is an inverse</li>
+</ul>
+<p><span class="math display">\[
+y(1) = \frac{x^{\lambda}-1}{\lambda} =
+      \frac{x^{-1}-1}{-1} =
+      \frac{x^{-1}}{-1}+\frac{-1}{-1} =
+      \frac{1}{-x}-1 = -x
+\]</span> <span class="math display">\[
+f = y(.5) \implies f(x) \approx -x
+\]</span></p>
+</section>
+<section id="just-use-the-function" class="slide level2">
+<h2>Just use the function</h2>
+<ul>
+<li>R: envstats</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a><span class="fu">library</span>(envstats)</span>
+<span id="cb28-2"><a></a></span>
+<span id="cb28-3"><a></a><span class="co"># Example data</span></span>
+<span id="cb28-4"><a></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb28-5"><a></a></span>
+<span id="cb28-6"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
+<span id="cb28-7"><a></a>boxcox_result <span class="ot">&lt;-</span> <span class="fu">boxcoxTransform</span>(data)</span>
+<span id="cb28-8"><a></a></span>
+<span id="cb28-9"><a></a><span class="co"># Print the result</span></span>
+<span id="cb28-10"><a></a><span class="fu">print</span>(boxcox_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="just-use-the-function-1" class="slide level2">
+<h2>Just use the function</h2>
+<ul>
+<li>Py: scipy.stats</li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a><span class="im">from</span> scipy.stats <span class="im">import</span> boxcox</span>
+<span id="cb29-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb29-3"><a></a></span>
+<span id="cb29-4"><a></a><span class="co"># Example data</span></span>
+<span id="cb29-5"><a></a>data <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
+<span id="cb29-6"><a></a></span>
+<span id="cb29-7"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
+<span id="cb29-8"><a></a>boxcox_result, lambda_value <span class="op">=</span> boxcox(data)</span>
+<span id="cb29-9"><a></a></span>
+<span id="cb29-10"><a></a><span class="co"># Print the result</span></span>
+<span id="cb29-11"><a></a><span class="bu">print</span>(<span class="st">"Transformed data:"</span>, boxcox_result)</span>
+<span id="cb29-12"><a></a><span class="bu">print</span>(<span class="st">"Lambda value:"</span>, lambda_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="on-python" class="slide level2">
+<h2>On Python</h2>
+<ul>
+<li>I like the Python <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html">boxcox documentation</a>:</li>
+</ul>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource haskell number-lines code-with-copy"><code class="sourceCode haskell"><span id="cb30-1"><a></a>y <span class="ot">=</span> (x<span class="op">**</span>lmbda <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> lmbda,  for lmbda <span class="op">!=</span> <span class="dv">0</span></span>
+<span id="cb30-2"><a></a>    <span class="fu">log</span>(x),                  for lmbda <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="caret-preprocessing-is-so-easy" class="slide level2">
 <h2>Caret preprocessing is so easy!</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a>wine <span class="sc">%&gt;%</span> </span>
-<span id="cb25-2"><a></a>  <span class="fu">preProcess</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"BoxCox"</span>,<span class="st">"center"</span>,<span class="st">"scale"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb25-3"><a></a>  <span class="fu">predict</span>(wine) <span class="sc">%&gt;%</span> </span>
-<span id="cb25-4"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description) <span class="sc">%&gt;%</span> </span>
-<span id="cb25-5"><a></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>wine <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a></a>  <span class="fu">preProcess</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"BoxCox"</span>,<span class="st">"center"</span>,<span class="st">"scale"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a></a>  <span class="fu">predict</span>(wine) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-5"><a></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    province      price    points        year    taster_name
 1     Oregon  0.7146905 -1.033841 -0.03425331   Paul Gregutt
@@ -719,16 +944,19 @@ Coefficients:
 6     Oregon -1.0109945 -1.367723  1.06846470   Paul Gregutt</code></pre>
 </div>
 </div>
+</section>
+<section id="or-is-it" class="slide level2">
+<h2>Or is it?</h2>
 <p>But wait… what is wrong here?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a>wino <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a></a>  <span class="fu">mutate</span>(<span class="at">year_f =</span> <span class="fu">as.factor</span>(year))</span>
-<span id="cb27-3"><a></a></span>
-<span id="cb27-4"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
-<span id="cb27-5"><a></a>  <span class="fu">preProcess</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"BoxCox"</span>,<span class="st">"center"</span>,<span class="st">"scale"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-6"><a></a>  <span class="fu">predict</span>(wino)</span>
-<span id="cb27-7"><a></a></span>
-<span id="cb27-8"><a></a><span class="fu">head</span>(wino <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"year"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>wino <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a></a>  <span class="fu">mutate</span>(<span class="at">year_f =</span> <span class="fu">as.factor</span>(year))</span>
+<span id="cb33-3"><a></a></span>
+<span id="cb33-4"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a></a>  <span class="fu">preProcess</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"BoxCox"</span>,<span class="st">"center"</span>,<span class="st">"scale"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-6"><a></a>  <span class="fu">predict</span>(wino)</span>
+<span id="cb33-7"><a></a></span>
+<span id="cb33-8"><a></a><span class="fu">head</span>(wino <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"year"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         year year_f
 1 -0.03425331   2012
@@ -739,64 +967,120 @@ Coefficients:
 6  1.06846470   2015</code></pre>
 </div>
 </div>
+<ul>
+<li>Are years normally distributed?</li>
+</ul>
 </section></section>
 <section>
 <section id="the-knn-algorithm" class="title-slide slide level1 center">
-<h1>The KNN Algorithm</h1>
+<h1>The <span class="math inline">\(K\)</span>NN Algorithm</h1>
 
 </section>
-<section id="algorithm" class="slide level2">
+<section id="algorithm" class="slide level2 smaller">
 <h2>Algorithm</h2>
 <ol type="1">
 <li>Load the data</li>
-<li>Initialize K to your chosen number of neighbors</li>
+<li>Initialize <span class="math inline">\(K\)</span> to your chosen number of neighbors</li>
 <li>For each example in the data</li>
+</ol>
+<ul>
 <li>Calculate the distance between the query example and the current example from the data.</li>
 <li>Add the distance and the index of the example to an ordered collection</li>
+</ul>
+<ol start="4" type="1">
 <li>Sort the ordered collection of distances and indices from smallest to largest (in ascending order) by the distances</li>
-<li>Pick the first K entries from the sorted collection</li>
-<li>Get the labels of the selected K entries</li>
-<li>If regression, return the mean of the K labels</li>
-<li>If classification, return the mode of the K labels</li>
+<li>Pick the first <span class="math inline">\(K\)</span> entries from the sorted collection</li>
+<li>Get the labels of the selected <span class="math inline">\(K\)</span> entries</li>
+<li>If regression, return the mean of the <span class="math inline">\(K\)</span> labels</li>
+<li>If classification, return the mode of the <span class="math inline">\(K\)</span> labels</li>
 </ol>
+</section>
+<section id="basis" class="slide level2">
+<h2>Basis</h2>
+<ul>
+<li>We assume:
+<ul>
+<li>Existing datapoints in something we think of as a space
+<ul>
+<li>That is, probably two numerical value per point in a coordinate plane</li>
+<li>Categorical is fine - think a Punnett square</li>
+</ul></li>
+<li>Existing datapoints are labelled
+<ul>
+<li>Numerical or categorical still fine!</li>
+</ul></li>
+</ul></li>
+<li>To visualize, we will have a 2d space with color labels.</li>
+</ul>
 </section>
 <section id="lets-draw-it" class="slide level2">
 <h2>Let’s draw it</h2>
-<p>&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp; &nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;<br>
-&nbsp;</p>
+<p><a title="Antti Ajanki AnAj, CC BY-SA 3.0 <http://creativecommons.org/licenses/by-sa/3.0/>, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:KnnClassification.svg"><img style="background-color:white;" width="50%" alt="KnnClassification" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/KnnClassification.svg/256px-KnnClassification.svg.png?20101222011435"></a></p>
+</section>
+<section id="lets-draw-it-2" class="slide level2">
+<h2>Let’s draw it 2</h2>
+<p><a title="Paolo Bonfini, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:KNN_decision_surface_animation.gif"><img width="100%" alt="KNN decision surface animation" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/KNN_decision_surface_animation.gif/512px-KNN_decision_surface_animation.gif?20240718130312"></a></p>
+</section>
+<section id="lets-draw-it-3" class="slide level2">
+<h2>Let’s draw it 3</h2>
+
+<img data-src="https://media.geeksforgeeks.org/wp-content/uploads/20231207103856/KNN-Algorithm-(1).png" class="r-stretch"><p><a href="https://www.geeksforgeeks.org/k-nearest-neighbours/">G4G</a></p>
 </section>
 <section id="engineering-some-features" class="slide level2">
 <h2>Engineering some features</h2>
+<ul>
+<li>Create an “other” for most tasters.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
-<span id="cb29-2"><a></a>  <span class="fu">mutate</span>(<span class="at">taster_name =</span> <span class="fu">fct_lump</span>(taster_name,<span class="dv">5</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-3"><a></a>  <span class="fu">dummy_cols</span>(</span>
-<span id="cb29-4"><a></a>    <span class="at">select_columns =</span> <span class="fu">c</span>(<span class="st">"year_f"</span>,<span class="st">"taster_name"</span>),</span>
-<span id="cb29-5"><a></a>    <span class="at">remove_most_frequent_dummy =</span> T, </span>
-<span id="cb29-6"><a></a>    <span class="at">remove_selected_columns =</span> T) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-7"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">tolower</span>(.))) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-8"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">str_replace_all</span>(., <span class="st">"-"</span>, <span class="st">"_"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-9"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-10"><a></a>  <span class="fu">mutate</span>(<span class="at">cherry =</span> <span class="fu">str_detect</span>(description,<span class="st">"cherry"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-11"><a></a>  <span class="fu">mutate</span>(<span class="at">chocolate =</span> <span class="fu">str_detect</span>(description,<span class="st">"chocolate"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-12"><a></a>  <span class="fu">mutate</span>(<span class="at">earth =</span> <span class="fu">str_detect</span>(description,<span class="st">"earth"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb29-13"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description)</span>
-<span id="cb29-14"><a></a></span>
-<span id="cb29-15"><a></a><span class="fu">head</span>(wino) <span class="sc">%&gt;%</span> </span>
-<span id="cb29-16"><a></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a></a>  <span class="fu">mutate</span>(<span class="at">taster_name =</span> <span class="fu">fct_lump</span>(taster_name,<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="engineering-some-features-1" class="slide level2">
+<h2>Engineering some features</h2>
+<ul>
+<li>Create dummys for years, tasters</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> <span class="fu">dummy_cols</span>(</span>
+<span id="cb36-2"><a></a>    <span class="at">select_columns =</span> <span class="fu">c</span>(<span class="st">"year_f"</span>,<span class="st">"taster_name"</span>),</span>
+<span id="cb36-3"><a></a>    <span class="at">remove_most_frequent_dummy =</span> T, </span>
+<span id="cb36-4"><a></a>    <span class="at">remove_selected_columns =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="engineering-some-features-2" class="slide level2">
+<h2>Engineering some features</h2>
+<ul>
+<li>Convert everything to snake case.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">tolower</span>(.))) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">str_replace_all</span>(., <span class="st">"-"</span>, <span class="st">"_"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-4"><a></a>  <span class="fu">rename_all</span>(<span class="fu">funs</span>(<span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="engineering-some-features-3" class="slide level2">
+<h2>Engineering some features</h2>
+<ul>
+<li>Add indicators for 3 tasting notes.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a></a>  <span class="fu">mutate</span>(<span class="at">cherry =</span> <span class="fu">str_detect</span>(description,<span class="st">"cherry"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a></a>  <span class="fu">mutate</span>(<span class="at">chocolate =</span> <span class="fu">str_detect</span>(description,<span class="st">"chocolate"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a></a>  <span class="fu">mutate</span>(<span class="at">earth =</span> <span class="fu">str_detect</span>(description,<span class="st">"earth"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-5"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="engineering-some-features-4" class="slide level2">
+<h2>Engineering some features</h2>
+<ul>
+<li>Let’s see it</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="fu">head</span>(wino) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    province      price    points        year year_f_1996 year_f_1997
 1     Oregon  0.7146905 -1.033841 -0.03425331           0           0
@@ -804,93 +1088,96 @@ Coefficients:
 3 California  0.8225454 -1.033841 -0.40146088           0           0
 4     Oregon  0.2408520 -1.367723 -0.76848588           0           0
 5     Oregon -1.2418658 -1.367723 -1.13532834           0           0
-6     Oregon -1.0109945 -1.367723  1.06846470           0           0
-  year_f_1998 year_f_1999
-1           0           0
-2           0           0
-3           0           0
-4           0           0
-5           0           0
-6           0           0</code></pre>
+6     Oregon -1.0109945 -1.367723  1.06846470           0           0</code></pre>
 </div>
+</div>
+</section>
+<section id="split" class="slide level2">
+<h2>Split</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a><span class="fu">set.seed</span>(<span class="dv">505</span>)</span>
+<span id="cb41-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb41-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="simple-model" class="slide level2">
 <h2>Simple model</h2>
+<ul>
+<li>Specify a <span class="math inline">\(K\)</span>NN model.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
-<span id="cb31-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
-<span id="cb31-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
-<span id="cb31-5"><a></a></span>
-<span id="cb31-6"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">knn</span>(</span>
-<span id="cb31-7"><a></a>  <span class="at">train =</span> <span class="fu">select</span>(train,<span class="sc">-</span>province), </span>
-<span id="cb31-8"><a></a>  <span class="at">test =</span> <span class="fu">select</span>(test,<span class="sc">-</span>province), </span>
-<span id="cb31-9"><a></a>  <span class="at">k=</span><span class="dv">5</span>, </span>
-<span id="cb31-10"><a></a>  <span class="at">cl =</span> train<span class="sc">$</span>province, </span>
-<span id="cb31-11"><a></a>  <span class="at">prob =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">knn</span>(</span>
+<span id="cb42-2"><a></a>  <span class="at">train =</span> <span class="fu">select</span>(train,<span class="sc">-</span>province), </span>
+<span id="cb42-3"><a></a>  <span class="at">test =</span> <span class="fu">select</span>(test,<span class="sc">-</span>province), </span>
+<span id="cb42-4"><a></a>  <span class="at">k=</span><span class="dv">5</span>, </span>
+<span id="cb42-5"><a></a>  <span class="at">cl =</span> train<span class="sc">$</span>province, </span>
+<span id="cb42-6"><a></a>  <span class="at">prob =</span> T) <span class="co"># 'votes' for the winning class are returned as attribute prob</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
+<ul>
+<li>Remember to scroll, a lot there!</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a><span class="fu">confusionMatrix</span>(fit,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a><span class="fu">confusionMatrix</span>(fit,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
                    Reference
 Prediction          Burgundy California Casablanca_Valley Marlborough New_York
-  Burgundy               235          0                 0           0        0
-  California               0        773                 0           0        0
-  Casablanca_Valley        0          0                 8           6        3
-  Marlborough              0          0                 8          19       11
-  New_York                 0          0                 3          12       11
-  Oregon                   3         18                 7           8        1
+  Burgundy               231          1                 0           0        0
+  California               0        770                 0           0        0
+  Casablanca_Valley        0          0                 3           3        3
+  Marlborough              0          0                16          21       14
+  New_York                 0          0                 3          12        5
+  Oregon                   7         20                 4           9        4
                    Reference
 Prediction          Oregon
-  Burgundy               2
+  Burgundy               5
   California             0
-  Casablanca_Valley      1
-  Marlborough            2
-  New_York               1
-  Oregon               541
+  Casablanca_Valley      3
+  Marlborough            3
+  New_York               0
+  Oregon               536
 
 Overall Statistics
                                           
-               Accuracy : 0.9486          
-                 95% CI : (0.9369, 0.9587)
+               Accuracy : 0.936           
+                 95% CI : (0.9232, 0.9473)
     No Information Rate : 0.4728          
     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
                                           
-                  Kappa : 0.9206          
+                  Kappa : 0.9013          
                                           
  Mcnemar's Test P-Value : NA              
 
 Statistics by Class:
 
                      Class: Burgundy Class: California Class: Casablanca_Valley
-Sensitivity                   0.9874            0.9772                 0.307692
-Specificity                   0.9986            1.0000                 0.993928
-Pos Pred Value                0.9916            1.0000                 0.444444
-Neg Pred Value                0.9979            0.9800                 0.989124
+Sensitivity                   0.9706            0.9735                 0.115385
+Specificity                   0.9958            1.0000                 0.994536
+Pos Pred Value                0.9747            1.0000                 0.250000
+Neg Pred Value                0.9951            0.9767                 0.986153
 Prevalence                    0.1423            0.4728                 0.015541
-Detection Rate                0.1405            0.4620                 0.004782
-Detection Prevalence          0.1417            0.4620                 0.010759
-Balanced Accuracy             0.9930            0.9886                 0.650810
+Detection Rate                0.1381            0.4603                 0.001793
+Detection Prevalence          0.1417            0.4603                 0.007173
+Balanced Accuracy             0.9832            0.9867                 0.554960
                      Class: Marlborough Class: New_York Class: Oregon
-Sensitivity                     0.42222        0.423077        0.9890
-Specificity                     0.98710        0.990285        0.9671
-Pos Pred Value                  0.47500        0.407407        0.9360
-Neg Pred Value                  0.98408        0.990887        0.9945
+Sensitivity                     0.46667        0.192308        0.9799
+Specificity                     0.97973        0.990893        0.9609
+Pos Pred Value                  0.38889        0.250000        0.9241
+Neg Pred Value                  0.98518        0.987296        0.9899
 Prevalence                      0.02690        0.015541        0.3270
-Detection Rate                  0.01136        0.006575        0.3234
-Detection Prevalence            0.02391        0.016139        0.3455
-Balanced Accuracy               0.70466        0.706681        0.9781</code></pre>
+Detection Rate                  0.01255        0.002989        0.3204
+Detection Prevalence            0.03228        0.011955        0.3467
+Balanced Accuracy               0.72320        0.591600        0.9704</code></pre>
 </div>
 </div>
 </section>
-<section id="kappa-statistic" class="slide level2">
-<h2>Kappa statistic</h2>
+<section id="kappa-kappa-statistic" class="slide level2">
+<h2>Kappa <span class="math inline">\(\kappa\)</span> statistic</h2>
 <p>Compares observed accuracy against what would be expected by a random classifier.</p>
 <ul>
 <li>&lt; 0.2 (not so good)</li>
@@ -900,93 +1187,163 @@ Balanced Accuracy               0.70466        0.706681        0.9781</code></pr
 <li>&gt; 0.8 (almost perfect)</li>
 </ul>
 <p>…whoa! What’s going on here?</p>
+</section></section>
+<section>
+<section id="overfitting-or-a-leak" class="title-slide slide level1 center">
+<h1>Overfitting… or a leak?</h1>
+
+</section>
+<section id="review-the-dataframe" class="slide level2">
+<h2>Review the dataframe</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="fu">summary</span>(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   province             price              points               year        
+ Length:8380        Min.   :-3.31001   Min.   :-3.289952   Min.   :-5.8877  
+ Class :character   1st Qu.:-0.62250   1st Qu.:-0.696100   1st Qu.:-0.4015  
+ Mode  :character   Median : 0.05057   Median :-0.009039   Median : 0.3331  
+                    Mean   : 0.00000   Mean   : 0.000000   Mean   : 0.0000  
+                    3rd Qu.: 0.57013   3rd Qu.: 0.693463   3rd Qu.: 0.7007  
+                    Max.   : 7.30609   Max.   : 2.893605   Max.   : 1.0685  
+  year_f_1996         year_f_1997         year_f_1998        year_f_1999      
+ Min.   :0.0000000   Min.   :0.0000000   Min.   :0.000000   Min.   :0.000000  
+ 1st Qu.:0.0000000   1st Qu.:0.0000000   1st Qu.:0.000000   1st Qu.:0.000000  
+ Median :0.0000000   Median :0.0000000   Median :0.000000   Median :0.000000  
+ Mean   :0.0001193   Mean   :0.0002387   Mean   :0.008353   Mean   :0.002029  
+ 3rd Qu.:0.0000000   3rd Qu.:0.0000000   3rd Qu.:0.000000   3rd Qu.:0.000000  
+ Max.   :1.0000000   Max.   :1.0000000   Max.   :1.000000   Max.   :1.000000  
+  year_f_2000        year_f_2001        year_f_2002        year_f_2003       
+ Min.   :0.000000   Min.   :0.000000   Min.   :0.000000   Min.   :0.0000000  
+ 1st Qu.:0.000000   1st Qu.:0.000000   1st Qu.:0.000000   1st Qu.:0.0000000  
+ Median :0.000000   Median :0.000000   Median :0.000000   Median :0.0000000  
+ Mean   :0.001074   Mean   :0.000358   Mean   :0.000358   Mean   :0.0001193  
+ 3rd Qu.:0.000000   3rd Qu.:0.000000   3rd Qu.:0.000000   3rd Qu.:0.0000000  
+ Max.   :1.000000   Max.   :1.000000   Max.   :1.000000   Max.   :1.0000000  
+  year_f_2004        year_f_2005       year_f_2006       year_f_2007     
+ Min.   :0.000000   Min.   :0.00000   Min.   :0.00000   Min.   :0.00000  
+ 1st Qu.:0.000000   1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.00000  
+ Median :0.000000   Median :0.00000   Median :0.00000   Median :0.00000  
+ Mean   :0.002029   Mean   :0.01539   Mean   :0.01957   Mean   :0.01432  
+ 3rd Qu.:0.000000   3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.00000  
+ Max.   :1.000000   Max.   :1.00000   Max.   :1.00000   Max.   :1.00000  
+  year_f_2008       year_f_2009       year_f_2010      year_f_2011     
+ Min.   :0.00000   Min.   :0.00000   Min.   :0.0000   Min.   :0.00000  
+ 1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.00000  
+ Median :0.00000   Median :0.00000   Median :0.0000   Median :0.00000  
+ Mean   :0.02733   Mean   :0.04129   Mean   :0.0599   Mean   :0.06945  
+ 3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.0000   3rd Qu.:0.00000  
+ Max.   :1.00000   Max.   :1.00000   Max.   :1.0000   Max.   :1.00000  
+  year_f_2012      year_f_2013      year_f_2015      taster_name_jim_gordon
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.00000   Min.   :0.00000       
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:0.00000       
+ Median :0.0000   Median :0.0000   Median :0.00000   Median :0.00000       
+ Mean   :0.1796   Mean   :0.2171   Mean   :0.09726   Mean   :0.06563       
+ 3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.00000   3rd Qu.:0.00000       
+ Max.   :1.0000   Max.   :1.0000   Max.   :1.00000   Max.   :1.00000       
+ taster_name_matt_kettmann taster_name_other taster_name_roger_voss
+ Min.   :0.0000            Min.   :0.00000   Min.   :0.0000        
+ 1st Qu.:0.0000            1st Qu.:0.00000   1st Qu.:0.0000        
+ Median :0.0000            Median :0.00000   Median :0.0000        
+ Mean   :0.1826            Mean   :0.06993   Mean   :0.1415        
+ 3rd Qu.:0.0000            3rd Qu.:0.00000   3rd Qu.:0.0000        
+ Max.   :1.0000            Max.   :1.00000   Max.   :1.0000        
+ taster_name_virginie_boone   cherry        chocolate         earth        
+ Min.   :0.0000             Mode :logical   Mode :logical   Mode :logical  
+ 1st Qu.:0.0000             FALSE:5017      FALSE:7830      FALSE:7030     
+ Median :0.0000             TRUE :3363      TRUE :550       TRUE :1350     
+ Mean   :0.2223                                                            
+ 3rd Qu.:0.0000                                                            
+ Max.   :1.0000                                                            </code></pre>
+</div>
+</div>
 </section>
 <section id="fixing-the-leak" class="slide level2">
 <h2>Fixing the leak</h2>
+<ul>
+<li>Dastardly humans, always existing in a physical location.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">select</span>(wino, <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"taster"</span>)) <span class="co"># get rid of the taster variables</span></span>
-<span id="cb34-2"><a></a></span>
-<span id="cb34-3"><a></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
-<span id="cb34-4"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb34-5"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
-<span id="cb34-6"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
-<span id="cb34-7"><a></a></span>
-<span id="cb34-8"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">knn</span>(</span>
-<span id="cb34-9"><a></a>  <span class="at">train =</span> <span class="fu">select</span>(train,<span class="sc">-</span>province), </span>
-<span id="cb34-10"><a></a>  <span class="at">test =</span> <span class="fu">select</span>(test,<span class="sc">-</span>province), </span>
-<span id="cb34-11"><a></a>  <span class="at">k=</span><span class="dv">5</span>, </span>
-<span id="cb34-12"><a></a>  <span class="at">cl =</span> train<span class="sc">$</span>province, </span>
-<span id="cb34-13"><a></a>  <span class="at">prob =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>train <span class="ot">&lt;-</span> <span class="fu">select</span>(train, <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"taster"</span>))</span>
+<span id="cb47-2"><a></a>test <span class="ot">&lt;-</span> <span class="fu">select</span>(test, <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"taster"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="rerun" class="slide level2">
+<h2>Rerun</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">knn</span>(</span>
+<span id="cb48-2"><a></a>  <span class="at">train =</span> <span class="fu">select</span>(train,<span class="sc">-</span>province), </span>
+<span id="cb48-3"><a></a>  <span class="at">test =</span> <span class="fu">select</span>(test,<span class="sc">-</span>province), </span>
+<span id="cb48-4"><a></a>  <span class="at">k=</span><span class="dv">5</span>, </span>
+<span id="cb48-5"><a></a>  <span class="at">cl =</span> train<span class="sc">$</span>province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="confusion-matrix-1" class="slide level2">
 <h2>Confusion matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a><span class="fu">confusionMatrix</span>(fit, <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a><span class="fu">confusionMatrix</span>(fit,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
                    Reference
 Prediction          Burgundy California Casablanca_Valley Marlborough New_York
-  Burgundy               113         40                 3           6        1
-  California              49        609                11          14       10
-  Casablanca_Valley        2          4                 0           1        1
-  Marlborough              4          6                 3           3        3
-  New_York                 1          3                 0           5        2
-  Oregon                  69        129                 9          16        9
+  Burgundy               124         41                 3           9        2
+  California              52        586                 8          14        5
+  Casablanca_Valley        2          1                 0           0        2
+  Marlborough              1          5                 2           4        5
+  New_York                 0          3                 3           3        3
+  Oregon                  59        155                10          15        9
                    Reference
 Prediction          Oregon
-  Burgundy              42
-  California           230
-  Casablanca_Valley      2
+  Burgundy              59
+  California           199
+  Casablanca_Valley      1
   Marlborough           11
-  New_York               4
-  Oregon               258
+  New_York               3
+  Oregon               274
 
 Overall Statistics
-                                          
-               Accuracy : 0.5888          
-                 95% CI : (0.5647, 0.6125)
-    No Information Rate : 0.4728          
-    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-                                          
-                  Kappa : 0.3423          
-                                          
- Mcnemar's Test P-Value : 9.85e-07        
+                                         
+               Accuracy : 0.5923         
+                 95% CI : (0.5684, 0.616)
+    No Information Rate : 0.4728         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.3559         
+                                         
+ Mcnemar's Test P-Value : 0.0005866      
 
 Statistics by Class:
 
                      Class: Burgundy Class: California Class: Casablanca_Valley
-Sensitivity                  0.47479            0.7699                 0.000000
-Specificity                  0.93589            0.6440                 0.993928
-Pos Pred Value               0.55122            0.6598                 0.000000
-Neg Pred Value               0.91485            0.7573                 0.984366
+Sensitivity                  0.52101            0.7408                 0.000000
+Specificity                  0.92056            0.6848                 0.996357
+Pos Pred Value               0.52101            0.6782                 0.000000
+Neg Pred Value               0.92056            0.7466                 0.984403
 Prevalence                   0.14226            0.4728                 0.015541
-Detection Rate               0.06754            0.3640                 0.000000
-Detection Prevalence         0.12253            0.5517                 0.005977
-Balanced Accuracy            0.70534            0.7070                 0.496964
+Detection Rate               0.07412            0.3503                 0.000000
+Detection Prevalence         0.14226            0.5164                 0.003586
+Balanced Accuracy            0.72078            0.7128                 0.498179
                      Class: Marlborough Class: New_York Class: Oregon
-Sensitivity                    0.066667        0.076923        0.4717
-Specificity                    0.983415        0.992107        0.7940
-Pos Pred Value                 0.100000        0.133333        0.5265
-Neg Pred Value                 0.974437        0.985525        0.7557
+Sensitivity                    0.088889        0.115385        0.5009
+Specificity                    0.985258        0.992714        0.7798
+Pos Pred Value                 0.142857        0.200000        0.5249
+Neg Pred Value                 0.975076        0.986128        0.7628
 Prevalence                     0.026898        0.015541        0.3270
-Detection Rate                 0.001793        0.001195        0.1542
-Detection Prevalence           0.017932        0.008966        0.2929
-Balanced Accuracy              0.525041        0.534515        0.6328</code></pre>
+Detection Rate                 0.002391        0.001793        0.1638
+Detection Prevalence           0.016736        0.008966        0.3120
+Balanced Accuracy              0.537073        0.554049        0.6403</code></pre>
 </div>
 </div>
 </section>
-<section id="basic-model-with-parameter-tuning" class="slide level2">
-<h2>Basic model with parameter tuning</h2>
+<section id="with-parameter-tuning-over-k" class="slide level2">
+<h2>With parameter tuning over <span class="math inline">\(K\)</span></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>control <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"boot"</span>, <span class="at">number =</span> <span class="dv">1</span>)</span>
-<span id="cb37-2"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb37-3"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb37-4"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
-<span id="cb37-5"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
-<span id="cb37-6"><a></a>             <span class="at">trControl =</span> control)</span>
-<span id="cb37-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb51-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb51-3"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb51-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
+<span id="cb51-5"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">number =</span> <span class="dv">1</span>)) <span class="co"># default bootstrap</span></span>
+<span id="cb51-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>k-Nearest Neighbors 
 
@@ -1000,96 +1357,95 @@ Summary of sample sizes: 6707
 Resampling results across tuning parameters:
 
   k   Accuracy   Kappa    
-   5  0.5578427  0.3100153
-   7  0.5759572  0.3301487
-   9  0.5804858  0.3313401
-  11  0.5821326  0.3308700
-  13  0.5883079  0.3372149
-  15  0.5953067  0.3462655
-  17  0.5969535  0.3481324
-  19  0.5977769  0.3465072
-  21  0.5936599  0.3392167
-  23  0.5977769  0.3437787
-  25  0.5957184  0.3392827
-  27  0.6010704  0.3472493
-  29  0.5936599  0.3348038
-  31  0.5994236  0.3436267
-  33  0.5990119  0.3420449
+   5  0.5790744  0.3385118
+   7  0.5863179  0.3441459
+   9  0.6056338  0.3704099
+  11  0.6024145  0.3628766
+  13  0.6000000  0.3571453
+  15  0.6100604  0.3706625
+  17  0.6060362  0.3630699
+  19  0.6020121  0.3542300
+  21  0.6100604  0.3636278
+  23  0.6060362  0.3580675
+  25  0.6084507  0.3597474
+  27  0.6064386  0.3571491
+  29  0.6052314  0.3541184
+  31  0.6132797  0.3669500
+  33  0.6092555  0.3606503
 
 Accuracy was used to select the optimal model using the largest value.
-The final value used for the model was k = 27.</code></pre>
+The final value used for the model was k = 31.</code></pre>
 </div>
 </div>
 </section>
 <section id="confusion-matrix-2" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(fit, test),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(fit, test),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
                    Reference
 Prediction          Burgundy California Casablanca_Valley Marlborough New_York
-  Burgundy               103         24                 0           6        0
-  California              66        694                13          18       13
-  Casablanca_Valley        0          0                 1           0        0
-  Marlborough              0          0                 2           0        0
-  New_York                 1          1                 0           1        2
-  Oregon                  68         72                10          20       11
+  Burgundy               113         20                 4           6        1
+  California              69        682                 9          14       10
+  Casablanca_Valley        0          1                 0           0        0
+  Marlborough              1          0                 2           2        1
+  New_York                 1          0                 2           1        1
+  Oregon                  54         88                 9          22       13
                    Reference
 Prediction          Oregon
-  Burgundy              37
-  California           281
-  Casablanca_Valley      0
-  Marlborough            0
-  New_York               2
-  Oregon               227
+  Burgundy              48
+  California           251
+  Casablanca_Valley      1
+  Marlborough            3
+  New_York               0
+  Oregon               244
 
 Overall Statistics
                                           
-               Accuracy : 0.6139          
-                 95% CI : (0.5901, 0.6373)
+               Accuracy : 0.6228          
+                 95% CI : (0.5991, 0.6461)
     No Information Rate : 0.4728          
     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
                                           
-                  Kappa : 0.3554          
+                  Kappa : 0.3786          
                                           
- Mcnemar's Test P-Value : NA              
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
 
 Statistics by Class:
 
                      Class: Burgundy Class: California Class: Casablanca_Valley
-Sensitivity                  0.43277            0.8774                0.0384615
-Specificity                  0.95331            0.5567                1.0000000
-Pos Pred Value               0.60588            0.6396                1.0000000
-Neg Pred Value               0.91018            0.8350                0.9850478
-Prevalence                   0.14226            0.4728                0.0155409
-Detection Rate               0.06157            0.4148                0.0005977
-Detection Prevalence         0.10161            0.6485                0.0005977
-Balanced Accuracy            0.69304            0.7170                0.5192308
+Sensitivity                  0.47479            0.8622                 0.000000
+Specificity                  0.94495            0.5998                 0.998786
+Pos Pred Value               0.58854            0.6589                 0.000000
+Neg Pred Value               0.91560            0.8292                 0.984440
+Prevalence                   0.14226            0.4728                 0.015541
+Detection Rate               0.06754            0.4077                 0.000000
+Detection Prevalence         0.11476            0.6186                 0.001195
+Balanced Accuracy            0.70987            0.7310                 0.499393
                      Class: Marlborough Class: New_York Class: Oregon
-Sensitivity                    0.000000        0.076923        0.4150
-Specificity                    0.998771        0.996964        0.8393
-Pos Pred Value                 0.000000        0.285714        0.5564
-Neg Pred Value                 0.973070        0.985594        0.7470
-Prevalence                     0.026898        0.015541        0.3270
-Detection Rate                 0.000000        0.001195        0.1357
-Detection Prevalence           0.001195        0.004184        0.2439
-Balanced Accuracy              0.499386        0.536944        0.6271</code></pre>
+Sensitivity                    0.044444       0.0384615        0.4461
+Specificity                    0.995700       0.9975713        0.8348
+Pos Pred Value                 0.222222       0.2000000        0.5674
+Neg Pred Value                 0.974159       0.9850120        0.7562
+Prevalence                     0.026898       0.0155409        0.3270
+Detection Rate                 0.001195       0.0005977        0.1458
+Detection Prevalence           0.005380       0.0029886        0.2570
+Balanced Accuracy              0.520072       0.5180164        0.6404</code></pre>
 </div>
 </div>
 </section>
-<section id="with-parameter-tuning-and-subsampling" class="slide level2">
-<h2>With parameter tuning and subsampling</h2>
+<section id="tuning-and-subsampling" class="slide level2">
+<h2>Tuning and subsampling</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb41-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb41-3"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
-<span id="cb41-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
-<span id="cb41-5"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>,</span>
-<span id="cb41-6"><a></a>             <span class="at">trControl =</span> control)</span>
-<span id="cb41-7"><a></a></span>
-<span id="cb41-8"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb55-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb55-3"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb55-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
+<span id="cb55-5"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>, <span class="co"># this is new</span></span>
+<span id="cb55-6"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">number =</span> <span class="dv">1</span>))</span>
+<span id="cb55-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>k-Nearest Neighbors 
 
@@ -1103,51 +1459,54 @@ Summary of sample sizes: 6707
 Resampling results across tuning parameters:
 
   k   Accuracy   Kappa    
-   5  0.5704341  0.3273476
-   7  0.5851761  0.3470054
-   9  0.5876331  0.3463441
-  11  0.5859951  0.3415135
-  13  0.5999181  0.3595324
-  15  0.6036036  0.3622092
-  17  0.6109746  0.3711568
-  19  0.6003276  0.3514989
-  21  0.6093366  0.3623349
-  23  0.6085176  0.3606025
-  25  0.6056511  0.3544650
-  27  0.6138411  0.3641099
-  29  0.6117936  0.3595468
-  31  0.6122031  0.3594652
-  33  0.6122031  0.3581913
+   5  0.5651286  0.3247143
+   7  0.5847285  0.3478770
+   9  0.5916701  0.3538738
+  11  0.5961617  0.3554485
+  13  0.6006533  0.3554753
+  15  0.6043283  0.3581862
+  17  0.6031033  0.3564435
+  19  0.6133116  0.3707901
+  21  0.6067783  0.3594476
+  23  0.6104532  0.3647640
+  25  0.6075949  0.3604109
+  27  0.6059616  0.3568547
+  29  0.6002450  0.3474101
+  31  0.6018783  0.3502747
+  33  0.6006533  0.3455772
 
 Kappa was used to select the optimal model using the largest value.
-The final value used for the model was k = 17.</code></pre>
+The final value used for the model was k = 19.</code></pre>
 </div>
 </div>
 </section>
 <section id="tuning-plot" class="slide level2">
 <h2>Tuning plot</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a><span class="fu">ggplot</span>(fit, <span class="at">metric=</span><span class="st">"Kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a><span class="fu">ggplot</span>(fit, <span class="at">metric=</span><span class="st">"Kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="Session03_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<img data-src="Session03_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
 <section id="group-modeling-problem-i" class="slide level2">
 <h2>Group modeling problem I</h2>
 <ul>
 <li>Practice running different versions of the model</li>
-<li>Create some new features and</li>
-<li>see if you can achieve a Kappa &gt;= 0.5</li>
+<li>Create some new features and…</li>
+<li>See if you can achieve a Kappa &gt;= 0.5!</li>
 </ul>
+<p><span class="math display">\[
+\kappa \geq 0.5
+\]</span></p>
 </section>
 <section id="bonus-knn-for-regression" class="slide level2">
 <h2>Bonus: KNN for regression</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(price <span class="sc">~</span> .,</span>
-<span id="cb44-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb44-3"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
-<span id="cb44-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
-<span id="cb44-5"><a></a>             <span class="at">trControl =</span> control)</span>
-<span id="cb44-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(price <span class="sc">~</span> .,</span>
+<span id="cb58-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb58-3"><a></a>             <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb58-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
+<span id="cb58-5"><a></a>             <span class="at">trControl =</span> control)</span>
+<span id="cb58-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>k-Nearest Neighbors 
 
@@ -1160,21 +1519,21 @@ Summary of sample sizes: 6707
 Resampling results across tuning parameters:
 
   k   RMSE       Rsquared   MAE      
-   5  0.7397803  0.4667813  0.5679558
-   7  0.7361223  0.4690235  0.5685617
-   9  0.7332577  0.4715985  0.5679969
-  11  0.7312190  0.4740079  0.5655931
-  13  0.7286175  0.4774743  0.5629271
-  15  0.7255261  0.4822795  0.5606873
-  17  0.7256343  0.4824432  0.5609475
-  19  0.7269683  0.4815387  0.5616769
-  21  0.7295000  0.4784287  0.5622216
-  23  0.7278374  0.4819006  0.5611112
-  25  0.7297833  0.4792947  0.5626595
-  27  0.7301862  0.4804616  0.5632017
-  29  0.7303998  0.4804668  0.5629553
-  31  0.7300819  0.4814206  0.5628775
-  33  0.7290362  0.4827843  0.5618911
+   5  0.7246834  0.4672941  0.5651539
+   7  0.7221250  0.4678558  0.5633229
+   9  0.7134765  0.4791446  0.5592436
+  11  0.7106638  0.4828453  0.5555246
+  13  0.7122695  0.4801285  0.5575852
+  15  0.7095923  0.4840800  0.5547213
+  17  0.7107968  0.4824361  0.5550126
+  19  0.7121059  0.4804953  0.5564995
+  21  0.7142649  0.4776084  0.5561903
+  23  0.7128662  0.4806183  0.5566426
+  25  0.7123259  0.4816877  0.5566498
+  27  0.7133841  0.4804263  0.5578355
+  29  0.7132583  0.4810625  0.5583965
+  31  0.7152932  0.4778591  0.5597311
+  33  0.7146887  0.4794251  0.5583231
 
 RMSE was used to select the optimal model using the smallest value.
 The final value used for the model was k = 15.</code></pre>

@@ -11,11 +11,29 @@ execute:
 
 ## Agenda
 
-1. Review of Homework 2
+1. Review of Homeworks
 2. A human understanding of regression
 3. Dinner break
 5. Preprocessing and BoxCox
-6. The KNN algorithm and the Confusion Matrix
+6. The $K$NN algorithm and the Confusion Matrix
+
+# Homework
+
+## HW1
+
+- We need to work on writing quality.
+- We need to work on RMSE intepretation.
+- We need to work on using `summary` responsibly.
+- We need to work on applying lecture topics to leading questions.
+- We would benefit from use of the [`embed-resources`](https://quarto.org/docs/reference/formats/html.html) option in Quarto.
+
+## HW2
+
+- Think
+- Pair
+- Share
+
+# Today
 
 ## Setup
 
@@ -25,6 +43,9 @@ library(moderndive)
 library(class)
 library(caret)
 library(fastDummies)
+library(thematic)
+theme_set(theme_dark())
+thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
 wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/wine.rds"))) %>%
   mutate(lprice = log(price))
 ```
@@ -49,10 +70,10 @@ wine %>%
 
 ## Exercise
 
-1. Calculate the correlation between log(price) and points 
-2. by variety
-3. for Oregon Chardonnay, Pinot Noir and Pinot Gris
-4. in the same tibble
+1. Calculate the correlation between $\log$(price) and points... 
+2. ...by variety...
+3. ...for Oregon Chardonnay, Pinot Noir and Pinot Gris...
+4. ...in the same tibble!
 
 ## Solution
 
@@ -106,9 +127,12 @@ pct = (exp(coef(model)["points"]) - 1) * 100
 
 Since we logged the DV, a 1 point ratings increase = ``r round(pct,2)``\% increase in price on average. 
 
-Note: $$ (e^x-1)*100 $$
+Note: 
+$$ 
+(e^x-1)*100 
+$$
 
-## Even moar awesomer with some code fu
+## Pretty Print
 
 ```{r}
 for(v in c("Chardonnay", "Pinot Gris","Pinot Noir")){
@@ -118,17 +142,29 @@ for(v in c("Chardonnay", "Pinot Gris","Pinot Noir")){
 }
 ```
 
-## Logged feature
+## $\log$ feature
 
 ```{r}
 model <- lm(price~lpoints, filter(wine,province=="Oregon") %>% mutate(lpoints=log(points)))
 model
-inc = coef(model)["lpoints"]/100
 ```
 
-Since we logged the IV (feature), a 1% ratings increase = ``r round(inc,2)`` increase in price on average. 
+- What does the *sign* (positive or negative) tell us?
+- Was $\log$ appropriate here?
 
-Note: $$ x/100 $$
+## Percentages
+
+```{r}
+coef(model)["lpoints"]/100
+```
+
+- Since we logged the IV (feature), a 1% ratings increase is a ~3.24 increase in price on average. 
+- What are the units on that?
+
+Note: 
+$$ 
+x/100 
+$$
 
 ## LogLog (also elasticity)
 
@@ -141,9 +177,51 @@ model
 
 ## Summary
 
-- Only the dependent/response variable is log-transformed. Exponentiate the coefficient, subtract one from this number, and multiply by 100. This gives the percent increase (or decrease) in the response for every one-unit increase in the independent variable. Example: the coefficient is 0.198. (exp(0.198) – 1) * 100 = 21.9. For every one-unit increase in the independent variable, our dependent variable increases by about 22%.
-- Only independent/predictor variable(s) is log-transformed. Divide the coefficient by 100. This tells us that a 1% increase in the independent variable increases (or decreases) the dependent variable by (coefficient/100) units. Example: the coefficient is 0.198. 0.198/100 = 0.00198. For every 1% increase in the independent variable, our dependent variable increases by about 0.002. 
-- Both dependent/response variable and independent/predictor variable(s) are log-transformed. Interpret the coefficient as the percent increase in the dependent variable for every 1% increase in the independent variable. Example: the coefficient is 0.198. For every 1% increase in the independent variable, our dependent variable increases by about 0.20%. 
+- Only the dependent/response variable is log-transformed. 
+  - Exponentiate the coefficient.
+  - Subtract one from this number
+  - Multiply by 100.
+- This gives the percent increase (or decrease).
+
+## Units
+
+- Change is per one-unit increase in the independent variable. 
+  - Here, independent is points.
+  - Dependent is price.
+
+
+## Example
+
+- Example: the coefficient is 0.198. 
+$$
+\exp(0.198) – 1) * 100 \approx 22
+$$
+```{r}
+exp(.198)- 1 * 100
+```
+
+- For every one-unit increase in the independent variable, our dependent variable increases by about 22%.
+
+## Independent
+
+- For every 1% increase in the independent variable...
+- ... our dependent variable increases by about 0.002...
+- ... which is about 22% of 1%
+
+## Dependent
+- Can $\log$ both of the:
+  - Dependent/response variable, and 
+  - Independent/predictor variable(s).
+- The coefficient is the ratio between percent changes.
+
+## Example
+
+- Example: the coefficient is 0.198. 
+  - For every 1% increase in the independent variable...
+  - Our dependent variable increases by about 0.20%. 
+  - That is, 20% of 1% or .2 times 1%.
+- A $30 bottle of wine scoring 90 would be worth $30.06 as a 91.
+  - We should probably transform scores from [80-100] to [0-20]
 
 ## Graphing points by variety
 ```{r}
@@ -163,10 +241,7 @@ wine %>%
   summarise(mean=mean(points)))
 ```
 
-Note: 
-
-1. The difference between Pinot Gris and Chardonnay is `r tmp[["mean"]][2]-tmp[["mean"]][1]`
-2. The difference between Pinot Noir and Chardonnay is `r tmp[["mean"]][3]-tmp[["mean"]][1]`
+- What are the percentage differences here?
 
 ## Regression
 ```{r}
@@ -175,7 +250,7 @@ model <- lm(points~variety,
 get_regression_table(model)
 ```
 
-What is the equation for this regression?
+- What types of variables are we considering here?
 
 
 ## Assumptions of linear regression
@@ -194,9 +269,13 @@ What would the residuals look like?
 
 ## Independence
 
-Given our original model of $log(price)=m*Points+b$... 
+- Given our original model of 
+$$
+\log(\text{price})=m*\text{Points}+b
+$$ 
 
-### ...are there any problems with independence?
+- are there any problems with independence?
+- How could we check?
 
 ## Normality
 ```{r}
@@ -216,12 +295,12 @@ get_regression_points(model) %>%
 
 ## No equality in the variance
 
-[*Credit:* Modern Dive](https://moderndive.com/5-regression.html)
+[*Credit:* Modern Dive](https://moderndive.com/5-regression.html) (click)
 
 ![](./images/unequal-variance.png)
 
 
-# Dinner (and vitural high fives)
+# Dinner
 
 ![](./images/comic3.png)
 
@@ -229,20 +308,125 @@ get_regression_points(model) %>%
 
 ## Setup
 
+- Pivot to pinot.
+  - Say "$\pi^0$"
+
 ```{r}
 wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot_orig.rds")))
 ```
 
-# Preprocessing
+## Preprocessing
 
-Box-Cox transformations use MLE to estimate $\lambda$
+- Box-Cox transformations use maximum likelihood estimate to estimate value for $\lambda$
 
-$x^{*} = \frac{x^{\lambda}-1}{\lambda\: \tilde{x}^{\lambda-1}}$
+$$
+y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
+$$
 
-- when $\lambda=1$, there is no transformation
-- when $\lambda=0$, it is log transformed
-- when $\lambda=0.5$, it is square root
-- when $\lambda=-1$, it is an inverse
+- The goal is to make data seem more like a normal distribution.
+
+## Examples
+
+- When $\lambda=1$, there is no transformation
+
+$$
+y(1) = \frac{x^{\lambda}-1}{\lambda} = 
+      \frac{x^{1}-1}{1} =
+        x-1 \approx x
+$$
+
+$$
+f = y(-1) \implies f(x) \approx x
+$$
+
+## Examples
+
+- When $\lambda=0$, it is log transformed
+
+$$
+y(0) = \frac{x^{\lambda}-1}{\lambda} = 
+      \frac{x^{0}-1}{0}
+$$
+
+$$
+f = y(0) \implies f(x) \approx \log(x)
+$$
+
+
+- Zero is a special case, but using a little thing called "calculus" this sorta makes sense.
+- Basically, negative infinity at 0, then increase slowly once positive.
+
+## Examples
+
+$$
+y(1) = \frac{x^{\lambda}-1}{\lambda} = 
+      \frac{x^{.5}-1}{.5} =
+      2\times(\sqrt{x}-1) \approx \sqrt{x}
+$$
+
+$$
+f = y(.5) \implies f(x) \approx \sqrt{x}
+$$
+
+
+## Examples
+
+- When $\lambda=-1$, it is an inverse
+
+$$
+y(1) = \frac{x^{\lambda}-1}{\lambda} = 
+      \frac{x^{-1}-1}{-1} =
+      \frac{x^{-1}}{-1}+\frac{-1}{-1} =
+      \frac{1}{-x}-1 = -x
+$$
+$$
+f = y(.5) \implies f(x) \approx -x
+$$
+
+## Just use the function
+
+- R: envstats
+```{.r}
+library(envstats)
+
+# Example data
+data <- c(1, 2, 3, 4, 5)
+
+# Apply Box-Cox transformation
+boxcox_result <- boxcoxTransform(data)
+
+# Print the result
+print(boxcox_result)
+```
+
+
+## Just use the function
+
+- Py: scipy.stats
+```{.py}
+from scipy.stats import boxcox
+import numpy as np
+
+# Example data
+data = np.array([1, 2, 3, 4, 5])
+
+# Apply Box-Cox transformation
+boxcox_result, lambda_value = boxcox(data)
+
+# Print the result
+print("Transformed data:", boxcox_result)
+print("Lambda value:", lambda_value)
+```
+
+## On Python
+
+- I like the Python [boxcox documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html):
+
+```{.haskell}
+y = (x**lmbda - 1) / lmbda,  for lmbda != 0
+    log(x),                  for lmbda = 0
+```
+
 
 ## Caret preprocessing is so easy!
 
@@ -253,6 +437,9 @@ wine %>%
   select(-description) %>% 
   head()
 ```
+
+
+## Or is it?
 
 But wait... what is wrong here?
 
@@ -267,88 +454,134 @@ wino <- wino %>%
 head(wino %>% select(starts_with("year")))
 ```
 
+- Are years normally distributed?
 
-# The KNN Algorithm
 
-## Algorithm
+# The $K$NN Algorithm
+
+## Algorithm {.smaller}
 
 1. Load the data
-2. Initialize K to your chosen number of neighbors
+2. Initialize $K$ to your chosen number of neighbors
 3. For each example in the data
-  1. Calculate the distance between the query example and the current example from the data.
-  2. Add the distance and the index of the example to an ordered collection
+  - Calculate the distance between the query example and the current example from the data.
+  - Add the distance and the index of the example to an ordered collection
 4. Sort the ordered collection of distances and indices from smallest to largest (in ascending order) by the distances
-5. Pick the first K entries from the sorted collection
-6. Get the labels of the selected K entries
-7. If regression, return the mean of the K labels
-8. If classification, return the mode of the K labels
+5. Pick the first $K$ entries from the sorted collection
+6. Get the labels of the selected $K$ entries
+7. If regression, return the mean of the $K$ labels
+8. If classification, return the mode of the $K$ labels
+
+## Basis
+
+- We assume:
+  - Existing datapoints in something we think of as a space
+    - That is, probably two numerical value per point in a coordinate plane
+    - Categorical is fine - think a Punnett square
+  - Existing datapoints are labelled
+    - Numerical or categorical still fine!
+- To visualize, we will have a 2d space with color labels.
 
 ## Let's draw it
 
+<a  title="Antti Ajanki AnAj, CC BY-SA 3.0 &lt;http://creativecommons.org/licenses/by-sa/3.0/&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:KnnClassification.svg"><img style="background-color:white;" width="50%" alt="KnnClassification" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/KnnClassification.svg/256px-KnnClassification.svg.png?20101222011435"></a>
 
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;  
-&nbsp;
+## Let's draw it 2
 
+
+<a title="Paolo Bonfini, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:KNN_decision_surface_animation.gif"><img width="100%" alt="KNN decision surface animation" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/KNN_decision_surface_animation.gif/512px-KNN_decision_surface_animation.gif?20240718130312"></a>
+
+## Let's draw it 3
+
+
+![](https://media.geeksforgeeks.org/wp-content/uploads/20231207103856/KNN-Algorithm-(1).png)
+
+[G4G](https://www.geeksforgeeks.org/k-nearest-neighbours/)
 
 ## Engineering some features
 
+- Create an "other" for most tasters.
+
 ```{r}
 wino <- wino %>% 
-  mutate(taster_name = fct_lump(taster_name,5)) %>% 
-  dummy_cols(
+  mutate(taster_name = fct_lump(taster_name,5))
+```
+
+## Engineering some features
+
+- Create dummys for years, tasters
+```{r}
+wino <- wino %>% dummy_cols(
     select_columns = c("year_f","taster_name"),
     remove_most_frequent_dummy = T, 
-    remove_selected_columns = T) %>% 
+    remove_selected_columns = T)
+```
+
+## Engineering some features
+
+- Convert everything to snake case.
+
+```{r}
+wino <- wino %>% 
   rename_all(funs(tolower(.))) %>% 
   rename_all(funs(str_replace_all(., "-", "_"))) %>% 
-  rename_all(funs(str_replace_all(., " ", "_"))) %>% 
+  rename_all(funs(str_replace_all(., " ", "_")))
+```
+
+## Engineering some features
+
+- Add indicators for 3 tasting notes.
+
+```{r}
+wino <- wino %>% 
   mutate(cherry = str_detect(description,"cherry")) %>% 
   mutate(chocolate = str_detect(description,"chocolate")) %>%
   mutate(earth = str_detect(description,"earth")) %>%
   select(-description)
+```
 
+## Engineering some features
+
+- Let's see it
+
+```{r}
 head(wino) %>% 
-  select(1:8)
+  select(1:6)
+```
+
+## Split
+
+```{r}
+set.seed(505)
+wine_index <- createDataPartition(wino$province, p = 0.8, list = FALSE)
+train <- wino[ wine_index, ]
+test <- wino[-wine_index, ]
 ```
 
 ## Simple model
 
+- Specify a $K$NN model.
+
 ```{r}
-set.seed(504)
-wine_index <- createDataPartition(wino$province, p = 0.8, list = FALSE)
-train <- wino[ wine_index, ]
-test <- wino[-wine_index, ]
 
 fit <- knn(
   train = select(train,-province), 
   test = select(test,-province), 
   k=5, 
   cl = train$province, 
-  prob = T)
+  prob = T) # 'votes' for the winning class are returned as attribute prob
 ```
 
 ## Confusion matrix
+
+- Remember to scroll, a lot there!
 
 ```{r}
 confusionMatrix(fit,factor(test$province))
 ```
 
 
-## Kappa statistic
+## Kappa $\kappa$ statistic
 
 Compares observed accuracy against what would be expected by a random classifier. 
 
@@ -360,39 +593,48 @@ Compares observed accuracy against what would be expected by a random classifier
 
 ...whoa! What's going on here?
 
-## Fixing the leak
+
+# Overfitting... or a leak?
+
+## Review the dataframe
 
 ```{r}
-wino <- select(wino, -starts_with("taster")) # get rid of the taster variables
+summary(wino)
+```
 
-set.seed(504)
-wine_index <- createDataPartition(wino$province, p = 0.8, list = FALSE)
-train <- wino[ wine_index, ]
-test <- wino[-wine_index, ]
+## Fixing the leak
 
+- Dastardly humans, always existing in a physical location.
+
+```{r}
+train <- select(train, -starts_with("taster"))
+test <- select(test, -starts_with("taster"))
+```
+
+## Rerun
+
+```{r}
 fit <- knn(
   train = select(train,-province), 
   test = select(test,-province), 
   k=5, 
-  cl = train$province, 
-  prob = T)
+  cl = train$province)
 ```
 
 ## Confusion matrix
 
-```{r tidy=T, strip.white=T, comment=""}
+```{r}
 confusionMatrix(fit,factor(test$province))
 ```
 
-## Basic model with parameter tuning
+## With parameter tuning over $K$
 
 ```{r}
-control <- trainControl(method = "boot", number = 1)
 fit <- train(province ~ .,
              data = train, 
              method = "knn",
              tuneLength = 15,
-             trControl = control)
+             trControl = trainControl(number = 1)) # default bootstrap
 fit
 ```
 
@@ -403,16 +645,15 @@ confusionMatrix(predict(fit, test),factor(test$province))
 ```
 
 
-## With parameter tuning and subsampling
+## Tuning and subsampling
 
 ```{r}
 fit <- train(province ~ .,
              data = train, 
              method = "knn",
              tuneLength = 15,
-             metric = "Kappa",
-             trControl = control)
-
+             metric = "Kappa", # this is new
+             trControl = trainControl(number = 1))
 fit
 ```
 
@@ -426,8 +667,12 @@ ggplot(fit, metric="Kappa")
 ## Group modeling problem I
 
 * Practice running different versions of the model
-* Create some new features and
-* see if you can achieve a Kappa >= 0.5
+* Create some new features and...
+* See if you can achieve a Kappa >= 0.5!
+
+$$
+\kappa \geq 0.5
+$$
 
 
 ## Bonus: KNN for regression
