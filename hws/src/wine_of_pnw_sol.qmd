@@ -1,0 +1,138 @@
+---
+title: "Wines of the PNW"
+author: Calvin Deutschbein
+date: "01/27/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme: superhero  
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+**Abstract:**
+
+This is a technical blog post of **both** an HTML file *and* [.qmd file](src/wine_of_pnw_sol.qmd) hosted on GitHub pages.
+
+# Setup
+
+**Step Up Code:**
+```{r}
+library(tidyverse) 
+library(moderndive) # Added "moderndive"
+
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/wine.rds"))) %>%
+  filter(province=="Oregon" | province=="California" | province=="New York") %>% 
+  mutate(cherry=as.integer(str_detect(description,"[Cc]herry"))) %>% 
+  mutate(lprice=log(price)) %>% 
+  select(lprice, points, cherry, province)
+```
+
+**Explanation:**
+
+>- Import the tidyverse library.
+- Import the moderndive library, to be used in the next cell.
+- Read in the `wine.rds` file containing the wine dataset.
+  - Filter out records not from Oregon, California and New York
+  - Create a new indicator variable called 'cherry' that is 1 if the word 'cherry' exists in the description and 0 otherwise
+  - create a new numerical variable called 'lprice' that is the (natural) log of price.
+  - Select four columns, exactly: lprice, points, cherry, and province
+
+# Multiple Regression
+
+## Linear Models
+
+First run a linear regression model with log of price as the dependent variable and 'points' and 'cherry' as features (variables).
+
+```{r}
+m1 <- lm(lprice ~ points + cherry, data=wine)
+get_regression_summaries(m1)
+```
+
+**Explanataion:**
+
+> The `lm` function takes a linear model over the sum of the points and the numerical (`0` or `1`) value of the `cherry` indicator variable for the wine dataset, then prints and summary.
+
+```{r}
+sqrt(mean(m1$residuals^2))
+```
+
+> As we predict `lprice`, this is the measurement in the difference of the log of price from the prediction. This numerical value is highly non-intuitive because it is a post-transform (logarithm). So in general, for around an error of `.5`, I would expect to be off by $1 - (1 / e^{.5}) \approx .4$ or 40%.
+
+```{r}
+log(100) - log(60)
+```
+
+## Interaction Models
+
+Add an interaction between 'points' and 'cherry'. 
+
+```{r}
+m2 <- lm(lprice ~ points * cherry, data=wine)
+get_regression_table(m2)
+```
+
+> Within the arguments of the `lm` function, `~` and `*` have specific meanings in accordance with the formulas API, so we note that this does not represent a naive multiplication and is much closer to common conception of a multiple regression - where the impacts of multiple independent variables, including potential **interactions** between these variables, are used to predict a dependent variable - in this case the log of price.
+
+```{r}
+sqrt(mean(m2$residuals^2))
+```
+
+> We note the RMSE is larger unaltered by switching to an interaction model, which is consistent with the interaction effect being relatively non-impactful compared to the direct effects of the variables.
+
+### The Interaction Variable
+
+> We start with two basic ideas: That wine with higher scores tends to fetch higher prices, and wine that reviewers say has a note of cherry tends to fetch higher prices. We want to answer the question of whether the having a cherry note is more usefully on wines with higher points, or with lower points. We find that in fact the more the points, the more value we get from a cherry note - by a small but meaningful amount. The wines tend to gain about 13% more value for each added point than the would without a cherry note.
+
+```{r}
+ests <- get_regression_table(m2)$estimate
+ests[4] / ests[2]
+```
+
+## Applications
+
+Determine which province (Oregon, California, or New York), does the 'cherry' feature in the data affect price most?
+
+```{r}
+cherry_impact <- function(state) {
+  df <- wine %>% filter(province == state)
+  m <- lm(lprice ~ cherry, data = df)
+  s <- summary(m)
+  get_regression_table(m)
+}
+map(c("Oregon", "California", "New York"), cherry_impact)
+```
+
+> Cherry impacts price roughly twice as strongly within Oregon wines as either California or New York wines, which are themselves quite similar.
+
+# Scenarios
+
+## On Accuracy
+
+Imagine a model to distinguish New York wines from those in California and Oregon. After a few days of work, you take some measurements and note: "I've achieved 91% accuracy on my model!" 
+
+Should you be impressed? Why or why not?
+
+```{r}
+ny <- wine %>% 
+        mutate(ny=province=="New York") %>% 
+        mutate(no=FALSE) %>% 
+        mutate(y_hat=ny==no)
+mean(ny$y_hat)
+```
+
+> Assuming no wines from New York yields 91% accuracy. This model is almost identical in performance to assuming the non-existence of New York and is the negation of impressive.
+
+## On Ethics
+
+Why is understanding this vignette important to use machine learning in an ethical manner?
+
+> It is difficult to understand, for me, to relate ethics, "the philosophical study of moral phenomena", to correctly calculating numerical values. I suspect ethics would occur at the site of application of these techniques to domain areas, and then using the ethical formulations specific to those domains at application time.
+
+## Ignorance is no excuse
+Imagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?
+
+> No - the only approach to resolve an ethical problem to is to "do the right thing" - which in this case is to take concrete actions to ensure the best possible outcomes for the individuals in question and nation-state/region as a whole. Modeling is insufficient to achieve a outcome consistent with ethical standards, which requires concrete actions with material implications. For example, one could share the results of a model on background with a reporter to apply political pressure the presidential administration to pressure the government to pursue verifiably sound industrial and economic policy.

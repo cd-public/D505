@@ -1,14 +1,17 @@
 ---
-title: "Homework 3"
-author: ""
-date: "02/08/2021"
-output: 
-  html_document:
-    df_print: kable
-    fig_width: 11
-    fig_height: 8
----
+title: "Wine Features"
+author: "Your name here!"
+date: "02/10/2025"
 
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme: superhero  
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
 **Directions:**
 
 Please turn in **both** a knitted HTML file *and* your Rmd file on WISE.

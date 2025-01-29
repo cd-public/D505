@@ -110,5 +110,54 @@
     "title": "Wine Features",
     "section": "",
     "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages.\n\nSetup\n\nChange the author of this QMD file to be yourself and delete this line.\nModify if necessary the below code so that you can successfully load wine.rds then delete this line.\nIn the space provided after the Python chunk, explain what thecode is doing (line by line) then delete this line.\nGet your GitHub Pages ready.\n\nSet Up Python:\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.utils import resample\n\nSet Up R Compatability:\n\nimport pyreadr\n\nStep Up Dataframe:\n\nurl = 'https://cd-public.github.io/D505/dat/'\nrds = 'wine.rds'\npyreadr.download_file(url + rds, rds) \nwine = pyreadr.read_r(rds)[None]      \n\nExplanataion:\n\nTODO: write your line-by-line explanation of the code here\n\n\n\nFeature Engineering\nWe begin by engineering an number of features.\n\nCreate a total of 10 features (including points).\nRemove all rows with a missing value.\nEnsure only log(price) and engineering features are the only columns that remain in the wino dataframe.\n\n\nwine['lprice'] = wine['price'].apply(lambda x: np.log(x))\n\n\n\nSkelarn\nWe now use a train/test split to evaluate the features.\n\nUse the Sklearn library to partition the wino dataframe into an 75/25 split.\nRun a linear regression with bootstrap resampling.\nReport RMSE on the test partition of the data.\n\n\n# TODO: hint: Check the slides.\n\n\n\nVariable selection\nWe now graph the importance of your 10 features.\n\n# TODO: hint: Check the slides."
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html",
+    "href": "wine_of_pnw_sol.html",
+    "title": "Wines of the PNW",
+    "section": "",
+    "text": "Abstract:\nThis is a technical blog post of both an HTML file and .qmd file hosted on GitHub pages."
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#linear-models",
+    "href": "wine_of_pnw_sol.html#linear-models",
+    "title": "Wines of the PNW",
+    "section": "Linear Models",
+    "text": "Linear Models\nFirst run a linear regression model with log of price as the dependent variable and ‘points’ and ‘cherry’ as features (variables).\n\nm1 &lt;- lm(lprice ~ points + cherry, data=wine)\nget_regression_summaries(m1)\n\n# A tibble: 1 × 9\n  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df  nobs\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.305         0.305 0.220 0.469 0.469     5846.       0     2 26584\n\n\nExplanataion:\n\nThe lm function takes a linear model over the sum of the points and the numerical (0 or 1) value of the cherry indicator variable for the wine dataset, then prints and summary.\n\n\nsqrt(mean(m1$residuals^2))\n\n[1] 0.4687657\n\n\n\nAs we predict lprice, this is the measurement in the difference of the log of price from the prediction. This numerical value is highly non-intuitive because it is a post-transform (logarithm). So in general, for around an error of .5, I would expect to be off by \\(1 - (1 / e^{.5}) \\approx .4\\) or 40%.\n\n\nlog(100) - log(60)\n\n[1] 0.5108256"
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#interaction-models",
+    "href": "wine_of_pnw_sol.html#interaction-models",
+    "title": "Wines of the PNW",
+    "section": "Interaction Models",
+    "text": "Interaction Models\nAdd an interaction between ‘points’ and ‘cherry’.\n\nm2 &lt;- lm(lprice ~ points * cherry, data=wine)\nget_regression_table(m2)\n\n# A tibble: 4 × 7\n  term          estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept       -5.66      0.102    -55.4        0   -5.86    -5.46 \n2 points           0.102     0.001     89.0        0    0.1      0.104\n3 cherry          -1.01      0.216     -4.70       0   -1.44    -0.592\n4 points:cherry    0.013     0.002      5.26       0    0.008    0.017\n\n\n\nWithin the arguments of the lm function, ~ and * have specific meanings in accordance with the formulas API, so we note that this does not represent a naive multiplication and is much closer to common conception of a multiple regression - where the impacts of multiple independent variables, including potential interactions between these variables, are used to predict a dependent variable - in this case the log of price.\n\n\nsqrt(mean(m2$residuals^2))\n\n[1] 0.4685223\n\n\n\nWe note the RMSE is larger unaltered by switching to an interaction model, which is consistent with the interaction effect being relatively non-impactful compared to the direct effects of the variables.\n\n\nThe Interaction Variable\n\nWe start with two basic ideas: That wine with higher scores tends to fetch higher prices, and wine that reviewers say has a note of cherry tends to fetch higher prices. We want to answer the question of whether the having a cherry note is more usefully on wines with higher points, or with lower points. We find that in fact the more the points, the more value we get from a cherry note - by a small but meaningful amount. The wines tend to gain about 13% more value for each added point than the would without a cherry note.\n\n\nests &lt;- get_regression_table(m2)$estimate\nests[4] / ests[2]\n\n[1] 0.127451"
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#applications",
+    "href": "wine_of_pnw_sol.html#applications",
+    "title": "Wines of the PNW",
+    "section": "Applications",
+    "text": "Applications\nDetermine which province (Oregon, California, or New York), does the ‘cherry’ feature in the data affect price most?\n\ncherry_impact &lt;- function(state) {\n  df &lt;- wine %&gt;% filter(province == state)\n  m &lt;- lm(lprice ~ cherry, data = df)\n  s &lt;- summary(m)\n  get_regression_table(m)\n}\nmap(c(\"Oregon\", \"California\", \"New York\"), cherry_impact)\n\n[[1]]\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    3.40      0.008     430.        0    3.39     3.42 \n2 cherry       0.303     0.016      19.2       0    0.272    0.334\n\n[[2]]\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    3.49      0.005     739.        0    3.48     3.50 \n2 cherry       0.177     0.01       18.4       0    0.158    0.196\n\n[[3]]\n# A tibble: 2 × 7\n  term      estimate std_error statistic p_value lower_ci upper_ci\n  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 intercept    3.02      0.009    331.         0    3.00     3.04 \n2 cherry       0.173     0.018      9.77       0    0.138    0.208\n\n\n\nCherry impacts price roughly twice as strongly within Oregon wines as either California or New York wines, which are themselves quite similar."
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#on-accuracy",
+    "href": "wine_of_pnw_sol.html#on-accuracy",
+    "title": "Wines of the PNW",
+    "section": "On Accuracy",
+    "text": "On Accuracy\nImagine a model to distinguish New York wines from those in California and Oregon. After a few days of work, you take some measurements and note: “I’ve achieved 91% accuracy on my model!”\nShould you be impressed? Why or why not?\n\nny &lt;- wine %&gt;% \n        mutate(ny=province==\"New York\") %&gt;% \n        mutate(no=FALSE) %&gt;% \n        mutate(y_hat=ny==no)\nmean(ny$y_hat)\n\n[1] 0.9110743\n\n\n\nAssuming no wines from New York yields 91% accuracy. This model is almost identical in performance to assuming the non-existence of New York and is the negation of impressive."
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#on-ethics",
+    "href": "wine_of_pnw_sol.html#on-ethics",
+    "title": "Wines of the PNW",
+    "section": "On Ethics",
+    "text": "On Ethics\nWhy is understanding this vignette important to use machine learning in an ethical manner?\n\nIt is difficult to understand, for me, to relate ethics, “the philosophical study of moral phenomena”, to correctly calculating numerical values. I suspect ethics would occur at the site of application of these techniques to domain areas, and then using the ethical formulations specific to those domains at application time."
+  },
+  {
+    "objectID": "wine_of_pnw_sol.html#ignorance-is-no-excuse",
+    "href": "wine_of_pnw_sol.html#ignorance-is-no-excuse",
+    "title": "Wines of the PNW",
+    "section": "Ignorance is no excuse",
+    "text": "Ignorance is no excuse\nImagine you are working on a model to predict the likelihood that an individual loses their job as the result of the changing federal policy under new presidential administrations. You have a very large dataset with many hundreds of features, but you are worried that including indicators like age, income or gender might pose some ethical problems. When you discuss these concerns with your boss, she tells you to simply drop those features from the model. Does this solve the ethical issue? Why or why not?\n\nNo - the only approach to resolve an ethical problem to is to “do the right thing” - which in this case is to take concrete actions to ensure the best possible outcomes for the individuals in question and nation-state/region as a whole. Modeling is insufficient to achieve a outcome consistent with ethical standards, which requires concrete actions with material implications. For example, one could share the results of a model on background with a reporter to apply political pressure the presidential administration to pressure the government to pursue verifiably sound industrial and economic policy."
   }
 ]
