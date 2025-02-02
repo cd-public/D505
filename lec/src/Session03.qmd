@@ -27,9 +27,7 @@ execute:
 - We need to work on applying lecture topics to leading questions.
 - We would benefit from use of the [`embed-resources`](https://quarto.org/docs/reference/formats/html.html) option in Quarto.
 
-## HW1 Sols Posted
-
-- [Here](../hws/wine_of_pnw_sol.html)
+## [HW1 Sols Posted](../hws/wine_of_pnw_sol.html)
 
 <iframe src="../hws/wine_of_pnw_sol.html" height="500" width="800" title="Iframe Example"></iframe> 
 
