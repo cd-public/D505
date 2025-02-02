@@ -27,6 +27,12 @@ execute:
 - We need to work on applying lecture topics to leading questions.
 - We would benefit from use of the [`embed-resources`](https://quarto.org/docs/reference/formats/html.html) option in Quarto.
 
+## HW1 Sols Posted
+
+- [Here](../hws/wine_of_pnw_sol.html)
+
+<iframe src="../hws/wine_of_pnw_sol.html" height="500" width="800" title="Iframe Example"></iframe> 
+
 ## HW2
 
 - Think
@@ -88,6 +94,7 @@ wine %>%
 ## Visualizing these different correlations
 
 ```{r}
+#| output-location: slide
 wine %>% 
   filter(province=="Oregon") %>% 
   filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %>% 
@@ -108,6 +115,10 @@ get_regression_points(model) %>%
     geom_point()
 ```
 
+## Annotate
+
+![](images/spread.png)
+
 ## Graphing residuals (good)
 
 ```{r}
@@ -123,14 +134,50 @@ get_regression_points(model) %>%
 ```{r}
 model <- lm(lprice~points, filter(wine,province=="Oregon"))
 pct = (exp(coef(model)["points"]) - 1) * 100
+c(coef(model)["points"],pct) 
 ```
 
-Since we logged the DV, a 1 point ratings increase = ``r round(pct,2)``\% increase in price on average. 
+- We logged the *dependent* variable (price)
+  - A 1 point ratings increase = ``r round(pct,2)``\%
+  - That is, a percent change in rating to an *absolute* change in the dependent variable. 
+- $(e^x - 1)*100$
 
-Note: 
-$$ 
-(e^x-1)*100 
-$$
+## Interpreting the coefficients
+
+```{r}
+m_yr <- lm(lprice~year, filter(wine,province=="Oregon"))
+yr = (exp(coef(m_yr)["year"]) - 1) * 100
+c(coef(m_yr)["year"],yr) 
+```
+
+- This is a *de facto* measure of inflation.
+
+## Some Examples
+
+::::{.columns}
+
+:::{.column width=50%}
+
+```{r}
+for (x in 1:10) {
+    print(c(x/100, (exp(x/100)-1) * 100))
+}
+```
+
+:::
+
+
+:::{.column width=50%}
+
+```{r}
+for (x in 1:10) {
+    print(c(x/010, (exp(x/010)-1) * 100))
+}
+```
+
+:::
+
+::::
 
 ## Pretty Print
 
@@ -188,13 +235,6 @@ model
 - Change is per one-unit increase in the independent variable. 
   - Here, independent is points.
   - Dependent is price.
-
-
-## Example
-
-- Example: the coefficient is ~8.3
-
-- For everypercent increase in the independent variable, our dependent variable increases by about 8.3%.
 
 ## Example
 
@@ -308,6 +348,23 @@ $$
 
 - The goal is to make data seem more like a normal distribution.
 
+## in R
+
+- LaTeX
+
+$$
+y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
+$$
+
+- R
+```{r}
+y <- function(l) {
+  r <- function(x) {
+    (x ** l - 1) /l
+  }
+}
+```
+
 ## Examples
 
 - When $\lambda=1$, there is no transformation
@@ -338,6 +395,18 @@ $$
 
 - Zero is a special case, but using a little thing called "calculus" this sorta makes sense.
 - Basically, negative infinity at 0, then increase slowly once positive.
+
+## $\lambda = 0$
+
+```{r}
+for (x in 1:3) {
+  print(x/10)
+  for (l in 3:1) {
+    f = y(l/100)
+    print(c(l/100, x/10, f(x/10), log(x/10), f(x/10) - log(x/10)))
+  }
+}
+```
 
 ## Examples
 
@@ -517,9 +586,9 @@ wino <- wino %>%
 
 ```{r}
 wino <- wino %>% 
-  mutate(cherry = str_detect(description,"cherry")) %>% 
-  mutate(chocolate = str_detect(description,"chocolate")) %>%
-  mutate(earth = str_detect(description,"earth")) %>%
+  mutate(note_cherry = str_detect(description,"cherry")) %>% 
+  mutate(note_chocolate = str_detect(description,"chocolate")) %>%
+  mutate(note_earth = str_detect(description,"earth")) %>%
   select(-description)
 ```
 
@@ -546,23 +615,29 @@ test <- wino[-wine_index, ]
 - Specify a $K$NN model.
 
 ```{r}
-
 fit <- knn(
   train = select(train,-province), 
   test = select(test,-province), 
   k=5, 
-  cl = train$province, 
-  prob = T) # 'votes' for the winning class are returned as attribute prob
+  cl = train$province)
 ```
 
 ## Confusion matrix
 
-- Remember to scroll, a lot there!
+- Let's look at Kappa.
 
 ```{r}
-confusionMatrix(fit,factor(test$province))
+confusionMatrix(fit,factor(test$province))$overall
 ```
 
+## Kappa $\kappa$ statistic
+
+> Kappa statistic is a measurement of the agreement for categorical items Kappa can be used to assess the performance of kNN algorithm.
+
+$$
+\kappa = \dfrac{P(A)-P(E)}{1 - P(E)}
+$$
+> where $P(A$)$ is the relative observed agreement among raters, and $P(E)$ is the proportion of agreement expected between the classifier and the ground truth by chance. [src](https://pmc.ncbi.nlm.nih.gov/articles/PMC4916348/)
 
 ## Kappa $\kappa$ statistic
 
@@ -583,6 +658,27 @@ Compares observed accuracy against what would be expected by a random classifier
 
 ```{r}
 summary(wino)
+```
+
+## Determine what dominates
+
+```{r}
+omit <- function(prefix) {
+  train <- select(train, -starts_with(prefix))
+  test <- select(test, -starts_with(prefix))
+  fit <- knn(
+    train = select(train,-province), 
+    test = select(test,-province), 
+    k=5, 
+    cl = train$province)
+  confusionMatrix(fit,factor(test$province))$overall
+}
+```
+
+## Test
+
+```{r}
+c(omit('year')["Kappa"], omit('note')["Kappa"], omit('taster')["Kappa"])
 ```
 
 ## Fixing the leak
