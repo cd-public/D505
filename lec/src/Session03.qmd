@@ -628,14 +628,15 @@ fit <- knn(
 confusionMatrix(fit,factor(test$province))$overall
 ```
 
-## Kappa $\kappa$ statistic
+## [Kappa $\kappa$ statistic](https://pmc.ncbi.nlm.nih.gov/articles/PMC4916348/)
 
 > Kappa statistic is a measurement of the agreement for categorical items Kappa can be used to assess the performance of kNN algorithm.
 
 $$
 \kappa = \dfrac{P(A)-P(E)}{1 - P(E)}
 $$
-> where $P(A$)$ is the relative observed agreement among raters, and $P(E)$ is the proportion of agreement expected between the classifier and the ground truth by chance. [src](https://pmc.ncbi.nlm.nih.gov/articles/PMC4916348/)
+
+> where $P(A)$ is the relative observed agreement among raters, and $P(E)$ is the proportion of agreement expected between the classifier and the ground truth by chance.
 
 ## Kappa $\kappa$ statistic
 
