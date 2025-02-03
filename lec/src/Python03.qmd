@@ -56,6 +56,10 @@ import seaborn as sns
 ```{python scikit}
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PowerTransformer
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, make_scorer, cohen_kappa_score
+import re
 ```
 
 ## Setup
@@ -134,7 +138,7 @@ sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)
 - Clearly should've made a function here.
 ```{python}
 def resid_plot(df, x, y):
-  X,y  = df[[x]], wine[y]
+  X,y  = df[[x]], df[y]
   wine['residual'] = y - LinearRegression().fit(X, y).predict(X)
   return sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)
 ```
@@ -259,7 +263,7 @@ sns.boxplot(x='variety', y='points', data=wine)
 
 ## Summary
 ```{python}
-wine.groupby('variety').apply(np.mean)['points']
+wine.groupby('variety')['points'].mean()
 ```
 
 - What are the percentage differences here?
@@ -290,25 +294,16 @@ $$
 
 ## Normality
 ```{python}
-# bar chart residuals
+X = wine[["points"]]
+sns.histplot(y - LinearRegression().fit(X, wine["lprice"]).predict(X))
 ```
 
-## Equality of variance
-
-```{r}
-ns.barplot(x=wine.index, y='residual', data=wine)
-```
 
 ## No equality in the variance
 
 [*Credit:* Modern Dive](https://moderndive.com/5-regression.html) (click)
 
 ![](./images/unequal-variance.png)
-
-
-# Dinner
-
-![](./images/comic3.png)
 
 # Preprocessing and BoxCox
 
@@ -423,6 +418,14 @@ print("Transformed data:", boxcox_result.flatten())
 print("Lambda value:", pt.lambdas_)
 ```
 
+## On Points
+
+```{python}
+pt.fit_transform(wine["points"].values.reshape(-1, 1))
+print("Transformed data:", boxcox_result.flatten())
+print("Lambda value:", pt.lambdas_)
+```
+
 ## On Python
 
 - I like the Python [boxcox documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html):
@@ -431,36 +434,6 @@ print("Lambda value:", pt.lambdas_)
 y = (x**lmbda - 1) / lmbda,  for lmbda != 0
     log(x),                  for lmbda = 0
 ```
-
-
-## Caret preprocessing is so easy!
-
-```{r}
-wine %>% 
-  preProcess(method = c("BoxCox","center","scale")) %>% 
-  predict(wine) %>% 
-  select(-description) %>% 
-  head()
-```
-
-
-## Or is it?
-
-But wait... what is wrong here?
-
-```{r}
-wino <- wine %>%
-  mutate(year_f = as.factor(year))
-
-wino <- wino %>% 
-  preProcess(method = c("BoxCox","center","scale")) %>% 
-  predict(wino)
-
-head(wino %>% select(starts_with("year")))
-```
-
-- Are years normally distributed?
-
 
 # The $K$NN Algorithm
 
@@ -505,195 +478,105 @@ head(wino %>% select(starts_with("year")))
 
 ## Engineering some features
 
-- Create an "other" for most tasters.
+- Tasters, years, notes
 
-```{r}
-wino <- wino %>% 
-  mutate(taster_name = fct_lump(taster_name,5))
-```
+```{python}
+wine = pd.get_dummies(wine, columns=['year', 'taster_name'], drop_first=True)
+wine.columns = [re.sub(r'\s+', '_', re.sub(r'-', '_', col.lower())) for col in wine.columns]
+notes = ['cherry', 'chocolate', 'earth']
+for note in notes:
+    wine[f'note_{note}'] = wine['description'].str.contains(note, case=False, na=False)
 
-## Engineering some features
-
-- Create dummys for years, tasters
-```{r}
-wino <- wino %>% dummy_cols(
-    select_columns = c("year_f","taster_name"),
-    remove_most_frequent_dummy = T, 
-    remove_selected_columns = T)
-```
-
-## Engineering some features
-
-- Convert everything to snake case.
-
-```{r}
-wino <- wino %>% 
-  rename_all(funs(tolower(.))) %>% 
-  rename_all(funs(str_replace_all(., "-", "_"))) %>% 
-  rename_all(funs(str_replace_all(., " ", "_")))
-```
-
-## Engineering some features
-
-- Add indicators for 3 tasting notes.
-
-```{r}
-wino <- wino %>% 
-  mutate(note_cherry = str_detect(description,"cherry")) %>% 
-  mutate(note_chocolate = str_detect(description,"chocolate")) %>%
-  mutate(note_earth = str_detect(description,"earth")) %>%
-  select(-description)
-```
-
-## Engineering some features
-
-- Let's see it
-
-```{r}
-head(wino) %>% 
-  select(1:6)
+wine = wine.drop('description', axis=1)
 ```
 
 ## Split
 
-```{r}
-set.seed(505)
-wine_index <- createDataPartition(wino$province, p = 0.8, list = FALSE)
-train <- wino[ wine_index, ]
-test <- wino[-wine_index, ]
-```
-
-## Simple model
-
-- Specify a $K$NN model.
-
-```{r}
-fit <- knn(
-  train = select(train,-province), 
-  test = select(test,-province), 
-  k=5, 
-  cl = train$province)
+```{python}
+train, test = train_test_split(wine, test_size=0.2, stratify=wine['province'], random_state=505)
 ```
 
 ## Confusion matrix
 
-- Let's look at Kappa.
+- Let's look at misses
 
-```{r}
-confusionMatrix(fit,factor(test$province))$overall
+```{python}
+#| output-location: slide
+X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, train['province'])
+y_pred = knn.predict(X_test)
+conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)
+sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')
 ```
 
-## [Kappa $\kappa$ statistic](https://pmc.ncbi.nlm.nih.gov/articles/PMC4916348/)
-
-> Kappa statistic is a measurement of the agreement for categorical items Kappa can be used to assess the performance of kNN algorithm.
-
-$$
-\kappa = \dfrac{P(A)-P(E)}{1 - P(E)}
-$$
-
-> where $P(A)$ is the relative observed agreement among raters, and $P(E)$ is the proportion of agreement expected between the classifier and the ground truth by chance.
-
-## Kappa $\kappa$ statistic
-
-Compares observed accuracy against what would be expected by a random classifier. 
-
-- \< 0.2 (not so good)
-- 0.21 - 0.4 (ok)
-- 0.41 - 0.6 (pretty good)
-- 0.6 - 0.8 (great)
-- \> 0.8 (almost perfect)
-
-...whoa! What's going on here?
-
-
-# Overfitting... or a leak?
-
-## Review the dataframe
-
-```{r}
-summary(wino)
-```
 
 ## Determine what dominates
 
-```{r}
-omit <- function(prefix) {
-  train <- select(train, -starts_with(prefix))
-  test <- select(test, -starts_with(prefix))
-  fit <- knn(
-    train = select(train,-province), 
-    test = select(test,-province), 
-    k=5, 
-    cl = train$province)
-  confusionMatrix(fit,factor(test$province))$overall
-}
+```{python}
+def omit(prefix):
+  X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])
+  columns_to_drop = [col for col in X_train.columns if prefix in col]
+  X_train = X_train.drop(columns=columns_to_drop)
+  X_test = X_test.drop(columns=columns_to_drop)
+  knn = KNeighborsClassifier(n_neighbors=5)
+  knn.fit(X_train, train['province'])
+  y_pred = knn.predict(X_test)
+  conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)
+  return sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')
 ```
 
 ## Test
 
-```{r}
-c(omit('year')["Kappa"], omit('note')["Kappa"], omit('taster')["Kappa"])
+::::{.columns}
+
+:::{.column width=33%}
+
+```{python}
+omit('year')
 ```
 
-## Fixing the leak
+:::
 
-- Dastardly humans, always existing in a physical location.
+:::{.column width=33%}
 
-```{r}
-train <- select(train, -starts_with("taster"))
-test <- select(test, -starts_with("taster"))
+```{python}
+omit('note')
 ```
 
-## Rerun
+:::
 
-```{r}
-fit <- knn(
-  train = select(train,-province), 
-  test = select(test,-province), 
-  k=5, 
-  cl = train$province)
+:::{.column width=33%}
+
+```{python}
+omit('taster')
 ```
 
-## Confusion matrix
+:::
 
-```{r}
-confusionMatrix(fit,factor(test$province))
+:::
+
+## Drop it
+
+```{python}
+columns_to_drop = [col for col in X_train.columns if 'taster' in col]
+
+train = train.drop(columns=columns_to_drop)
+
+test = test.drop(columns=columns_to_drop)
+
 ```
-
-## With parameter tuning over $K$
-
-```{r}
-fit <- train(province ~ .,
-             data = train, 
-             method = "knn",
-             tuneLength = 15,
-             trControl = trainControl(number = 1)) # default bootstrap
-fit
-```
-
-
-## Confusion Matrix
-```{r}
-confusionMatrix(predict(fit, test),factor(test$province))
-```
-
 
 ## Tuning and subsampling
 
-```{r}
-fit <- train(province ~ .,
-             data = train, 
-             method = "knn",
-             tuneLength = 15,
-             metric = "Kappa", # this is new
-             trControl = trainControl(number = 1))
-fit
-```
-
-## Tuning plot
-
-```{r}
-ggplot(fit, metric="Kappa")
+```{python}
+X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])
+knn = KNeighborsClassifier()
+param_grid = {'n_neighbors': range(1, 16)}
+kappa_scorer = make_scorer(cohen_kappa_score)
+grid_search = GridSearchCV(knn, param_grid, scoring=kappa_scorer)
+grid_search.fit(X_train, train['province'])
+cohen_kappa_score(test['province'], grid_search.best_estimator_.predict(X_test))
 ```
 
 
@@ -702,21 +585,3 @@ ggplot(fit, metric="Kappa")
 * Practice running different versions of the model
 * Create some new features and...
 * See if you can achieve a Kappa >= 0.5!
-
-$$
-\kappa \geq 0.5
-$$
-
-
-## Bonus: KNN for regression
-
-```{r}
-fit <- train(price ~ .,
-             data = train, 
-             method = "knn",
-             tuneLength = 15,
-             trControl = trainControl(number = 1))
-fit
-
-```
-

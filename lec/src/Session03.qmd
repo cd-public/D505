@@ -29,7 +29,19 @@ execute:
 
 ## [HW1 Sols Posted](../hws/wine_of_pnw_sol.html)
 
-<iframe src="../hws/wine_of_pnw_sol.html" height="500" width="800" title="Iframe Example"></iframe> 
+<iframe src="../hws/wine_of_pnw_sol.html" height="500" width="800" title="hw1 sols"></iframe> 
+
+## Throwback ThMonday
+
+- I took my old grad ML repo down, but I've restored it.
+- [Here](https://github.com/cd-public/cdml15)
+- Takeaways:
+  - Everything is typeset.
+    - Mathematics differentiated from
+    - Code block differentiated from
+    - Technical writing.
+  - No missing assets (e.g. images)
+  - Printable.
 
 ## HW2
 
@@ -187,6 +199,14 @@ for(v in c("Chardonnay", "Pinot Gris","Pinot Noir")){
 }
 ```
 
+## Summary
+
+- Only the dependent/response variable is log-transformed. 
+  - Exponentiate the coefficient.
+  - Subtract one from this number
+  - Multiply by 100.
+- This gives the percent increase (or decrease).
+
 ## $\log$ feature
 
 ```{r}
@@ -220,13 +240,6 @@ model
 
 ...a 1\% increase in ratings equals a ``r round(coef(model)["lpoints"],2)``\% increase in price on average
 
-## Summary
-
-- Only the dependent/response variable is log-transformed. 
-  - Exponentiate the coefficient.
-  - Subtract one from this number
-  - Multiply by 100.
-- This gives the percent increase (or decrease).
 
 ## Units
 
@@ -427,11 +440,87 @@ $$
 y(1) = \frac{x^{\lambda}-1}{\lambda} = 
       \frac{x^{-1}-1}{-1} =
       \frac{x^{-1}}{-1}+\frac{-1}{-1} =
-      \frac{1}{-x}-1 = -x
+      -x^{-1}-1 \approx x^{-1}
 $$
 $$
-f = y(.5) \implies f(x) \approx -x
+f = y(-1) \implies f(x) \approx x^{-1}
 $$
+
+## A Note
+
+- I am only aware of the following Box-Cox formulation:
+
+$$
+y(\lambda) =
+\begin{cases}
+ \dfrac{y_i^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0, \\
+ \ln y_i & \text{if } \lambda = 0,
+\end{cases}
+$$
+
+- Box-Cox is specified this way on Wikipedia, in Scikit documentation, in Scipy documentation.
+- I can only find one reference to $y(1)(x) \equiv x^{-1}$ [here](https://www.statisticshowto.com/probability-and-statistics/normal-distributions/box-cox-transformation/)
+  - It's citation are closed source.
+- There is no mention in the companion text [ILSR](https://www.statlearning.com/)
+
+## My Theory
+
+::::{.columns}
+
+
+:::{.column width=50%}
+
+- This chart showed up in literature somewhere
+- Either a miscalculation or just some other transform.
+- It may be used in practice, including possibly in R?
+- It *doesn't matter* they only change wrt scaled values.
+
+:::
+
+
+:::{.column width=50%}
+
+<table>
+<tr>
+<td>-3</td>
+<td>Y<sup>-3</sup> = 1/Y<sup>3</sup></td>
+</tr>
+<tr>
+<td>-2</td>
+<td>Y<sup>-2</sup> = 1/Y<sup>2</sup></td>
+</tr>
+<tr>
+<td>-1</td>
+<td>Y<sup>-1</sup> = 1/Y<sup>1</sup></td>
+</tr>
+<tr>
+<td>-0.5</td>
+<td>Y<sup>-0.5</sup> = 1/(√(Y))</td>
+</tr>
+<tr>
+<td>0</td>
+<td>log(Y)**</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>Y<sup>0.5</sup> = √(Y)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Y<sup>1 </sup>= Y</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Y<sup>2</sup></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Y<sup>3</sup></td>
+</tr></table>
+
+:::
+
+::::
 
 ## Just use the function
 
@@ -477,6 +566,9 @@ y = (x**lmbda - 1) / lmbda,  for lmbda != 0
     log(x),                  for lmbda = 0
 ```
 
+- This was how I tracked down what I believe to be the inconsistency with other Box-Cox definitions.
+
+# Onward
 
 ## Caret preprocessing is so easy!
 
@@ -640,7 +732,7 @@ $$
 
 ## Kappa $\kappa$ statistic
 
-Compares observed accuracy against what would be expected by a random classifier. 
+Rule of thumb.
 
 - \< 0.2 (not so good)
 - 0.21 - 0.4 (ok)
@@ -648,7 +740,7 @@ Compares observed accuracy against what would be expected by a random classifier
 - 0.6 - 0.8 (great)
 - \> 0.8 (almost perfect)
 
-...whoa! What's going on here?
+We had ~.9...
 
 
 # Overfitting... or a leak?
@@ -698,6 +790,9 @@ fit <- knn(
   k=5, 
   cl = train$province)
 ```
+
+- We should probably have written function here!
+- That is a lot of lines to copy+paste...
 
 ## Confusion matrix
 

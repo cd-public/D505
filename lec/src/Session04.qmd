@@ -1,0 +1,188 @@
+---
+title: "$K$ Nearest Neighbors"
+subtitle: "Applied Machine Learning"
+author: "Jameson > Hendrik > Calvin"
+  
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+---
+
+## Agenda
+
+1. Review of Homework 3
+2. RStudio Server and Parallel Processing
+3. The Naive Bayes algorithm
+4. Dinner break
+5. Tidy text and bag of words
+6. Group work
+7. Vocabulary
+
+# Homework
+
+## HW3
+
+- Think
+- Pair
+- Share
+
+# The Naive Bayes Algorithm
+
+## Shorter
+
+$$
+P(c|x) = \frac{P(x|c)P(c)}{P(x)} = \frac{P(c \space \land \space x)}{P(x)}
+$$
+
+- Take $\land$ to be "logical and" 
+- The probability of both `c` and `x`, basically.
+
+## Longer
+
+$$ 
+P(L~|~{\rm features}) = \frac{P({\rm features}~|~L)P(L)}{P({\rm features})} 
+$$
+
+- More generally...
+
+
+$$
+ P({\rm A}~|~{\rm B}) = \frac{P({\rm B}~|~ \rm{A})P(\rm{A})}{P({\rm B})} 
+ $$
+
+## Bayes' Theorem Example
+
+- Suppose half of all emails are spam, and you've just purchased some software (hurray) that filters spam emails, claiming to detect 99% of spam and that the probability of a false positive (marking non-spam as spam) is 5%.
+
+## Bayes' Theorem Example
+
+- "Suppose half of all emails are spam...""
+  - `P(is_spam) = .5`
+- "detect 99% of spam"
+  - `P(called_spam|is_spam) = .99`
+- "(marking non-spam as spam) is 5%"
+  - `P(called_spam|isnt_spam) = .5`
+
+## Bayes' Theorem Example
+
+- Now suppose an incoming email is marked as spam. What is the probability that it's a non-spam email?
+- $A$ = email is non-spam email
+- $B$ = email is marked as spam
+- P($B$ | $A$) =
+- P($A$) =
+- P($B$) =
+
+## Bayes' Theorem Example Solution
+
+- P($B$ | $A$) = .05
+- P($A$) = .5
+- P($B$) = .99 * .5 + .05 * .5
+- P($A$ | $B$) = .05 * .5 / (.99 * .5 + .05 * .5)
+```{r}
+c(.99 * .5 + .05 * .5, .05 * .5 / (.99 * .5 + .05 * .5))
+```
+
+
+## Exercise 1
+
+- You have three cards: 
+  - one is red on both sides, 
+  - one is black on both sides, and 
+  - one has one red side and one black side. 
+- You pick a card at random, and 
+  - put it on the table on a random side, and 
+  - the color showing is red. 
+- What is the probability that the other side is black?
+
+2. Let's imagine half of all rainy days start off cloudy in the morning. However, we live in a cloudy place, and about 40% of days start off cloudy, and you know that 90% of days this time of year do not have rain. What are the odds it will rain today?
+
+
+## Solutions
+
+1. Solution:
+
+Thing 1 = card is red-black
+
+thing 2 = side up is red
+
+P(side up is red | card is red-black) = 1/2
+
+P(thing 1) = 1/3
+
+P(thing 2) = 100% * 1/3 + 50% * 1/3 + 0% * 1/3
+
+so P(card is red-black | side up is red) = 1/3 * 1/2 / (1/3 + 1/6) = 1/3
+
+2. Solution:
+
+thing 1 = rain during the day
+
+thing 2 = cloudy in the morning
+
+P (thing 2 | thing 1) = 50%
+
+P(thing 1) = 10%
+
+P(thing 2) = 40%
+
+so we get P(thing 1 | thing 2) = 0.1*0.5 / 0.4 = 0.125
+
+## Algorithm
+
+$$ P(L~|~{\rm features}) = \frac{P({\rm features}~|~L)P(L)}{P({\rm features})} $$
+
+If we only care about choosing between two labels L1 and L2, then we only need the ratio:
+
+$$ \frac{P(L_1~|~{\rm features})}{P(L_2~|~{\rm features})} = \frac{P({\rm features}~|~L_1)}{P({\rm features}~|~L_2)}\frac{P(L_1)}{P(L_2)} $$
+
+But how on earth can we get P(features | L)? Well, we have to make an assumption. "Naive" in Naive Bayes means we keep it simple.
+
+Really we would need P(Cherry, Fruit, Bordeaux | Chardonnay), "Naive" assumption is independence so the algorithm calculates P(Cherry | Chardonnay) * P(Fruit | Chardonnay) * P(Bordeaux | Chardonnay).
+
+
+
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(caret)
+library(fastDummies)
+library(thematic)
+theme_set(theme_dark())
+thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
+names(wine)[names(wine) == 'id'] = 'ID'
+```
+
+## Some basic features
+
+```{r}
+wino <- wine %>% 
+  mutate(year_f = as.factor(year)) %>% 
+  mutate(cherry = str_detect(description,"cherry")) %>% 
+  mutate(chocolate = str_detect(description,"chocolate")) %>%
+  mutate(earth = str_detect(description,"earth")) %>%
+  select(-description, year)
+
+glimpse(wino)
+```
+
+## A couple conditional probabilities
+
+$p(Oregon | cherry) = \frac{p(Oregon \space\&\space Cherry)}{p(Cherry)}$
+
+```{r}
+oregon_and_cherry <- nrow(filter(wino, province=="Oregon" & cherry))/nrow(wino)
+cherry <- nrow(filter(wino, cherry))/nrow(wino)
+oregon_and_cherry/cherry
+```
+
+## How about New York?
+$p(NY | cherry) = \frac{p(NY \space\&\space Cherry)}{p(Cherry)}$
+
+```{r}
+ny_and_cherry <- nrow(filter(wino, province=="New_York" & cherry))/nrow(wino)
+ny_and_cherry/cherry
+```
