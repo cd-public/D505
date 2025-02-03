@@ -69,15 +69,6 @@ from sklearn.linear_model import LinearRegression
 ```{python Setup}
 url = 'https://cd-public.github.io/D505/dat/'
 rds = 'wine.rds'
-pyreadr.download_file(url + rds, rds) 
-wine = pyreadr.read_r(rds)[None]      
-wine.dropna(subset=['points','price'])
-```
-
-
-```{python Setup}
-url = 'https://cd-public.github.io/D505/dat/'
-rds = 'wine.rds'
 #pyreadr.download_file(url + rds, rds) 
 wine = pyreadr.read_r(rds)[None]      
 wine['lprice'] = np.log(wine['price'])
@@ -122,15 +113,15 @@ def var_cor(wine, var):
 
 ```{python}
 vs = ("Chardonnay", "Pinot Noir", "Pinot Gris")
-[print(v, var_cor(wine, v)) for v in vs]
+_ = [print(v, var_cor(wine, v)) for v in vs]
 ```
 
 ## Visualizing these different correlations
 
 ```{python}
-filtered_wine = wine[(wine['province'] == "Oregon") & 
+wine = wine[(wine['province'] == "Oregon") & 
                      (wine['variety'].isin(vs))]
-g = sns.FacetGrid(filtered_wine, col="variety", hue="variety")
+g = sns.FacetGrid(wine, col="variety", hue="variety")
 g.map_dataframe(sns.regplot, x="points", y="lprice")
 ```
 
@@ -138,30 +129,32 @@ g.map_dataframe(sns.regplot, x="points", y="lprice")
 ## Graphing residuals (bad)
 
 ```{python}
-X,y  = filtered_wine[['points']], filtered_wine['price']
-filtered_wine['residual'] = y - LinearRegression().fit(X, y).predict(X)
-sns.scatterplot(x='points', y='residual', data=filtered_wine, alpha=0.3)
+X,y  = wine[['points']], wine['price']
+wine['residual'] = y - LinearRegression().fit(X, y).predict(X)
+sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)
 ```
-
-## Annotate
-
-![](images/spread.png)
 
 ## Graphing residuals (good)
 
 - Clearly should've made a function here.
 ```{python}
 def resid_plot(df, x, y):
-  X,y  = df[[x]], filtered_wine[y]
-  filtered_wine['residual'] = y - LinearRegression().fit(X, y).predict(X)
-  return sns.scatterplot(x='points', y='residual', data=filtered_wine, alpha=0.3)
+  X,y  = df[[x]], wine[y]
+  wine['residual'] = y - LinearRegression().fit(X, y).predict(X)
+  return sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)
 ```
 
 
 ## Try it
 
 ```{python}
-resid_plot(filtered_wine, "points", "lprice")
+resid_plot(wine, "points", "lprice")
+```
+
+## Try it on year
+
+```{python}
+resid_plot(wine, "year", "lprice")
 ```
 
 ## Interpreting the coefficients
@@ -169,28 +162,30 @@ resid_plot(filtered_wine, "points", "lprice")
 - Before examining many coefficients, a helper.
 
 ```{python}
-def coef(df, x, y):
-  X,y  = df[[x]], filtered_wine[y]
-  return (LinearRegression().fit(X,y))_coef[0]
+def get_coef(df, x, y):
+  X,y  = df[[x]], df[y]
+  return (LinearRegression().fit(X,y)).coef_[0]
 ```
 
-```{r}
-model <- lm(lprice~points, filter(wine,province=="Oregon"))
-pct = (exp(coef(model)["points"]) - 1) * 100
-c(coef(model)["points"],pct) 
+## % Change
+
+```{python}
+get_pct = lambda x : (np.exp(x)- 1) * 100
+
+coef = get_coef(wine, "points", "lprice")
+coef, get_pct(coef) 
 ```
 
 - We logged the *dependent* variable (price)
-  - A 1 point ratings increase = ``r round(pct,2)``\%
+  - A 1 point ratings increase = ~10% price
   - That is, a percent change in rating to an *absolute* change in the dependent variable. 
 - $(e^x - 1)*100$
 
 ## Interpreting the coefficients
 
-```{r}
-m_yr <- lm(lprice~year, filter(wine,province=="Oregon"))
-yr = (exp(coef(m_yr)["year"]) - 1) * 100
-c(coef(m_yr)["year"],yr) 
+```{python}
+coef = get_coef(wine, "year", "lprice")
+coef, get_pct(coef)
 ```
 
 - This is a *de facto* measure of inflation.
@@ -201,10 +196,8 @@ c(coef(m_yr)["year"],yr)
 
 :::{.column width=50%}
 
-```{r}
-for (x in 1:10) {
-    print(c(x/100, (exp(x/100)-1) * 100))
-}
+```{python}
+_ = [print(x/10, get_pct(x/10)) for x in range(10)]
 ```
 
 :::
@@ -212,58 +205,33 @@ for (x in 1:10) {
 
 :::{.column width=50%}
 
-```{r}
-for (x in 1:10) {
-    print(c(x/010, (exp(x/010)-1) * 100))
-}
+```{python}
+_ = [print(x/100, get_pct(x/100)) for x in range(10)]
 ```
 
 :::
 
 ::::
 
-## Pretty Print
-
-```{r}
-for(v in c("Chardonnay", "Pinot Gris","Pinot Noir")){
-  m <- lm(lprice~points, filter(wine,province=="Oregon", variety==v))
-  pct <- round((exp(coef(m)["points"]) - 1) * 100,2)
-  print(str_c("For ",v,", a 1 point ratings increase leads to a ",pct,"% increase in price."))
-}
-```
-
 ## $\log$ feature
 
-```{r}
-model <- lm(price~lpoints, filter(wine,province=="Oregon") %>% mutate(lpoints=log(points)))
-model
+```{python}
+wine['lpoints'] = np.log(wine['points'])
+coef = get_coef(wine, "lpoints", "price")
+coef, get_pct(coef) 
 ```
 
 - What does the *sign* (positive or negative) tell us?
 - Was $\log$ appropriate here?
 
-## Percentages
-
-```{r}
-coef(model)["lpoints"]/100
-```
-
-- Since we logged the IV (feature), a 1% ratings increase is a ~3.24 increase in price on average. 
-- What are the units on that?
-
-Note: 
-$$ 
-x/100 
-$$
-
 ## LogLog (also elasticity)
 
-```{r}
-model <- lm(lprice~lpoints, filter(wine,province=="Oregon") %>% mutate(lpoints=log(points)))
-model
+```{python}
+coef = get_coef(wine, "lpoints", "lprice")
+coef, get_pct(coef) 
 ```
 
-...a 1\% increase in ratings equals a ``r round(coef(model)["lpoints"],2)``\% increase in price on average
+...a 1\% increase in ratings gives said increase in price on average
 
 ## Summary
 
@@ -285,7 +253,7 @@ model
   - Basically, one point
   - Our dependent variable increases by about 8.3%.
 - A $30 bottle of wine scoring 90 would be worth $32.50 as a 91.
-```{r}
+```{python}
 30 * (1 + 8.3/100)
 ```
 

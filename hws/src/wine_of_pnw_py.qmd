@@ -41,15 +41,18 @@ import statsmodels.formula.api as smf
 ```
 
 **Step Up Dataframe:**
+- I ran this exactly once.
 ```{python}
 url = 'https://cd-public.github.io/D505/dat/'
 rds = 'wine.rds'
 pyreadr.download_file(url + rds, rds) 
-wine = pyreadr.read_r(rds)[None]      
-wine = wine[wine['province'].isin(['Oregon', 'California', 'New York'])]
-wine['cherry'] = wine['description'].apply(lambda x: 'herry' in x)
-wine['lprice'] = wine['price'].apply(np.log)
-wine = wine[['lprice', 'points', 'cherry', 'province']]
+wine = pyreadr.read_r(rds)[None]
+```
+- With a dataframe in hand, I saved to a parquet file.
+  - Parquet is gaining prominence as an open standard, versus the various R formats that are not documented for general use.
+
+```{python}
+wine.to_parquet("wine.parquet")
 ```
 
 **Explanataion:**

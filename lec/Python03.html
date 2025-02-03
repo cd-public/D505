@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/tabby.min.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -186,9 +186,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-  
-  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-dark">
   <div class="reveal">
@@ -258,7 +255,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li>Python base data stack</li>
 </ul>
-<div id="4ee72734" class="cell" data-execution_count="2">
+<div id="d1f9c0eb" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -267,19 +264,14 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li>R compatibility</li>
 </ul>
-<div id="50cadd7b" class="cell" data-execution_count="3">
+<div id="c6e3ad25" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">import</span> pyreadr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="ml-library" class="slide level2">
 <h2>ML Library</h2>
-<div id="8cfa8fb1" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb3-2"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb3-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> RepeatedKFold, cross_val_score</span>
-<span id="cb3-4"><a></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
-<span id="cb3-5"><a></a><span class="im">from</span> sklearn.feature_selection <span class="im">import</span> RFE</span>
-<span id="cb3-6"><a></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0e6b86f5" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="setup-1" class="slide level2">
@@ -287,261 +279,12 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li><code>pyreadr</code> to read in an R dataset.</li>
 </ul>
-<div id="38ed89de" class="cell" data-execution_count="5">
+<div id="fb43f26a" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/D505/dat/'</span></span>
 <span id="cb4-2"><a></a>rds <span class="op">=</span> <span class="st">'wine.rds'</span></span>
-<span id="cb4-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
+<span id="cb4-3"><a></a><span class="co">#pyreadr.download_file(url + rds, rds) </span></span>
 <span id="cb4-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]      </span>
-<span id="cb4-5"><a></a>wine.dropna(subset<span class="op">=</span>[<span class="st">'points'</span>,<span class="st">'price'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">id</th>
-<th data-quarto-table-cell-role="th">country</th>
-<th data-quarto-table-cell-role="th">description</th>
-<th data-quarto-table-cell-role="th">designation</th>
-<th data-quarto-table-cell-role="th">points</th>
-<th data-quarto-table-cell-role="th">price</th>
-<th data-quarto-table-cell-role="th">province</th>
-<th data-quarto-table-cell-role="th">region_1</th>
-<th data-quarto-table-cell-role="th">region_2</th>
-<th data-quarto-table-cell-role="th">taster_name</th>
-<th data-quarto-table-cell-role="th">taster_twitter_handle</th>
-<th data-quarto-table-cell-role="th">title</th>
-<th data-quarto-table-cell-role="th">variety</th>
-<th data-quarto-table-cell-role="th">winery</th>
-<th data-quarto-table-cell-role="th">year</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1.0</td>
-<td>Portugal</td>
-<td>This is ripe and fruity, a wine that is smooth...</td>
-<td>Avidagos</td>
-<td>87.0</td>
-<td>15.0</td>
-<td>Douro</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Quinta dos Avidagos 2011 Avidagos Red (Douro)</td>
-<td>Portuguese Red</td>
-<td>Quinta dos Avidagos</td>
-<td>2011.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2.0</td>
-<td>US</td>
-<td>Tart and snappy, the flavors of lime flesh and...</td>
-<td>NaN</td>
-<td>87.0</td>
-<td>14.0</td>
-<td>Oregon</td>
-<td>Willamette Valley</td>
-<td>Willamette Valley</td>
-<td>Paul Gregutt</td>
-<td>@paulgwine</td>
-<td>Rainstorm 2013 Pinot Gris (Willamette Valley)</td>
-<td>Pinot Gris</td>
-<td>Rainstorm</td>
-<td>2013.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>3.0</td>
-<td>US</td>
-<td>Pineapple rind, lemon pith and orange blossom ...</td>
-<td>Reserve Late Harvest</td>
-<td>87.0</td>
-<td>13.0</td>
-<td>Michigan</td>
-<td>Lake Michigan Shore</td>
-<td>NaN</td>
-<td>Alexander Peartree</td>
-<td>NaN</td>
-<td>St. Julian 2013 Reserve Late Harvest Riesling ...</td>
-<td>Riesling</td>
-<td>St. Julian</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>4.0</td>
-<td>US</td>
-<td>Much like the regular bottling from 2012, this...</td>
-<td>Vintner's Reserve Wild Child Block</td>
-<td>87.0</td>
-<td>65.0</td>
-<td>Oregon</td>
-<td>Willamette Valley</td>
-<td>Willamette Valley</td>
-<td>Paul Gregutt</td>
-<td>@paulgwine</td>
-<td>Sweet Cheeks 2012 Vintner's Reserve Wild Child...</td>
-<td>Pinot Noir</td>
-<td>Sweet Cheeks</td>
-<td>2012.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>5.0</td>
-<td>Spain</td>
-<td>Blackberry and raspberry aromas show a typical...</td>
-<td>Ars In Vitro</td>
-<td>87.0</td>
-<td>15.0</td>
-<td>Northern Spain</td>
-<td>Navarra</td>
-<td>NaN</td>
-<td>Michael Schachner</td>
-<td>@wineschach</td>
-<td>Tandem 2011 Ars In Vitro Tempranillo-Merlot (N...</td>
-<td>Tempranillo-Merlot</td>
-<td>Tandem</td>
-<td>2011.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89551</td>
-<td>129966.0</td>
-<td>Germany</td>
-<td>Notes of honeysuckle and cantaloupe sweeten th...</td>
-<td>Brauneberger Juffer-Sonnenuhr Spätlese</td>
-<td>90.0</td>
-<td>28.0</td>
-<td>Mosel</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>Anna Lee C. Iijima</td>
-<td>NaN</td>
-<td>Dr. H. Thanisch (Erben Müller-Burggraef) 2013 ...</td>
-<td>Riesling</td>
-<td>Dr. H. Thanisch (Erben Müller-Burggraef)</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">89552</td>
-<td>129967.0</td>
-<td>US</td>
-<td>Citation is given as much as a decade of bottl...</td>
-<td>NaN</td>
-<td>90.0</td>
-<td>75.0</td>
-<td>Oregon</td>
-<td>Oregon</td>
-<td>Oregon Other</td>
-<td>Paul Gregutt</td>
-<td>@paulgwine</td>
-<td>Citation 2004 Pinot Noir (Oregon)</td>
-<td>Pinot Noir</td>
-<td>Citation</td>
-<td>2004.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89553</td>
-<td>129968.0</td>
-<td>France</td>
-<td>Well-drained gravel soil gives this wine its c...</td>
-<td>Kritt</td>
-<td>90.0</td>
-<td>30.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Gresser 2013 Kritt Gewurztraminer (Als...</td>
-<td>Gewürztraminer</td>
-<td>Domaine Gresser</td>
-<td>2013.0</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">89554</td>
-<td>129969.0</td>
-<td>France</td>
-<td>A dry style of Pinot Gris, this is crisp with ...</td>
-<td>NaN</td>
-<td>90.0</td>
-<td>32.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Marcel Deiss 2012 Pinot Gris (Alsace)</td>
-<td>Pinot Gris</td>
-<td>Domaine Marcel Deiss</td>
-<td>2012.0</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">89555</td>
-<td>129970.0</td>
-<td>France</td>
-<td>Big, rich and off-dry, this is powered by inte...</td>
-<td>Lieu-dit Harth Cuvée Caroline</td>
-<td>90.0</td>
-<td>21.0</td>
-<td>Alsace</td>
-<td>Alsace</td>
-<td>NaN</td>
-<td>Roger Voss</td>
-<td>@vossroger</td>
-<td>Domaine Schoffit 2012 Lieu-dit Harth Cuvée Car...</td>
-<td>Gewürztraminer</td>
-<td>Domaine Schoffit</td>
-<td>2012.0</td>
-</tr>
-</tbody>
-</table>
-
-<p>89556 rows × 15 columns</p>
-</div>
-</div>
-</div>
-<div id="26ef779e" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>url <span class="op">=</span> <span class="st">'https://cd-public.github.io/D505/dat/'</span></span>
-<span id="cb5-2"><a></a>rds <span class="op">=</span> <span class="st">'wine.rds'</span></span>
-<span id="cb5-3"><a></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
-<span id="cb5-4"><a></a>wine <span class="op">=</span> pyreadr.read_r(rds)[<span class="va">None</span>]      </span>
-<span id="cb5-5"><a></a>wine[<span class="st">'lprice'</span>] <span class="op">=</span> np.log(wine[<span class="st">'price'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a></a>wine[<span class="st">'lprice'</span>] <span class="op">=</span> np.log(wine[<span class="st">'price'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
@@ -557,9 +300,9 @@ Jameson &gt; Hendrik &gt; Calvin
 <img data-src="./images/correlation.png" class="r-stretch"></section>
 <section id="calculating-correlation" class="slide level2">
 <h2>Calculating correlation</h2>
-<div id="e6b04e6d" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a>wine[<span class="st">'price'</span>].corr(wine[<span class="st">'points'</span>]), wine[<span class="st">'lprice'</span>].corr(wine[<span class="st">'points'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div id="abda89f7" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>wine[<span class="st">'price'</span>].corr(wine[<span class="st">'points'</span>]), wine[<span class="st">'lprice'</span>].corr(wine[<span class="st">'points'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>(0.4043745886494151, 0.6243320331753497)</code></pre>
 </div>
 </div>
@@ -575,50 +318,123 @@ Jameson &gt; Hendrik &gt; Calvin
 </section>
 <section id="solution" class="slide level2">
 <h2>Solution</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a></a>filtered_wine = wine[(wine['province'] == "Oregon") &amp; </span>
-<span id="cb8-2"><a></a>                     (wine['variety'].isin(["Chardonnay", "Pinot Noir", "Pinot Gris"]))]</span>
-<span id="cb8-3"><a></a>_ = filtered_wine.groupby('variety').apply(</span>
-<span id="cb8-4"><a></a>    lambda x: print(x['lprice'].corr(x['points'])))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Make a function…</li>
+</ul>
+<div id="f0ac1e20" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="kw">def</span> var_cor(wine, var):</span>
+<span id="cb7-2"><a></a>  df <span class="op">=</span> wine[(wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">"Oregon"</span>) <span class="op">&amp;</span> </span>
+<span id="cb7-3"><a></a>            (wine[<span class="st">'variety'</span>]  <span class="op">==</span> var)]</span>
+<span id="cb7-4"><a></a>  <span class="cf">return</span> df[<span class="st">'lprice'</span>].corr(df[<span class="st">'points'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eval" class="slide level2">
+<h2>Eval</h2>
+<div id="1c4a8f67" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a>vs <span class="op">=</span> (<span class="st">"Chardonnay"</span>, <span class="st">"Pinot Noir"</span>, <span class="st">"Pinot Gris"</span>)</span>
+<span id="cb8-2"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(v, var_cor(wine, v)) <span class="cf">for</span> v <span class="kw">in</span> vs]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Chardonnay 0.641621392105451
+Pinot Noir 0.5910593714883141
+Pinot Gris 0.48969431912451855</code></pre>
+</div>
+</div>
 </section>
 <section id="visualizing-these-different-correlations" class="slide level2">
 <h2>Visualizing these different correlations</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb9-1"><a></a>#| output-location: slide</span>
-<span id="cb9-2"><a></a>wine %&gt;% </span>
-<span id="cb9-3"><a></a>  filter(province=="Oregon") %&gt;% </span>
-<span id="cb9-4"><a></a>  filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %&gt;% </span>
-<span id="cb9-5"><a></a>  ggplot(aes(points,lprice, color=variety)) +</span>
-<span id="cb9-6"><a></a>    geom_point(alpha=0.3)+</span>
-<span id="cb9-7"><a></a>    facet_wrap(~variety)+</span>
-<span id="cb9-8"><a></a>    geom_smooth(method = lm)</span>
-<span id="cb9-9"><a></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="f9bd25ff" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>wine <span class="op">=</span> wine[(wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">"Oregon"</span>) <span class="op">&amp;</span> </span>
+<span id="cb10-2"><a></a>                     (wine[<span class="st">'variety'</span>].isin(vs))]</span>
+<span id="cb10-3"><a></a>g <span class="op">=</span> sns.FacetGrid(wine, col<span class="op">=</span><span class="st">"variety"</span>, hue<span class="op">=</span><span class="st">"variety"</span>)</span>
+<span id="cb10-4"><a></a>g.map_dataframe(sns.regplot, x<span class="op">=</span><span class="st">"points"</span>, y<span class="op">=</span><span class="st">"lprice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python03_files/figure-revealjs/cell-9-output-1.png" width="854" height="278"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="graphing-residuals-bad" class="slide level2">
 <h2>Graphing residuals (bad)</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb10-1"><a></a>model &lt;- lm(price~points, filter(wine,province=="Oregon"))</span>
-<span id="cb10-2"><a></a>get_regression_points(model) %&gt;% </span>
-<span id="cb10-3"><a></a>  ggplot(aes(points, residual))+</span>
-<span id="cb10-4"><a></a>    geom_point()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3e5c6707" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>X,y  <span class="op">=</span> wine[[<span class="st">'points'</span>]], wine[<span class="st">'price'</span>]</span>
+<span id="cb11-2"><a></a>wine[<span class="st">'residual'</span>] <span class="op">=</span> y <span class="op">-</span> LinearRegression().fit(X, y).predict(X)</span>
+<span id="cb11-3"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'residual'</span>, data<span class="op">=</span>wine, alpha<span class="op">=</span><span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python03_files/figure-revealjs/cell-10-output-1.png" width="820" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="annotate" class="slide level2">
-<h2>Annotate</h2>
-
-<img data-src="images/spread.png" class="r-stretch"></section>
 <section id="graphing-residuals-good" class="slide level2">
 <h2>Graphing residuals (good)</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a></a>model &lt;- lm(lprice~points, filter(wine,province=="Oregon"))</span>
-<span id="cb11-2"><a></a>get_regression_points(model) %&gt;% </span>
-<span id="cb11-3"><a></a>  ggplot(aes(points, residual))+</span>
-<span id="cb11-4"><a></a>    geom_point()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Clearly should’ve made a function here.</li>
+</ul>
+<div id="28d0bbc1" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a><span class="kw">def</span> resid_plot(df, x, y):</span>
+<span id="cb12-2"><a></a>  X,y  <span class="op">=</span> df[[x]], wine[y]</span>
+<span id="cb12-3"><a></a>  wine[<span class="st">'residual'</span>] <span class="op">=</span> y <span class="op">-</span> LinearRegression().fit(X, y).predict(X)</span>
+<span id="cb12-4"><a></a>  <span class="cf">return</span> sns.scatterplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'residual'</span>, data<span class="op">=</span>wine, alpha<span class="op">=</span><span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="try-it" class="slide level2">
+<h2>Try it</h2>
+<div id="19bb3409" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>resid_plot(wine, <span class="st">"points"</span>, <span class="st">"lprice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python03_files/figure-revealjs/cell-12-output-1.png" width="824" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="try-it-on-year" class="slide level2">
+<h2>Try it on year</h2>
+<div id="16c8d927" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>resid_plot(wine, <span class="st">"year"</span>, <span class="st">"lprice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="Python03_files/figure-revealjs/cell-13-output-1.png" width="824" height="429"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="interpreting-the-coefficients" class="slide level2">
 <h2>Interpreting the coefficients</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb12-1"><a></a>model &lt;- lm(lprice~points, filter(wine,province=="Oregon"))</span>
-<span id="cb12-2"><a></a>pct = (exp(coef(model)["points"]) - 1) * 100</span>
-<span id="cb12-3"><a></a>c(coef(model)["points"],pct) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Before examining many coefficients, a helper.</li>
+</ul>
+<div id="06f8436a" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a><span class="kw">def</span> get_coef(df, x, y):</span>
+<span id="cb15-2"><a></a>  X,y  <span class="op">=</span> df[[x]], df[y]</span>
+<span id="cb15-3"><a></a>  <span class="cf">return</span> (LinearRegression().fit(X,y)).coef_[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="change" class="slide level2">
+<h2>% Change</h2>
+<div id="3c7ae549" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>get_pct <span class="op">=</span> <span class="kw">lambda</span> x : (np.exp(x)<span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb16-2"><a></a></span>
+<span id="cb16-3"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"points"</span>, <span class="st">"lprice"</span>)</span>
+<span id="cb16-4"><a></a>coef, get_pct(coef) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>(0.10392268891742625, 10.951467381914615)</code></pre>
+</div>
+</div>
 <ul>
 <li>We logged the <em>dependent</em> variable (price)
 <ul>
-<li>A 1 point ratings increase = <code>r round(pct,2)</code>%</li>
+<li>A 1 point ratings increase = ~10% price</li>
 <li>That is, a percent change in rating to an <em>absolute</em> change in the dependent variable.</li>
 </ul></li>
 <li><span class="math inline">\((e^x - 1)*100\)</span></li>
@@ -626,9 +442,13 @@ Jameson &gt; Hendrik &gt; Calvin
 </section>
 <section id="interpreting-the-coefficients-1" class="slide level2">
 <h2>Interpreting the coefficients</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb13-1"><a></a>m_yr &lt;- lm(lprice~year, filter(wine,province=="Oregon"))</span>
-<span id="cb13-2"><a></a>yr = (exp(coef(m_yr)["year"]) - 1) * 100</span>
-<span id="cb13-3"><a></a>c(coef(m_yr)["year"],yr) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="381b8cbb" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"year"</span>, <span class="st">"lprice"</span>)</span>
+<span id="cb18-2"><a></a>coef, get_pct(coef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>(0.017641923387450218, 1.779846130624252)</code></pre>
+</div>
+</div>
 <ul>
 <li>This is a <em>de facto</em> measure of inflation.</li>
 </ul>
@@ -637,48 +457,64 @@ Jameson &gt; Hendrik &gt; Calvin
 <h2>Some Examples</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb14-1"><a></a>for (x in 1:10) {</span>
-<span id="cb14-2"><a></a>    print(c(x/100, (exp(x/100)-1) * 100))</span>
-<span id="cb14-3"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a0ae5a3c" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(x<span class="op">/</span><span class="dv">10</span>, get_pct(x<span class="op">/</span><span class="dv">10</span>)) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0 0.0
+0.1 10.517091807564771
+0.2 22.140275816016985
+0.3 34.98588075760032
+0.4 49.182469764127035
+0.5 64.87212707001282
+0.6 82.21188003905088
+0.7 101.37527074704767
+0.8 122.55409284924679
+0.9 145.960311115695</code></pre>
+</div>
+</div>
 </div><div class="column" style="width:50%;">
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb15-1"><a></a>for (x in 1:10) {</span>
-<span id="cb15-2"><a></a>    print(c(x/010, (exp(x/010)-1) * 100))</span>
-<span id="cb15-3"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="4efeff81" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(x<span class="op">/</span><span class="dv">100</span>, get_pct(x<span class="op">/</span><span class="dv">100</span>)) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0 0.0
+0.01 1.005016708416795
+0.02 2.0201340026755776
+0.03 3.045453395351694
+0.04 4.081077419238821
+0.05 5.127109637602412
+0.06 6.183654654535964
+0.07 7.250818125421654
+0.08 8.328706767495863
+0.09 9.41742837052104</code></pre>
+</div>
+</div>
 </div></div>
-</section>
-<section id="pretty-print" class="slide level2">
-<h2>Pretty Print</h2>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a></a>for(v in c("Chardonnay", "Pinot Gris","Pinot Noir")){</span>
-<span id="cb16-2"><a></a>  m &lt;- lm(lprice~points, filter(wine,province=="Oregon", variety==v))</span>
-<span id="cb16-3"><a></a>  pct &lt;- round((exp(coef(m)["points"]) - 1) * 100,2)</span>
-<span id="cb16-4"><a></a>  print(str_c("For ",v,", a 1 point ratings increase leads to a ",pct,"% increase in price."))</span>
-<span id="cb16-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="log-feature" class="slide level2">
 <h2><span class="math inline">\(\log\)</span> feature</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb17-1"><a></a>model &lt;- lm(price~lpoints, filter(wine,province=="Oregon") %&gt;% mutate(lpoints=log(points)))</span>
-<span id="cb17-2"><a></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="a01d1389" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>wine[<span class="st">'lpoints'</span>] <span class="op">=</span> np.log(wine[<span class="st">'points'</span>])</span>
+<span id="cb24-2"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"lpoints"</span>, <span class="st">"price"</span>)</span>
+<span id="cb24-3"><a></a>coef, get_pct(coef) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>(362.4947164430504, 2.6881597265771833e+159)</code></pre>
+</div>
+</div>
 <ul>
 <li>What does the <em>sign</em> (positive or negative) tell us?</li>
 <li>Was <span class="math inline">\(\log\)</span> appropriate here?</li>
 </ul>
 </section>
-<section id="percentages" class="slide level2">
-<h2>Percentages</h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb18-1"><a></a>coef(model)["lpoints"]/100</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>Since we logged the IV (feature), a 1% ratings increase is a ~3.24 increase in price on average.</li>
-<li>What are the units on that?</li>
-</ul>
-<p>Note: <span class="math display">\[
-x/100
-\]</span></p>
-</section>
 <section id="loglog-also-elasticity" class="slide level2">
 <h2>LogLog (also elasticity)</h2>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb19-1"><a></a>model &lt;- lm(lprice~lpoints, filter(wine,province=="Oregon") %&gt;% mutate(lpoints=log(points)))</span>
-<span id="cb19-2"><a></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>…a 1% increase in ratings equals a <code>r round(coef(model)["lpoints"],2)</code>% increase in price on average</p>
+<div id="ce502f48" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"lpoints"</span>, <span class="st">"lprice"</span>)</span>
+<span id="cb26-2"><a></a>coef, get_pct(coef) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>(9.218567454376164, 1008161.0178417759)</code></pre>
+</div>
+</div>
+<p>…a 1% increase in ratings gives said increase in price on average</p>
 </section>
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
@@ -712,32 +548,37 @@ x/100
 </ul></li>
 <li>A $30 bottle of wine scoring 90 would be worth $32.50 as a 91.</li>
 </ul>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb20-1"><a></a>30 * (1 + 8.3/100)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="18c30190" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a><span class="dv">30</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="fl">8.3</span><span class="op">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>32.49</code></pre>
+</div>
+</div>
 </section>
 <section id="graphing-points-by-variety" class="slide level2">
 <h2>Graphing points by variety</h2>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb21-1"><a></a>wine %&gt;% </span>
-<span id="cb21-2"><a></a>  filter(province=="Oregon") %&gt;% </span>
-<span id="cb21-3"><a></a>  filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %&gt;% </span>
-<span id="cb21-4"><a></a>  ggplot(aes(variety,points))+</span>
-<span id="cb21-5"><a></a>    geom_boxplot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb30-1"><a></a>wine %&gt;% </span>
+<span id="cb30-2"><a></a>  filter(province=="Oregon") %&gt;% </span>
+<span id="cb30-3"><a></a>  filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %&gt;% </span>
+<span id="cb30-4"><a></a>  ggplot(aes(variety,points))+</span>
+<span id="cb30-5"><a></a>    geom_boxplot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="summary-1" class="slide level2">
 <h2>Summary</h2>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb22-1"><a></a>(tmp &lt;- wine %&gt;% </span>
-<span id="cb22-2"><a></a>  filter(province=="Oregon") %&gt;% </span>
-<span id="cb22-3"><a></a>  filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %&gt;% </span>
-<span id="cb22-4"><a></a>  group_by(variety) %&gt;% </span>
-<span id="cb22-5"><a></a>  summarise(mean=mean(points)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb31-1"><a></a>(tmp &lt;- wine %&gt;% </span>
+<span id="cb31-2"><a></a>  filter(province=="Oregon") %&gt;% </span>
+<span id="cb31-3"><a></a>  filter(variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")) %&gt;% </span>
+<span id="cb31-4"><a></a>  group_by(variety) %&gt;% </span>
+<span id="cb31-5"><a></a>  summarise(mean=mean(points)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>What are the percentage differences here?</li>
 </ul>
 </section>
 <section id="regression" class="slide level2">
 <h2>Regression</h2>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb23-1"><a></a>model &lt;- lm(points~variety, </span>
-<span id="cb23-2"><a></a>            filter(wine,province=="Oregon",variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")))</span>
-<span id="cb23-3"><a></a>get_regression_table(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb32-1"><a></a>model &lt;- lm(points~variety, </span>
+<span id="cb32-2"><a></a>            filter(wine,province=="Oregon",variety %in% c("Chardonnay","Pinot Noir","Pinot Gris")))</span>
+<span id="cb32-3"><a></a>get_regression_table(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>What types of variables are we considering here?</li>
 </ul>
@@ -769,16 +610,16 @@ x/100
 </section>
 <section id="normality" class="slide level2">
 <h2>Normality</h2>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb24-1"><a></a>model &lt;- lm(lprice~points, filter(wine,province=="Oregon"))</span>
-<span id="cb24-2"><a></a>get_regression_points(model) %&gt;% </span>
-<span id="cb24-3"><a></a>  ggplot(aes(residual))+</span>
-<span id="cb24-4"><a></a>    geom_histogram(color="white")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb33-1"><a></a>model &lt;- lm(lprice~points, filter(wine,province=="Oregon"))</span>
+<span id="cb33-2"><a></a>get_regression_points(model) %&gt;% </span>
+<span id="cb33-3"><a></a>  ggplot(aes(residual))+</span>
+<span id="cb33-4"><a></a>    geom_histogram(color="white")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="equality-of-variance" class="slide level2">
 <h2>Equality of variance</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb25-1"><a></a>get_regression_points(model) %&gt;% </span>
-<span id="cb25-2"><a></a>  ggplot(aes(points, residual))+</span>
-<span id="cb25-3"><a></a>    geom_jitter(alpha=0.2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb34-1"><a></a>get_regression_points(model) %&gt;% </span>
+<span id="cb34-2"><a></a>  ggplot(aes(points, residual))+</span>
+<span id="cb34-3"><a></a>    geom_jitter(alpha=0.2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="no-equality-in-the-variance" class="slide level2">
 <h2>No equality in the variance</h2>
@@ -803,7 +644,7 @@ x/100
 <li>Say “<span class="math inline">\(\pi^0\)</span>”</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb26-1"><a></a>wine &lt;- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot_orig.rds")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb35-1"><a></a>wine &lt;- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot_orig.rds")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="preprocessing" class="slide level2">
 <h2>Preprocessing</h2>
@@ -828,11 +669,11 @@ y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
 <ul>
 <li>R</li>
 </ul>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb27-1"><a></a>y &lt;- function(l) {</span>
-<span id="cb27-2"><a></a>  r &lt;- function(x) {</span>
-<span id="cb27-3"><a></a>    (x ** l - 1) /l</span>
-<span id="cb27-4"><a></a>  }</span>
-<span id="cb27-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb36-1"><a></a>y &lt;- function(l) {</span>
+<span id="cb36-2"><a></a>  r &lt;- function(x) {</span>
+<span id="cb36-3"><a></a>    (x ** l - 1) /l</span>
+<span id="cb36-4"><a></a>  }</span>
+<span id="cb36-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="examples" class="slide level2">
 <h2>Examples</h2>
@@ -867,13 +708,13 @@ f = y(0) \implies f(x) \approx \log(x)
 </section>
 <section id="lambda-0" class="slide level2">
 <h2><span class="math inline">\(\lambda = 0\)</span></h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb28-1"><a></a>for (x in 1:3) {</span>
-<span id="cb28-2"><a></a>  print(x/10)</span>
-<span id="cb28-3"><a></a>  for (l in 3:1) {</span>
-<span id="cb28-4"><a></a>    f = y(l/100)</span>
-<span id="cb28-5"><a></a>    print(c(l/100, x/10, f(x/10), log(x/10), f(x/10) - log(x/10)))</span>
-<span id="cb28-6"><a></a>  }</span>
-<span id="cb28-7"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb37-1"><a></a>for (x in 1:3) {</span>
+<span id="cb37-2"><a></a>  print(x/10)</span>
+<span id="cb37-3"><a></a>  for (l in 3:1) {</span>
+<span id="cb37-4"><a></a>    f = y(l/100)</span>
+<span id="cb37-5"><a></a>    print(c(l/100, x/10, f(x/10), log(x/10), f(x/10) - log(x/10)))</span>
+<span id="cb37-6"><a></a>  }</span>
+<span id="cb37-7"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="examples-2" class="slide level2">
 <h2>Examples</h2>
@@ -905,62 +746,62 @@ f = y(.5) \implies f(x) \approx -x
 <ul>
 <li>R: envstats</li>
 </ul>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a><span class="fu">library</span>(envstats)</span>
-<span id="cb29-2"><a></a></span>
-<span id="cb29-3"><a></a><span class="co"># Example data</span></span>
-<span id="cb29-4"><a></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
-<span id="cb29-5"><a></a></span>
-<span id="cb29-6"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
-<span id="cb29-7"><a></a>boxcox_result <span class="ot">&lt;-</span> <span class="fu">boxcoxTransform</span>(data)</span>
-<span id="cb29-8"><a></a></span>
-<span id="cb29-9"><a></a><span class="co"># Print the result</span></span>
-<span id="cb29-10"><a></a><span class="fu">print</span>(boxcox_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a><span class="fu">library</span>(envstats)</span>
+<span id="cb38-2"><a></a></span>
+<span id="cb38-3"><a></a><span class="co"># Example data</span></span>
+<span id="cb38-4"><a></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb38-5"><a></a></span>
+<span id="cb38-6"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
+<span id="cb38-7"><a></a>boxcox_result <span class="ot">&lt;-</span> <span class="fu">boxcoxTransform</span>(data)</span>
+<span id="cb38-8"><a></a></span>
+<span id="cb38-9"><a></a><span class="co"># Print the result</span></span>
+<span id="cb38-10"><a></a><span class="fu">print</span>(boxcox_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="just-use-the-function-1" class="slide level2">
 <h2>Just use the function</h2>
 <ul>
 <li>Py: scipy.stats</li>
 </ul>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a><span class="im">from</span> scipy.stats <span class="im">import</span> boxcox</span>
-<span id="cb30-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb30-3"><a></a></span>
-<span id="cb30-4"><a></a><span class="co"># Example data</span></span>
-<span id="cb30-5"><a></a>data <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
-<span id="cb30-6"><a></a></span>
-<span id="cb30-7"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
-<span id="cb30-8"><a></a>boxcox_result, lambda_value <span class="op">=</span> boxcox(data)</span>
-<span id="cb30-9"><a></a></span>
-<span id="cb30-10"><a></a><span class="co"># Print the result</span></span>
-<span id="cb30-11"><a></a><span class="bu">print</span>(<span class="st">"Transformed data:"</span>, boxcox_result)</span>
-<span id="cb30-12"><a></a><span class="bu">print</span>(<span class="st">"Lambda value:"</span>, lambda_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a><span class="im">from</span> scipy.stats <span class="im">import</span> boxcox</span>
+<span id="cb39-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb39-3"><a></a></span>
+<span id="cb39-4"><a></a><span class="co"># Example data</span></span>
+<span id="cb39-5"><a></a>data <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
+<span id="cb39-6"><a></a></span>
+<span id="cb39-7"><a></a><span class="co"># Apply Box-Cox transformation</span></span>
+<span id="cb39-8"><a></a>boxcox_result, lambda_value <span class="op">=</span> boxcox(data)</span>
+<span id="cb39-9"><a></a></span>
+<span id="cb39-10"><a></a><span class="co"># Print the result</span></span>
+<span id="cb39-11"><a></a><span class="bu">print</span>(<span class="st">"Transformed data:"</span>, boxcox_result)</span>
+<span id="cb39-12"><a></a><span class="bu">print</span>(<span class="st">"Lambda value:"</span>, lambda_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="on-python" class="slide level2">
 <h2>On Python</h2>
 <ul>
 <li>I like the Python <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html">boxcox documentation</a>:</li>
 </ul>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource haskell number-lines code-with-copy"><code class="sourceCode haskell"><span id="cb31-1"><a></a>y <span class="ot">=</span> (x<span class="op">**</span>lmbda <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> lmbda,  for lmbda <span class="op">!=</span> <span class="dv">0</span></span>
-<span id="cb31-2"><a></a>    <span class="fu">log</span>(x),                  for lmbda <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource haskell number-lines code-with-copy"><code class="sourceCode haskell"><span id="cb40-1"><a></a>y <span class="ot">=</span> (x<span class="op">**</span>lmbda <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> lmbda,  for lmbda <span class="op">!=</span> <span class="dv">0</span></span>
+<span id="cb40-2"><a></a>    <span class="fu">log</span>(x),                  for lmbda <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="caret-preprocessing-is-so-easy" class="slide level2">
 <h2>Caret preprocessing is so easy!</h2>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb32-1"><a></a>wine %&gt;% </span>
-<span id="cb32-2"><a></a>  preProcess(method = c("BoxCox","center","scale")) %&gt;% </span>
-<span id="cb32-3"><a></a>  predict(wine) %&gt;% </span>
-<span id="cb32-4"><a></a>  select(-description) %&gt;% </span>
-<span id="cb32-5"><a></a>  head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb41-1"><a></a>wine %&gt;% </span>
+<span id="cb41-2"><a></a>  preProcess(method = c("BoxCox","center","scale")) %&gt;% </span>
+<span id="cb41-3"><a></a>  predict(wine) %&gt;% </span>
+<span id="cb41-4"><a></a>  select(-description) %&gt;% </span>
+<span id="cb41-5"><a></a>  head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="or-is-it" class="slide level2">
 <h2>Or is it?</h2>
 <p>But wait… what is wrong here?</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb33-1"><a></a>wino &lt;- wine %&gt;%</span>
-<span id="cb33-2"><a></a>  mutate(year_f = as.factor(year))</span>
-<span id="cb33-3"><a></a></span>
-<span id="cb33-4"><a></a>wino &lt;- wino %&gt;% </span>
-<span id="cb33-5"><a></a>  preProcess(method = c("BoxCox","center","scale")) %&gt;% </span>
-<span id="cb33-6"><a></a>  predict(wino)</span>
-<span id="cb33-7"><a></a></span>
-<span id="cb33-8"><a></a>head(wino %&gt;% select(starts_with("year")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb42-1"><a></a>wino &lt;- wine %&gt;%</span>
+<span id="cb42-2"><a></a>  mutate(year_f = as.factor(year))</span>
+<span id="cb42-3"><a></a></span>
+<span id="cb42-4"><a></a>wino &lt;- wino %&gt;% </span>
+<span id="cb42-5"><a></a>  preProcess(method = c("BoxCox","center","scale")) %&gt;% </span>
+<span id="cb42-6"><a></a>  predict(wino)</span>
+<span id="cb42-7"><a></a></span>
+<span id="cb42-8"><a></a>head(wino %&gt;% select(starts_with("year")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Are years normally distributed?</li>
 </ul>
@@ -1025,72 +866,72 @@ f = y(.5) \implies f(x) \approx -x
 <ul>
 <li>Create an “other” for most tasters.</li>
 </ul>
-<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb34-1"><a></a>wino &lt;- wino %&gt;% </span>
-<span id="cb34-2"><a></a>  mutate(taster_name = fct_lump(taster_name,5))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb43-1"><a></a>wino &lt;- wino %&gt;% </span>
+<span id="cb43-2"><a></a>  mutate(taster_name = fct_lump(taster_name,5))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="engineering-some-features-1" class="slide level2">
 <h2>Engineering some features</h2>
 <ul>
 <li>Create dummys for years, tasters</li>
 </ul>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb35-1"><a></a>wino &lt;- wino %&gt;% dummy_cols(</span>
-<span id="cb35-2"><a></a>    select_columns = c("year_f","taster_name"),</span>
-<span id="cb35-3"><a></a>    remove_most_frequent_dummy = T, </span>
-<span id="cb35-4"><a></a>    remove_selected_columns = T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb44-1"><a></a>wino &lt;- wino %&gt;% dummy_cols(</span>
+<span id="cb44-2"><a></a>    select_columns = c("year_f","taster_name"),</span>
+<span id="cb44-3"><a></a>    remove_most_frequent_dummy = T, </span>
+<span id="cb44-4"><a></a>    remove_selected_columns = T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="engineering-some-features-2" class="slide level2">
 <h2>Engineering some features</h2>
 <ul>
 <li>Convert everything to snake case.</li>
 </ul>
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb36-1"><a></a>wino &lt;- wino %&gt;% </span>
-<span id="cb36-2"><a></a>  rename_all(funs(tolower(.))) %&gt;% </span>
-<span id="cb36-3"><a></a>  rename_all(funs(str_replace_all(., "-", "_"))) %&gt;% </span>
-<span id="cb36-4"><a></a>  rename_all(funs(str_replace_all(., " ", "_")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb45-1"><a></a>wino &lt;- wino %&gt;% </span>
+<span id="cb45-2"><a></a>  rename_all(funs(tolower(.))) %&gt;% </span>
+<span id="cb45-3"><a></a>  rename_all(funs(str_replace_all(., "-", "_"))) %&gt;% </span>
+<span id="cb45-4"><a></a>  rename_all(funs(str_replace_all(., " ", "_")))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="engineering-some-features-3" class="slide level2">
 <h2>Engineering some features</h2>
 <ul>
 <li>Add indicators for 3 tasting notes.</li>
 </ul>
-<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb37-1"><a></a>wino &lt;- wino %&gt;% </span>
-<span id="cb37-2"><a></a>  mutate(note_cherry = str_detect(description,"cherry")) %&gt;% </span>
-<span id="cb37-3"><a></a>  mutate(note_chocolate = str_detect(description,"chocolate")) %&gt;%</span>
-<span id="cb37-4"><a></a>  mutate(note_earth = str_detect(description,"earth")) %&gt;%</span>
-<span id="cb37-5"><a></a>  select(-description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb46-1"><a></a>wino &lt;- wino %&gt;% </span>
+<span id="cb46-2"><a></a>  mutate(note_cherry = str_detect(description,"cherry")) %&gt;% </span>
+<span id="cb46-3"><a></a>  mutate(note_chocolate = str_detect(description,"chocolate")) %&gt;%</span>
+<span id="cb46-4"><a></a>  mutate(note_earth = str_detect(description,"earth")) %&gt;%</span>
+<span id="cb46-5"><a></a>  select(-description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="engineering-some-features-4" class="slide level2">
 <h2>Engineering some features</h2>
 <ul>
 <li>Let’s see it</li>
 </ul>
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb38-1"><a></a>head(wino) %&gt;% </span>
-<span id="cb38-2"><a></a>  select(1:6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb47-1"><a></a>head(wino) %&gt;% </span>
+<span id="cb47-2"><a></a>  select(1:6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="split" class="slide level2">
 <h2>Split</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb39-1"><a></a>set.seed(505)</span>
-<span id="cb39-2"><a></a>wine_index &lt;- createDataPartition(wino$province, p = 0.8, list = FALSE)</span>
-<span id="cb39-3"><a></a>train &lt;- wino[ wine_index, ]</span>
-<span id="cb39-4"><a></a>test &lt;- wino[-wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb48-1"><a></a>set.seed(505)</span>
+<span id="cb48-2"><a></a>wine_index &lt;- createDataPartition(wino$province, p = 0.8, list = FALSE)</span>
+<span id="cb48-3"><a></a>train &lt;- wino[ wine_index, ]</span>
+<span id="cb48-4"><a></a>test &lt;- wino[-wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="simple-model" class="slide level2">
 <h2>Simple model</h2>
 <ul>
 <li>Specify a <span class="math inline">\(K\)</span>NN model.</li>
 </ul>
-<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb40-1"><a></a>fit &lt;- knn(</span>
-<span id="cb40-2"><a></a>  train = select(train,-province), </span>
-<span id="cb40-3"><a></a>  test = select(test,-province), </span>
-<span id="cb40-4"><a></a>  k=5, </span>
-<span id="cb40-5"><a></a>  cl = train$province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb49-1"><a></a>fit &lt;- knn(</span>
+<span id="cb49-2"><a></a>  train = select(train,-province), </span>
+<span id="cb49-3"><a></a>  test = select(test,-province), </span>
+<span id="cb49-4"><a></a>  k=5, </span>
+<span id="cb49-5"><a></a>  cl = train$province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion matrix</h2>
 <ul>
 <li>Let’s look at Kappa.</li>
 </ul>
-<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb41-1"><a></a>confusionMatrix(fit,factor(test$province))$overall</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb50-1"><a></a>confusionMatrix(fit,factor(test$province))$overall</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="kappa-kappa-statistic" class="slide level2">
 <h2><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4916348/">Kappa <span class="math inline">\(\kappa\)</span> statistic</a></h2>
@@ -1123,71 +964,71 @@ f = y(.5) \implies f(x) \approx -x
 </section>
 <section id="review-the-dataframe" class="slide level2">
 <h2>Review the dataframe</h2>
-<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb42-1"><a></a>summary(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb51-1"><a></a>summary(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="determine-what-dominates" class="slide level2">
 <h2>Determine what dominates</h2>
-<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb43-1"><a></a>omit &lt;- function(prefix) {</span>
-<span id="cb43-2"><a></a>  train &lt;- select(train, -starts_with(prefix))</span>
-<span id="cb43-3"><a></a>  test &lt;- select(test, -starts_with(prefix))</span>
-<span id="cb43-4"><a></a>  fit &lt;- knn(</span>
-<span id="cb43-5"><a></a>    train = select(train,-province), </span>
-<span id="cb43-6"><a></a>    test = select(test,-province), </span>
-<span id="cb43-7"><a></a>    k=5, </span>
-<span id="cb43-8"><a></a>    cl = train$province)</span>
-<span id="cb43-9"><a></a>  confusionMatrix(fit,factor(test$province))$overall</span>
-<span id="cb43-10"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb52-1"><a></a>omit &lt;- function(prefix) {</span>
+<span id="cb52-2"><a></a>  train &lt;- select(train, -starts_with(prefix))</span>
+<span id="cb52-3"><a></a>  test &lt;- select(test, -starts_with(prefix))</span>
+<span id="cb52-4"><a></a>  fit &lt;- knn(</span>
+<span id="cb52-5"><a></a>    train = select(train,-province), </span>
+<span id="cb52-6"><a></a>    test = select(test,-province), </span>
+<span id="cb52-7"><a></a>    k=5, </span>
+<span id="cb52-8"><a></a>    cl = train$province)</span>
+<span id="cb52-9"><a></a>  confusionMatrix(fit,factor(test$province))$overall</span>
+<span id="cb52-10"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="test" class="slide level2">
 <h2>Test</h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb44-1"><a></a>c(omit('year')["Kappa"], omit('note')["Kappa"], omit('taster')["Kappa"])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb53-1"><a></a>c(omit('year')["Kappa"], omit('note')["Kappa"], omit('taster')["Kappa"])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="fixing-the-leak" class="slide level2">
 <h2>Fixing the leak</h2>
 <ul>
 <li>Dastardly humans, always existing in a physical location.</li>
 </ul>
-<div class="sourceCode" id="cb45"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb45-1"><a></a>train &lt;- select(train, -starts_with("taster"))</span>
-<span id="cb45-2"><a></a>test &lt;- select(test, -starts_with("taster"))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb54-1"><a></a>train &lt;- select(train, -starts_with("taster"))</span>
+<span id="cb54-2"><a></a>test &lt;- select(test, -starts_with("taster"))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="rerun" class="slide level2">
 <h2>Rerun</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb46-1"><a></a>fit &lt;- knn(</span>
-<span id="cb46-2"><a></a>  train = select(train,-province), </span>
-<span id="cb46-3"><a></a>  test = select(test,-province), </span>
-<span id="cb46-4"><a></a>  k=5, </span>
-<span id="cb46-5"><a></a>  cl = train$province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb55-1"><a></a>fit &lt;- knn(</span>
+<span id="cb55-2"><a></a>  train = select(train,-province), </span>
+<span id="cb55-3"><a></a>  test = select(test,-province), </span>
+<span id="cb55-4"><a></a>  k=5, </span>
+<span id="cb55-5"><a></a>  cl = train$province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="confusion-matrix-1" class="slide level2">
 <h2>Confusion matrix</h2>
-<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb47-1"><a></a>confusionMatrix(fit,factor(test$province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb56-1"><a></a>confusionMatrix(fit,factor(test$province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="with-parameter-tuning-over-k" class="slide level2">
 <h2>With parameter tuning over <span class="math inline">\(K\)</span></h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb48-1"><a></a>fit &lt;- train(province ~ .,</span>
-<span id="cb48-2"><a></a>             data = train, </span>
-<span id="cb48-3"><a></a>             method = "knn",</span>
-<span id="cb48-4"><a></a>             tuneLength = 15,</span>
-<span id="cb48-5"><a></a>             trControl = trainControl(number = 1)) # default bootstrap</span>
-<span id="cb48-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb57-1"><a></a>fit &lt;- train(province ~ .,</span>
+<span id="cb57-2"><a></a>             data = train, </span>
+<span id="cb57-3"><a></a>             method = "knn",</span>
+<span id="cb57-4"><a></a>             tuneLength = 15,</span>
+<span id="cb57-5"><a></a>             trControl = trainControl(number = 1)) # default bootstrap</span>
+<span id="cb57-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="confusion-matrix-2" class="slide level2">
 <h2>Confusion Matrix</h2>
-<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb49-1"><a></a>confusionMatrix(predict(fit, test),factor(test$province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb58-1"><a></a>confusionMatrix(predict(fit, test),factor(test$province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="tuning-and-subsampling" class="slide level2">
 <h2>Tuning and subsampling</h2>
-<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb50-1"><a></a>fit &lt;- train(province ~ .,</span>
-<span id="cb50-2"><a></a>             data = train, </span>
-<span id="cb50-3"><a></a>             method = "knn",</span>
-<span id="cb50-4"><a></a>             tuneLength = 15,</span>
-<span id="cb50-5"><a></a>             metric = "Kappa", # this is new</span>
-<span id="cb50-6"><a></a>             trControl = trainControl(number = 1))</span>
-<span id="cb50-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb59-1"><a></a>fit &lt;- train(province ~ .,</span>
+<span id="cb59-2"><a></a>             data = train, </span>
+<span id="cb59-3"><a></a>             method = "knn",</span>
+<span id="cb59-4"><a></a>             tuneLength = 15,</span>
+<span id="cb59-5"><a></a>             metric = "Kappa", # this is new</span>
+<span id="cb59-6"><a></a>             trControl = trainControl(number = 1))</span>
+<span id="cb59-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="tuning-plot" class="slide level2">
 <h2>Tuning plot</h2>
-<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb51-1"><a></a>ggplot(fit, metric="Kappa")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb60-1"><a></a>ggplot(fit, metric="Kappa")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="group-modeling-problem-i" class="slide level2">
 <h2>Group modeling problem I</h2>
@@ -1202,12 +1043,12 @@ f = y(.5) \implies f(x) \approx -x
 </section>
 <section id="bonus-knn-for-regression" class="slide level2">
 <h2>Bonus: KNN for regression</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb52-1"><a></a>fit &lt;- train(price ~ .,</span>
-<span id="cb52-2"><a></a>             data = train, </span>
-<span id="cb52-3"><a></a>             method = "knn",</span>
-<span id="cb52-4"><a></a>             tuneLength = 15,</span>
-<span id="cb52-5"><a></a>             trControl = trainControl(number = 1))</span>
-<span id="cb52-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode numberSource {r} number-lines code-with-copy"><code class="sourceCode"><span id="cb61-1"><a></a>fit &lt;- train(price ~ .,</span>
+<span id="cb61-2"><a></a>             data = train, </span>
+<span id="cb61-3"><a></a>             method = "knn",</span>
+<span id="cb61-4"><a></a>             tuneLength = 15,</span>
+<span id="cb61-5"><a></a>             trControl = trainControl(number = 1))</span>
+<span id="cb61-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section></section>
