@@ -4793,15 +4793,15 @@ vertical-align: -.125em;
 <li>Get your <a href="https://docs.github.com/en/pages/quickstart">GitHub Pages</a> ready.</li>
 </ol>
 <p><strong>Set Up Python:</strong></p>
-<div id="08115e97" class="cell" data-execution_count="1">
+<div id="c0a5a896" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Set Up R Compatability:</strong></p>
-<div id="bcb3a359" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyreadr</span>
+<div id="2f782317" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import pyreadr - no longer needed - keep reading</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -4818,19 +4818,44 @@ vertical-align: -.125em;
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wine.to_parquet(<span class="st">&quot;wine.parquet&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>Then from now on…</li>
+<li>Then I can use <code>read_parquet</code></li>
 </ul>
-<div id="f2256573" class="cell" data-execution_count="3">
+<div id="2658e574" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> pd.read_parquet(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/wine.parquet&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>I found this was unexpectly low performance as well, so I switched to the Python specific <code>pickle</code> file
+<ul>
+<li>The <code>parquet</code> and <code>pandas</code> libraries have to repackage strings.
+<ul>
+<li>This is a string-forward data set so slow.</li>
+</ul></li>
+<li><code>pickle</code> is optimized for <code>pandas</code></li>
+<li>Named after the <a href="https://www.portlandpicklesbaseball.com/">Portland Pickles</a> <img role="img" src="data:text/html; charset=utf-8;charset=utf-8,%3C%21DOCTYPE%20html%3E%0A%3Chtml%20lang%3D%22en%22%3E%0A%3Cmeta%20charset%3D%22utf%2D8%22%3E%0A%3Ctitle%3EWikimedia%20Error%3C%2Ftitle%3E%0A%3Cstyle%3E%0A%2A%20%7B%20margin%3A%200%3B%20padding%3A%200%3B%20%7D%0Abody%20%7B%20background%3A%20%23fff%3B%20font%3A%2015px%2F1%2E6%20sans%2Dserif%3B%20color%3A%20%23333%3B%20%7D%0A%2Econtent%20%7B%20margin%3A%207%25%20auto%200%3B%20padding%3A%202em%201em%201em%3B%20max%2Dwidth%3A%20640px%3B%20%7D%0A%2Efooter%20%7B%20clear%3A%20both%3B%20margin%2Dtop%3A%2014%25%3B%20border%2Dtop%3A%201px%20solid%20%23e5e5e5%3B%20background%3A%20%23f9f9f9%3B%20padding%3A%202em%200%3B%20font%2Dsize%3A%200%2E8em%3B%20text%2Dalign%3A%20center%3B%20%7D%0Aimg%20%7B%20float%3A%20left%3B%20margin%3A%200%202em%202em%200%3B%20%7D%0Aa%20img%20%7B%20border%3A%200%3B%20%7D%0Ah1%20%7B%20margin%2Dtop%3A%201em%3B%20font%2Dsize%3A%201%2E2em%3B%20%7D%0A%2Econtent%2Dtext%20%7B%20overflow%3A%20hidden%3B%20overflow%2Dwrap%3A%20break%2Dword%3B%20word%2Dwrap%3A%20break%2Dword%3B%20%2Dwebkit%2Dhyphens%3A%20auto%3B%20%2Dmoz%2Dhyphens%3A%20auto%3B%20%2Dms%2Dhyphens%3A%20auto%3B%20hyphens%3A%20auto%3B%20%7D%0Ap%20%7B%20margin%3A%200%2E7em%200%201em%200%3B%20%7D%0Aa%20%7B%20color%3A%20%230645ad%3B%20text%2Ddecoration%3A%20none%3B%20%7D%0Aa%3Ahover%20%7B%20text%2Ddecoration%3A%20underline%3B%20%7D%0Acode%20%7B%20font%2Dfamily%3A%20sans%2Dserif%3B%20%7D%0Asummary%20%7B%20font%2Dweight%3A%20bold%3B%20cursor%3A%20pointer%3B%20%7D%0Adetails%5Bopen%5D%20%7B%20background%3A%20%23970302%3B%20color%3A%20%23dfdedd%3B%20%7D%0A%2Etext%2Dmuted%20%7B%20color%3A%20%23777%3B%20%7D%0A%40media%20%28prefers%2Dcolor%2Dscheme%3A%20dark%29%20%7B%0A%20%20a%20%7B%20color%3A%20%239e9eff%3B%20%7D%0A%20%20body%20%7B%20background%3A%20transparent%3B%20color%3A%20%23ddd%3B%20%7D%0A%20%20%2Efooter%20%7B%20border%2Dtop%3A%201px%20solid%20%23444%3B%20background%3A%20%23060606%3B%20%7D%0A%20%20%23logo%20%7B%20filter%3A%20invert%281%29%20hue%2Drotate%28180deg%29%3B%20%7D%0A%20%20%2Etext%2Dmuted%20%7B%20color%3A%20%23888%3B%20%7D%0A%7D%0A%3C%2Fstyle%3E%0A%3Cmeta%20name%3D%22color%2Dscheme%22%20content%3D%22light%20dark%22%3E%0A%3Cdiv%20class%3D%22content%22%20role%3D%22main%22%3E%0A%3Ca%20href%3D%22https%3A%2F%2Fwww%2Ewikimedia%2Eorg%22%3E%3Cimg%20id%3D%22logo%22%20src%3D%22https%3A%2F%2Fwww%2Ewikimedia%2Eorg%2Fstatic%2Fimages%2Fwmf%2Dlogo%2Epng%22%20srcset%3D%22https%3A%2F%2Fwww%2Ewikimedia%2Eorg%2Fstatic%2Fimages%2Fwmf%2Dlogo%2D2x%2Epng%202x%22%20alt%3D%22Wikimedia%22%20width%3D%22135%22%20height%3D%22101%22%3E%0A%3C%2Fa%3E%0A%3Ch1%3EError%3C%2Fh1%3E%0A%3Cdiv%20class%3D%22content%2Dtext%22%3E%0A%0A%3Cp%3EOur%20servers%20are%20currently%20under%20maintenance%20or%20experiencing%20a%20technical%20issue%3C%2Fp%3E%0A%3C%2Fdiv%3E%0A%3C%2Fdiv%3E%0A%3Cdiv%20class%3D%22footer%22%3E%3Cp%3EIf%20you%20report%20this%20error%20to%20the%20Wikimedia%20System%20Administrators%2C%20please%20include%20the%20details%20below%2E%3C%2Fp%3E%3Cp%20class%3D%22text%2Dmuted%22%3E%3Ccode%3ERequest%20served%20via%20cp1107%20cp1107%2C%20Varnish%20XID%20417989888%3Cbr%3EUpstream%20caches%3A%20cp1107%20int%3Cbr%3EError%3A%20403%2C%20Forbidden%2E%20Please%20comply%20with%20the%20User%2DAgent%20policy%3A%20https%3A%2F%2Fmeta%2Ewikimedia%2Eorg%2Fwiki%2FUser%2DAgent%5Fpolicy%20at%20Mon%2C%2003%20Feb%202025%2000%3A39%3A48%20GMT%3Cbr%3E%3Cdetails%3E%3Csummary%3ESensitive%20client%20information%3C%2Fsummary%3EIP%20address%3A%2099%2E196%2E128%2E133%3C%2Fdetails%3E%3C%2Fcode%3E%3C%2Fp%3E%0A%3C%2Fdiv%3E%0A%3C%2Fhtml%3E%0A" class="img-fluid">
+<ul>
+<li>I don’t know if that’s true or not, but it probably isn’t.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wine.to_pickle(<span class="st">&quot;wine.pickle&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Henceforth I’ll use <code>read_pickle</code> and its ~100x performance improvement.
+<ul>
+<li>Plus, now I can use pandas anywhere - don’t need to install <em>and</em> import pyreadr, which is not customarily part of the Python data stack.</li>
+</ul></li>
+<li>This is the first “live” code sell that isn’t showing historical cells that were no longer in use, setting up file formats.</li>
+</ul>
+<div id="0395d1c1" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> pd.read_pickle(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/wine.pickle&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Then simply engineer the features.</li>
 </ul>
-<div id="91f80b0d" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> wine[wine[<span class="st">&#39;province&#39;</span>].isin([<span class="st">&#39;Oregon&#39;</span>, <span class="st">&#39;California&#39;</span>, <span class="st">&#39;New York&#39;</span>])]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>wine[<span class="st">&#39;cherry&#39;</span>] <span class="op">=</span> wine[<span class="st">&#39;description&#39;</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="st">&#39;herry&#39;</span> <span class="kw">in</span> x)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>wine[<span class="st">&#39;lprice&#39;</span>] <span class="op">=</span> wine[<span class="st">&#39;price&#39;</span>].<span class="bu">apply</span>(np.log)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> wine[[<span class="st">&#39;lprice&#39;</span>, <span class="st">&#39;points&#39;</span>, <span class="st">&#39;cherry&#39;</span>, <span class="st">&#39;province&#39;</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fa67beb6" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> wine[wine[<span class="st">&#39;province&#39;</span>].isin([<span class="st">&#39;Oregon&#39;</span>, <span class="st">&#39;California&#39;</span>, <span class="st">&#39;New York&#39;</span>])]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>wine[<span class="st">&#39;cherry&#39;</span>] <span class="op">=</span> wine[<span class="st">&#39;description&#39;</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="st">&#39;herry&#39;</span> <span class="kw">in</span> x)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>wine[<span class="st">&#39;lprice&#39;</span>] <span class="op">=</span> wine[<span class="st">&#39;price&#39;</span>].<span class="bu">apply</span>(np.log)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>wine <span class="op">=</span> wine[[<span class="st">&#39;lprice&#39;</span>, <span class="st">&#39;points&#39;</span>, <span class="st">&#39;cherry&#39;</span>, <span class="st">&#39;province&#39;</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Explanation:</strong></p>
 <blockquote class="blockquote">

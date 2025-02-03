@@ -35,7 +35,7 @@ import seaborn as sns
 
 **Set Up R Compatability:**
 ```{python}
-import pyreadr
+# import pyreadr - no longer needed - keep reading
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 ```
@@ -54,10 +54,29 @@ wine = pyreadr.read_r(rds)[None]
 ```{.python}
 wine.to_parquet("wine.parquet")
 ```
-- Then from now on...
-```{python}
+- Then I can use `read_parquet`
+```{.python}
 wine = pd.read_parquet("https://github.com/cd-public/D505/raw/master/dat/wine.parquet")
 ```
+- I found this was unexpectly low performance as well, so I switched to the Python specific `pickle` file
+  - The `parquet` and `pandas` libraries have to repackage strings.
+    - This is a string-forward data set so slow.
+  - `pickle` is optimized for `pandas`
+  - Named after the [Portland Pickles](https://www.portlandpicklesbaseball.com/)
+![](https://upload.wikimedia.org/wikipedia/en/c/c0/Portland_Pickles_Logo_2023.png)
+    - I don't know if that's true or not, but it probably isn't.
+
+```{.python}
+wine.to_pickle("wine.pickle")
+```
+- Henceforth I'll use `read_pickle` and its ~100x performance improvement.
+  - Plus, now I can use pandas anywhere - don't need to install *and* import pyreadr, which is not customarily part of the Python data stack.
+- This is the first "live" code sell that isn't showing historical cells that were no longer in use, setting up file formats.
+```{python}
+wine = pd.read_pickle("https://github.com/cd-public/D505/raw/master/dat/wine.pickle")
+```
+- Much faster with a local (that is, non-url) pickle, of course.
+
 - Then simply engineer the features.
 ```{python}
 wine = wine[wine['province'].isin(['Oregon', 'California', 'New York'])]
