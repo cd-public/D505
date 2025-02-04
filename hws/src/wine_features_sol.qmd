@@ -1,0 +1,101 @@
+---
+title: "Wine Features"
+author: "Calvin Deutschbein"
+date: "02/03/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme: superhero  
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+**Abstract:**
+
+This is a technical blog post of **both** an HTML file *and* [.qmd file](src/wine_features.qmd) hosted on GitHub pages.
+
+# Setup
+
+**Step Up Code:**
+```{r}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(caret))
+sh(library(fastDummies))
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/wine.rds")))
+```
+
+**Explanataion:**
+
+> We will proceed as follows:<br>
+- Suppress `library` load warnings, as we addressed them prior to publication.<br>
+- Use Tidy data sets via the `tidyverse` package<br>
+- Perform classification and regression via the 'caret' package<br>
+- Engineer features via the `fastDummies` package<br>
+- Load in the `wine.rds` dataframe, hosted publicly on [GitHub](https://github.com/cd-public/D505/raw/master/dat/wine.rds).
+
+# Feature Engineering
+
+We begin by engineering an number of features.
+
+```{r}
+wino <- wine %>% 
+  mutate(lprice=log(price), description = tolower(description)) %>%
+  select(lprice, description)
+```
+
+1. Create a total of 10 features (including points). 
+
+```{r}
+notes <- c("smoke", "spice", "pepper", "grass", "tannic", "crisp", "acidic", "bright", "smooth")
+for (note in notes) {
+  wino <- wino %>%
+    mutate(!!sym(note) := str_detect(description, note))
+}
+head(wino)
+```
+
+2. Remove all rows with a missing value. 
+3. Ensure only log(price) and engineering features are the only columns that remain in the `wino` dataframe.
+
+```{r}
+wino <- wino %>% select(-description) %>% drop_na(.)
+```
+
+# Caret
+
+We now use a train/test split to evaluate the features.
+
+1. Use the Caret library to partition the wino dataframe into an 80/20 split. 
+
+```{r}
+set.seed(505)  # For reproducibility
+trainIndex <- createDataPartition(wino$lprice, p = 0.8, list = FALSE)
+trainData <- wino[trainIndex, ]
+testData <- wino[-trainIndex, ]
+```
+
+2. Run a linear regression with bootstrap resampling. 
+
+```{r}
+options(warn=-1)
+model <- train(lprice ~ ., data = trainData, method = "lm", trControl = trainControl(method = "boot", number = 5))
+options(warn=0)
+```
+
+3. Report RMSE on the test partition of the data.
+
+```{r}
+sqrt(mean((predict(model, newdata = testData) - testData$lprice)^2))
+```
+
+# Variable selection
+
+We now graph the importance of our 10 features.
+
+```{r}
+plot(varImp(model))
+```
