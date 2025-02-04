@@ -906,9 +906,9 @@ y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
 <li>R</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>y <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>y <span class="ot">&lt;-</span> <span class="cf">function</span>(A) {</span>
 <span id="cb35-2"><a></a>  r <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb35-3"><a></a>    (x <span class="sc">**</span> l <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span>l</span>
+<span id="cb35-3"><a></a>    (x <span class="sc">**</span> A <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> A</span>
 <span id="cb35-4"><a></a>  }</span>
 <span id="cb35-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -973,7 +973,7 @@ f = y(0) \implies f(x) \approx \log(x)
 <section id="examples-2" class="slide level2">
 <h2>Examples</h2>
 <p><span class="math display">\[
-y(1) = \frac{x^{\lambda}-1}{\lambda} =
+y(.5) = \frac{x^{\lambda}-1}{\lambda} =
       \frac{x^{.5}-1}{.5} =
       2\times(\sqrt{x}-1) \approx \sqrt{x}
 \]</span></p>
@@ -987,7 +987,7 @@ f = y(.5) \implies f(x) \approx \sqrt{x}
 <li>When <span class="math inline">\(\lambda=-1\)</span>, it is an inverse</li>
 </ul>
 <p><span class="math display">\[
-y(1) = \frac{x^{\lambda}-1}{\lambda} =
+y(-1) = \frac{x^{\lambda}-1}{\lambda} =
       \frac{x^{-1}-1}{-1} =
       \frac{x^{-1}}{-1}+\frac{-1}{-1} =
       -x^{-1}-1 \approx x^{-1}
