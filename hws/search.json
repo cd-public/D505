@@ -200,13 +200,13 @@
     "href": "knn.html#kappa",
     "title": "\\(K\\)NN",
     "section": "6. Kappa",
-    "text": "6. Kappa\nHow do we determine rather a Kappa value is represents a good or bad outcome?\n\nTODO: Explain"
+    "text": "6. Kappa\nHow do we determine whether a Kappa value is represents a good or bad outcome?\n\nTODO: Explain"
   },
   {
     "objectID": "knn.html#improvement",
     "href": "knn.html#improvement",
     "title": "\\(K\\)NN",
     "section": "7. Improvement",
-    "text": "7. Improvement\nHow can we interpret a the confusion matrix, and how can we improve in our predictions?\n\nTODO: Explain"
+    "text": "7. Improvement\nHow can we interpret the confusion matrix, and how can we improve in our predictions?\n\nTODO: Explain"
   }
 ]

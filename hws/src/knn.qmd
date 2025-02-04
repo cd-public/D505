@@ -15,7 +15,18 @@ format:
 
 **Abstract:**
 
-This is a technical blog post of **both** an HTML file *and* [.qmd file](src/wine_features.qmd) hosted on GitHub pages.
+This is a technical blog post of **both** an HTML file *and* [.qmd file](https://raw.githubusercontent.com/cd-public/D505/refs/heads/master/hws/src/knn.qmd) hosted on GitHub pages.
+
+# 0. Quarto Type-setting
+
+- This document is rendered with Quarto, and configured to embed an images using the `embed-resources` option in the header.
+- If you wish to use a similar header, here's is the format specification for this document:
+
+```email
+format: 
+  html:
+    embed-resources: true
+```
 
 # 1. Setup
 
@@ -66,12 +77,12 @@ wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/pino
 
 ## 6. Kappa
 
-How do we determine rather a Kappa value is represents a good or bad outcome?
+How do we determine whether a Kappa value is represents a good or bad outcome?
 
 > <span style="color:red;font-weight:bold">TODO</span>: *Explain*
 
 ## 7. Improvement
 
-How can we interpret a the confusion matrix, and how can we improve in our predictions?
+How can we interpret the confusion matrix, and how can we improve in our predictions?
 
 > <span style="color:red;font-weight:bold">TODO</span>: *Explain*

@@ -4922,11 +4922,21 @@ window.Quarto = {
 
 
 <p><strong>Abstract:</strong></p>
-<p>This is a technical blog post of <strong>both</strong> an HTML file <em>and</em> <a href="src/wine_features.qmd">.qmd file</a> hosted on GitHub pages.</p>
+<p>This is a technical blog post of <strong>both</strong> an HTML file <em>and</em> <a href="https://raw.githubusercontent.com/cd-public/D505/refs/heads/master/hws/src/knn.qmd">.qmd file</a> hosted on GitHub pages.</p>
+<section id="quarto-type-setting" class="level1">
+<h1>0. Quarto Type-setting</h1>
+<ul>
+<li>This document is rendered with Quarto, and configured to embed an images using the <code>embed-resources</code> option in the header.</li>
+<li>If you wish to use a similar header, here’s is the format specification for this document:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format: </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  html:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    embed-resources: true</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="setup" class="level1">
 <h1>1. Setup</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -4939,7 +4949,7 @@ window.Quarto = {
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: lattice
 
@@ -4949,7 +4959,7 @@ The following object is masked from &#39;package:purrr&#39;:
 
     lift</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/pinot.rds&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/pinot.rds&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="knn-concepts" class="level2">
 <h2 class="anchored" data-anchor-id="knn-concepts">2. <span class="math inline">\(K\)</span>NN Concepts</h2>
@@ -4972,7 +4982,7 @@ The following object is masked from &#39;package:purrr&#39;:
 <li>Remove the description column from the data.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="preprocessing" class="level2">
@@ -4982,7 +4992,7 @@ The following object is masked from &#39;package:purrr&#39;:
 <li>Create dummy variables for the <code>year</code> factor column</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="running-knn" class="level2">
@@ -5001,14 +5011,14 @@ The following object is masked from &#39;package:purrr&#39;:
 </section>
 <section id="kappa" class="level2">
 <h2 class="anchored" data-anchor-id="kappa">6. Kappa</h2>
-<p>How do we determine rather a Kappa value is represents a good or bad outcome?</p>
+<p>How do we determine whether a Kappa value is represents a good or bad outcome?</p>
 <blockquote class="blockquote">
 <p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain</em></p>
 </blockquote>
 </section>
 <section id="improvement" class="level2">
 <h2 class="anchored" data-anchor-id="improvement">7. Improvement</h2>
-<p>How can we interpret a the confusion matrix, and how can we improve in our predictions?</p>
+<p>How can we interpret the confusion matrix, and how can we improve in our predictions?</p>
 <blockquote class="blockquote">
 <p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain</em></p>
 </blockquote>
