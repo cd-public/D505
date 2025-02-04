@@ -1,7 +1,7 @@
 ---
-title: "$K$ Nearest Neighbors"
+title: "$K$ Nearest Neighbors in Python"
 subtitle: "Applied Machine Learning"
-author: "Jameson > Hendrik > Calvin"
+author: "Calvin"
   
 jupyter: python3
 

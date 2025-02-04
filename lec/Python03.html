@@ -9,8 +9,8 @@
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.6.30">
 
-  <meta name="author" content="Jameson > Hendrik > Calvin">
-  <title>K Nearest Neighbors</title>
+  <meta name="author" content="Calvin">
+  <title>K Nearest Neighbors in Python</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -390,13 +390,13 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title"><span class="math inline">\(K\)</span> Nearest Neighbors</h1>
+  <h1 class="title"><span class="math inline">\(K\)</span> Nearest Neighbors in Python</h1>
   <p class="subtitle">Applied Machine Learning</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Jameson &gt; Hendrik &gt; Calvin 
+Calvin 
 </div>
 </div>
 </div>
@@ -453,7 +453,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li>Python base data stack</li>
 </ul>
-<div id="d20b7e06" class="cell" data-execution_count="1">
+<div id="d20b7e06" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -462,7 +462,7 @@ Jameson &gt; Hendrik &gt; Calvin
 </section>
 <section id="ml-library" class="slide level2">
 <h2>ML Library</h2>
-<div id="c052dccb" class="cell" data-execution_count="2">
+<div id="c052dccb" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb2-2"><a></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PowerTransformer</span>
 <span id="cb2-3"><a></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, GridSearchCV</span>
@@ -476,7 +476,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li><code>pyreadr</code> to read in an R dataset.</li>
 </ul>
-<div id="9fe8ec46" class="cell" data-execution_count="3">
+<div id="9fe8ec46" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Local pickle as a performance concession.</span></span>
 <span id="cb3-2"><a></a><span class="co"># Same relative path as on GitHub</span></span>
 <span id="cb3-3"><a></a>wine <span class="op">=</span> pd.read_pickle(<span class="st">"../../dat/wine.pickle"</span>)     </span>
@@ -496,7 +496,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <img data-src="./images/correlation.png" class="r-stretch"></section>
 <section id="calculating-correlation" class="slide level2">
 <h2>Calculating correlation</h2>
-<div id="c7ad4244" class="cell" data-execution_count="4">
+<div id="c7ad4244" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>wine[<span class="st">'price'</span>].corr(wine[<span class="st">'points'</span>]), wine[<span class="st">'lprice'</span>].corr(wine[<span class="st">'points'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>(np.float64(0.4043745886494151), np.float64(0.6243320331753497))</code></pre>
@@ -517,7 +517,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <ul>
 <li>Make a function…</li>
 </ul>
-<div id="989d1f91" class="cell" data-execution_count="5">
+<div id="989d1f91" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a></a><span class="kw">def</span> var_cor(wine, var):</span>
 <span id="cb6-2"><a></a>  df <span class="op">=</span> wine[(wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">"Oregon"</span>) <span class="op">&amp;</span> </span>
 <span id="cb6-3"><a></a>            (wine[<span class="st">'variety'</span>]  <span class="op">==</span> var)]</span>
@@ -526,7 +526,7 @@ Jameson &gt; Hendrik &gt; Calvin
 </section>
 <section id="eval" class="slide level2">
 <h2>Eval</h2>
-<div id="9b288fe1" class="cell" data-execution_count="6">
+<div id="9b288fe1" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>vs <span class="op">=</span> (<span class="st">"Chardonnay"</span>, <span class="st">"Pinot Noir"</span>, <span class="st">"Pinot Gris"</span>)</span>
 <span id="cb7-2"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(v, var_cor(wine, v)) <span class="cf">for</span> v <span class="kw">in</span> vs]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -538,7 +538,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="visualizing-these-different-correlations" class="slide level2">
 <h2>Visualizing these different correlations</h2>
-<div id="8785bb24" class="cell" data-execution_count="7">
+<div id="8785bb24" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>wine <span class="op">=</span> wine[(wine[<span class="st">'province'</span>] <span class="op">==</span> <span class="st">"Oregon"</span>) <span class="op">&amp;</span> </span>
 <span id="cb9-2"><a></a>                     (wine[<span class="st">'variety'</span>].isin(vs))]</span>
 <span id="cb9-3"><a></a>g <span class="op">=</span> sns.FacetGrid(wine, col<span class="op">=</span><span class="st">"variety"</span>, hue<span class="op">=</span><span class="st">"variety"</span>)</span>
@@ -554,7 +554,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="graphing-residuals-bad" class="slide level2">
 <h2>Graphing residuals (bad)</h2>
-<div id="be9992ab" class="cell" data-execution_count="8">
+<div id="be9992ab" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>X,y  <span class="op">=</span> wine[[<span class="st">'points'</span>]], wine[<span class="st">'price'</span>]</span>
 <span id="cb10-2"><a></a>wine[<span class="st">'residual'</span>] <span class="op">=</span> y <span class="op">-</span> LinearRegression().fit(X, y).predict(X)</span>
 <span id="cb10-3"><a></a>sns.scatterplot(x<span class="op">=</span><span class="st">'points'</span>, y<span class="op">=</span><span class="st">'residual'</span>, data<span class="op">=</span>wine, alpha<span class="op">=</span><span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -572,7 +572,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 <ul>
 <li>Clearly should’ve made a function here.</li>
 </ul>
-<div id="c7f415be" class="cell" data-execution_count="9">
+<div id="c7f415be" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a><span class="kw">def</span> resid_plot(df, x, y):</span>
 <span id="cb11-2"><a></a>  X,y  <span class="op">=</span> df[[x]], df[y]</span>
 <span id="cb11-3"><a></a>  wine[<span class="st">'residual'</span>] <span class="op">=</span> y <span class="op">-</span> LinearRegression().fit(X, y).predict(X)</span>
@@ -581,7 +581,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="try-it" class="slide level2">
 <h2>Try it</h2>
-<div id="030a9db3" class="cell" data-execution_count="10">
+<div id="030a9db3" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>resid_plot(wine, <span class="st">"points"</span>, <span class="st">"lprice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -594,7 +594,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="try-it-on-year" class="slide level2">
 <h2>Try it on year</h2>
-<div id="9ccdaed8" class="cell" data-execution_count="11">
+<div id="9ccdaed8" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>resid_plot(wine, <span class="st">"year"</span>, <span class="st">"lprice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -610,7 +610,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 <ul>
 <li>Before examining many coefficients, a helper.</li>
 </ul>
-<div id="7d5a2ad6" class="cell" data-execution_count="12">
+<div id="7d5a2ad6" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a><span class="kw">def</span> get_coef(df, x, y):</span>
 <span id="cb14-2"><a></a>  X,y  <span class="op">=</span> df[[x]], df[y]</span>
 <span id="cb14-3"><a></a>  <span class="cf">return</span> (LinearRegression().fit(X,y)).coef_[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -618,7 +618,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="change" class="slide level2">
 <h2>% Change</h2>
-<div id="de8e411f" class="cell" data-execution_count="13">
+<div id="de8e411f" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>get_pct <span class="op">=</span> <span class="kw">lambda</span> x : (np.exp(x)<span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span></span>
 <span id="cb15-2"><a></a></span>
 <span id="cb15-3"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"points"</span>, <span class="st">"lprice"</span>)</span>
@@ -638,7 +638,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="interpreting-the-coefficients-1" class="slide level2">
 <h2>Interpreting the coefficients</h2>
-<div id="b32b92ea" class="cell" data-execution_count="14">
+<div id="b32b92ea" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"year"</span>, <span class="st">"lprice"</span>)</span>
 <span id="cb17-2"><a></a>coef, get_pct(coef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -653,7 +653,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 <h2>Some Examples</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div id="078c4c13" class="cell" data-execution_count="15">
+<div id="078c4c13" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(x<span class="op">/</span><span class="dv">10</span>, get_pct(x<span class="op">/</span><span class="dv">10</span>)) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.0 0.0
@@ -669,7 +669,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<div id="725545ba" class="cell" data-execution_count="16">
+<div id="725545ba" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>_ <span class="op">=</span> [<span class="bu">print</span>(x<span class="op">/</span><span class="dv">100</span>, get_pct(x<span class="op">/</span><span class="dv">100</span>)) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.0 0.0
@@ -688,7 +688,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="log-feature" class="slide level2">
 <h2><span class="math inline">\(\log\)</span> feature</h2>
-<div id="c0ff849f" class="cell" data-execution_count="17">
+<div id="c0ff849f" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>wine[<span class="st">'lpoints'</span>] <span class="op">=</span> np.log(wine[<span class="st">'points'</span>])</span>
 <span id="cb23-2"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"lpoints"</span>, <span class="st">"price"</span>)</span>
 <span id="cb23-3"><a></a>coef, get_pct(coef) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -703,7 +703,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="loglog-also-elasticity" class="slide level2">
 <h2>LogLog (also elasticity)</h2>
-<div id="9d2e1eb1" class="cell" data-execution_count="18">
+<div id="9d2e1eb1" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a>coef <span class="op">=</span> get_coef(wine, <span class="st">"lpoints"</span>, <span class="st">"lprice"</span>)</span>
 <span id="cb25-2"><a></a>coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
@@ -744,7 +744,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </ul></li>
 <li>A $30 bottle of wine scoring 90 would be worth $32.75 as a 91.</li>
 </ul>
-<div id="a335b195" class="cell" data-execution_count="19">
+<div id="a335b195" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a></a><span class="dv">30</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="fl">9.2</span><span class="op">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <pre><code>32.760000000000005</code></pre>
@@ -753,7 +753,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="graphing-points-by-variety" class="slide level2">
 <h2>Graphing points by variety</h2>
-<div id="f297665f" class="cell" data-execution_count="20">
+<div id="f297665f" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a></a>sns.boxplot(x<span class="op">=</span><span class="st">'variety'</span>, y<span class="op">=</span><span class="st">'points'</span>, data<span class="op">=</span>wine)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -766,7 +766,7 @@ Pinot Gris 0.48969431912451855</code></pre>
 </section>
 <section id="summary-1" class="slide level2">
 <h2>Summary</h2>
-<div id="5737c9d9" class="cell" data-execution_count="21">
+<div id="5737c9d9" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>wine.groupby(<span class="st">'variety'</span>)[<span class="st">'points'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>variety
@@ -807,7 +807,7 @@ Name: points, dtype: float64</code></pre>
 </section>
 <section id="normality" class="slide level2">
 <h2>Normality</h2>
-<div id="6bf03a1e" class="cell" data-execution_count="22">
+<div id="6bf03a1e" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a></a>X <span class="op">=</span> wine[[<span class="st">"points"</span>]]</span>
 <span id="cb32-2"><a></a>sns.histplot(y <span class="op">-</span> LinearRegression().fit(X, wine[<span class="st">"lprice"</span>]).predict(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -837,7 +837,7 @@ Name: points, dtype: float64</code></pre>
 <li>Say “<span class="math inline">\(\pi^0\)</span>”</li>
 </ul></li>
 </ul>
-<div id="716d162f" class="cell" data-execution_count="23">
+<div id="716d162f" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a>wine <span class="op">=</span> pd.read_pickle(<span class="st">"../../dat/pinot_orig.pickle"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -864,7 +864,7 @@ y(\lambda) = \frac{x^{\lambda}-1}{\lambda}
 <ul>
 <li>Py</li>
 </ul>
-<div id="753140f5" class="cell" data-execution_count="24">
+<div id="753140f5" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a></a>y <span class="op">=</span> <span class="kw">lambda</span> l : <span class="kw">lambda</span> x : (x <span class="op">**</span> l <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -901,7 +901,7 @@ f = y(0) \implies f(x) \approx \log(x)
 </section>
 <section id="lambda-0" class="slide level2">
 <h2><span class="math inline">\(\lambda = 0\)</span></h2>
-<div id="1f3b9772" class="cell" data-execution_count="25">
+<div id="1f3b9772" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a>[y(<span class="dv">10</span><span class="op">**-</span>l)(<span class="dv">4</span>) <span class="op">-</span> np.log(<span class="dv">4</span>) <span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>[np.float64(1.6137056388801094),
@@ -942,7 +942,7 @@ f = y(.5) \implies f(x) \approx -x
 <ul>
 <li>Use <code>PowerTransformer</code></li>
 </ul>
-<div id="5c6d819a" class="cell" data-execution_count="26">
+<div id="5c6d819a" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>data <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
 <span id="cb37-2"><a></a></span>
 <span id="cb37-3"><a></a><span class="co"># Apply PowerTransformer (Box-Cox transformation)</span></span>
@@ -960,7 +960,7 @@ Lambda value: [0.69029655]</code></pre>
 </section>
 <section id="on-points" class="slide level2">
 <h2>On Points</h2>
-<div id="5483412d" class="cell" data-execution_count="27">
+<div id="5483412d" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a></a>pt.fit_transform(wine[<span class="st">"points"</span>].values.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
 <span id="cb39-2"><a></a><span class="bu">print</span>(<span class="st">"Transformed data:"</span>, boxcox_result.flatten())</span>
 <span id="cb39-3"><a></a><span class="bu">print</span>(<span class="st">"Lambda value:"</span>, pt.lambdas_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1038,7 +1038,7 @@ Lambda value: [5.2309031]</code></pre>
 <ul>
 <li>Tasters, years, notes</li>
 </ul>
-<div id="5cfccd16" class="cell" data-execution_count="28">
+<div id="5cfccd16" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a></a>wine <span class="op">=</span> pd.get_dummies(wine, columns<span class="op">=</span>[<span class="st">'year'</span>, <span class="st">'taster_name'</span>], drop_first<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb42-2"><a></a>wine.columns <span class="op">=</span> [re.sub(<span class="vs">r'\s+'</span>, <span class="st">'_'</span>, re.sub(<span class="vs">r'-'</span>, <span class="st">'_'</span>, col.lower())) <span class="cf">for</span> col <span class="kw">in</span> wine.columns]</span>
 <span id="cb42-3"><a></a>notes <span class="op">=</span> [<span class="st">'cherry'</span>, <span class="st">'chocolate'</span>, <span class="st">'earth'</span>]</span>
@@ -1050,7 +1050,7 @@ Lambda value: [5.2309031]</code></pre>
 </section>
 <section id="split" class="slide level2">
 <h2>Split</h2>
-<div id="869d6f29" class="cell" data-execution_count="29">
+<div id="869d6f29" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a></a>train, test <span class="op">=</span> train_test_split(wine, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>wine[<span class="st">'province'</span>], random_state<span class="op">=</span><span class="dv">505</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -1059,7 +1059,7 @@ Lambda value: [5.2309031]</code></pre>
 <ul>
 <li>Let’s look at misses</li>
 </ul>
-<div id="742a122e" class="cell" data-execution_count="30">
+<div id="742a122e" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>X_train, X_test <span class="op">=</span> train.drop(columns<span class="op">=</span>[<span class="st">'province'</span>]), test.drop(columns<span class="op">=</span>[<span class="st">'province'</span>])</span>
 <span id="cb44-2"><a></a>knn <span class="op">=</span> KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">5</span>)</span>
 <span id="cb44-3"><a></a>knn.fit(X_train, train[<span class="st">'province'</span>])</span>
@@ -1069,7 +1069,7 @@ Lambda value: [5.2309031]</code></pre>
 </div>
 
 </section>
-<section id="confusion-matrix-output" class="slide level2 output-location-slide"><h2>Confusion matrix</h2><div class="cell output-location-slide" data-execution_count="30">
+<section id="confusion-matrix-output" class="slide level2 output-location-slide"><h2>Confusion matrix</h2><div class="cell output-location-slide" data-execution_count="31">
 <div class="cell-output cell-output-display">
 <div>
 <figure>
@@ -1079,7 +1079,7 @@ Lambda value: [5.2309031]</code></pre>
 </div>
 </div></section><section id="determine-what-dominates" class="slide level2">
 <h2>Determine what dominates</h2>
-<div id="8de3f056" class="cell" data-execution_count="31">
+<div id="8de3f056" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a></a><span class="kw">def</span> omit(prefix):</span>
 <span id="cb45-2"><a></a>  X_train, X_test <span class="op">=</span> train.drop(columns<span class="op">=</span>[<span class="st">'province'</span>]), test.drop(columns<span class="op">=</span>[<span class="st">'province'</span>])</span>
 <span id="cb45-3"><a></a>  columns_to_drop <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_train.columns <span class="cf">if</span> prefix <span class="kw">in</span> col]</span>
@@ -1096,7 +1096,7 @@ Lambda value: [5.2309031]</code></pre>
 <h2>Test</h2>
 <div class="columns">
 <div class="column" style="width:33%;">
-<div id="6f5b523e" class="cell" data-execution_count="32">
+<div id="6f5b523e" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a>omit(<span class="st">'year'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1107,7 +1107,7 @@ Lambda value: [5.2309031]</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:33%;">
-<div id="0e3bd089" class="cell" data-execution_count="33">
+<div id="0e3bd089" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a></a>omit(<span class="st">'note'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1118,7 +1118,7 @@ Lambda value: [5.2309031]</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:33%;">
-<div id="9fbcaeee" class="cell" data-execution_count="34">
+<div id="9fbcaeee" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a></a>omit(<span class="st">'taster'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1132,7 +1132,7 @@ Lambda value: [5.2309031]</code></pre>
 </section>
 <section id="drop-it" class="slide level2">
 <h2>Drop it</h2>
-<div id="5acf07ae" class="cell" data-execution_count="35">
+<div id="5acf07ae" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a></a>columns_to_drop <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_train.columns <span class="cf">if</span> <span class="st">'taster'</span> <span class="kw">in</span> col]</span>
 <span id="cb49-2"><a></a></span>
 <span id="cb49-3"><a></a>train <span class="op">=</span> train.drop(columns<span class="op">=</span>columns_to_drop)</span>
@@ -1142,7 +1142,7 @@ Lambda value: [5.2309031]</code></pre>
 </section>
 <section id="tuning-and-subsampling" class="slide level2">
 <h2>Tuning and subsampling</h2>
-<div id="a374f681" class="cell" data-execution_count="36">
+<div id="a374f681" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a></a>X_train, X_test <span class="op">=</span> train.drop(columns<span class="op">=</span>[<span class="st">'province'</span>]), test.drop(columns<span class="op">=</span>[<span class="st">'province'</span>])</span>
 <span id="cb50-2"><a></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
 <span id="cb50-3"><a></a>param_grid <span class="op">=</span> {<span class="st">'n_neighbors'</span>: <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">16</span>)}</span>
