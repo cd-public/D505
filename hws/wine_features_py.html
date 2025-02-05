@@ -4793,7 +4793,7 @@ vertical-align: -.125em;
 <li>Get your <a href="https://docs.github.com/en/pages/quickstart">GitHub Pages</a> ready.</li>
 </ol>
 <p><strong>Set Up Python:</strong></p>
-<div id="3e4a28bd" class="cell" data-execution_count="1">
+<div id="792966b1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -4805,11 +4805,11 @@ vertical-align: -.125em;
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.utils <span class="im">import</span> resample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Set Up R Compatability:</strong></p>
-<div id="87d80eda" class="cell" data-execution_count="2">
+<div id="0dcba041" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyreadr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Step Up Dataframe:</strong></p>
-<div id="5a1c9254" class="cell" data-execution_count="3">
+<div id="0e784e9b" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&#39;https://cd-public.github.io/D505/dat/&#39;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rds <span class="op">=</span> <span class="st">&#39;wine.rds&#39;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pyreadr.download_file(url <span class="op">+</span> rds, rds) </span>
@@ -4828,7 +4828,7 @@ vertical-align: -.125em;
 <li>Remove all rows with a missing value.</li>
 <li>Ensure only log(price) and engineering features are the only columns that remain in the <code>wino</code> dataframe.</li>
 </ol>
-<div id="43eb3531" class="cell" data-execution_count="4">
+<div id="d56c5343" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wine[<span class="st">&#39;lprice&#39;</span>] <span class="op">=</span> wine[<span class="st">&#39;price&#39;</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: np.log(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -4840,14 +4840,14 @@ vertical-align: -.125em;
 <li>Run a linear regression with bootstrap resampling.</li>
 <li>Report RMSE on the test partition of the data.</li>
 </ol>
-<div id="7214e919" class="cell" data-execution_count="5">
+<div id="fe0a0dbf" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: hint: Check the slides.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="variable-selection" class="level1">
 <h1>Variable selection</h1>
 <p>We now graph the importance of your 10 features.</p>
-<div id="70b08994" class="cell" data-execution_count="6">
+<div id="3b76094c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: hint: Check the slides.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 

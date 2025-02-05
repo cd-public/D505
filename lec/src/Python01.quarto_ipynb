@@ -1,0 +1,820 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Machine Learning in Python\"\n",
+        "subtitle: \"Applied Machine Learning\"\n",
+        "author: \"Calvin\"\n",
+        "  \n",
+        "jupyter: python3\n",
+        "\n",
+        "execute:\n",
+        "    echo: true\n",
+        "    cache: true\n",
+        "    freeze: true  # never re-render during project render\n",
+        "---\n",
+        "\n",
+        "\n",
+        "## Prerequisite\n",
+        "\n",
+        "- I assume a Python/VS Code/Quarto workflow.\n",
+        "    - Review [this document](Python00.html)\n",
+        "- I assume familiarity with Machine Learning in R\n",
+        "    - Review [these slides](Session01.html)\n",
+        "\n",
+        "\n",
+        "## Agenda\n",
+        "\n",
+        "1.  Python Overview\n",
+        "2.  Review of Regression\n",
+        "3.  Classification\n",
+        "4.  Basic Feature Engineering\n",
+        "\n",
+        "## Quarto\n",
+        "\n",
+        "-   I switch from a R backend to a Python backend.\n",
+        "-   I add the following below my title in my .qmd header:\n",
+        "    -   `jupyter: python3`\n",
+        "\n",
+        "```yml         \n",
+        "title: \"Machine Learning in Python\"\n",
+        "subtitle: \"Applied Machine Learning\"\n",
+        "author: \"Calvin\"\n",
+        "  \n",
+        "jupyter: python3\n",
+        "```\n",
+        "\n",
+        "## Pip\n",
+        "\n",
+        "-   In Python, we can typically install packages via `pip`\n",
+        "-   It is more typical to use `pip` at commandline.\n",
+        "\n",
+        "``` bash\n",
+        "python -m pip install sampleproject\n",
+        "```\n",
+        "\n",
+        "-   Here is a 'clean' way to do so from within the Python\n"
+      ],
+      "id": "1fbb2c01"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import subprocess  # A base package we need to install other packages\n",
+        "import sys         # A base package we need to install other packages\n",
+        "install = lambda package : subprocess.check_call([sys.executable, \n",
+        "                                                  '-m', \n",
+        "                                                  'pip', \n",
+        "                                                  'install', \n",
+        "                                                  package])"
+      ],
+      "id": "0368de43",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Packages\n",
+        "\n",
+        "-   I'll build a list of packages then install them via a loop.\n",
+        "    -   Some (numpy, matplotlib) required for Quarto.\n"
+      ],
+      "id": "da47c531"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "python_data_stack = [\"numpy\", \"pandas\", \"matplotlib\", \"seaborn\"]\n",
+        "r_data_stack = ['pyreadr', 'statsmodels']\n",
+        "packages = python_data_stack + r_data_stack + [\"scikit-learn\"]\n",
+        "\n",
+        "_ = [install(package) for package in packages]"
+      ],
+      "id": "c0d7d71d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   I use `_ =` to discard the result of the process.\n",
+        "    -   This ignores errors - remove to debug.\n",
+        "\n",
+        "## Import\n",
+        "\n",
+        "-   Python packages use `import` rather than `library()`\n",
+        "-   Python base data stack"
+      ],
+      "id": "ff9e8ee1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns"
+      ],
+      "id": "08e7edd3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   R & statistics"
+      ],
+      "id": "5e442f8a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import pyreadr\n",
+        "import statsmodels.api as sm\n",
+        "import statsmodels.formula.api as smf"
+      ],
+      "id": "f9d6f268",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## ML Library\n",
+        "-   There are 3.5 Python ML libraries that matter\n",
+        "    -   Scikit-learn, mainline ML\n",
+        "    -   Torch, deep learning\n",
+        "    -   Tensorflow, deep learning\n",
+        "    -   PySpark MLlib, MLOps"
+      ],
+      "id": "4da04108"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Common to include parts of, not all of, sklearn\n",
+        "from sklearn.linear_model import LinearRegression\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay"
+      ],
+      "id": "85930f52",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Many packages\n",
+        "-   There's a lot of imports here, we could cut back but...\n",
+        "-   We would typical use only `sklearn` not `stats_models`\n",
+        "    -   SM=statisical learning, SK=machine learning\n",
+        "    -   Use SM for equivalence with R.\n",
+        "-   Typically use the module name as a function's prefix.\n",
+        "    -   This resolves name collisions, like `dplyr` and `stats`\n",
+        "\n",
+        "    ``` r\n",
+        "    ✖ dplyr::filter() masks stats::filter()\n",
+        "    ✖ dplyr::lag()    masks stats::lag()\n",
+        "    ```\n",
+        "\n",
+        "## Setup\n",
+        "\n",
+        "-   We will use `pyreadr` to read in an R dataset.\n",
+        "    -   This is atypical but not difficult.\n"
+      ],
+      "id": "fcc18a47"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "url = 'https://cd-public.github.io/D505/dat/'\n",
+        "rds = 'wine.rds'\n",
+        "pyreadr.download_file(url + rds, rds) \n",
+        "wine = pyreadr.read_r(rds)[None]      \n",
+        "wine.dropna(subset=['points','price'])\n",
+        "str(wine.info()) # string for slide formatting"
+      ],
+      "id": "be863192",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Review of Regression\n",
+        "\n",
+        "## Single Variable\n",
+        "\n",
+        "-   Pick the poshest province.\n"
+      ],
+      "id": "5f70678a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine['bordeaux'] = wine['province'] == 'Bordeaux'\n",
+        "wine.head(2)"
+      ],
+      "id": "b68435bb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Regress\n",
+        "\n",
+        "-   Take a quick regression model over the wine.\n"
+      ],
+      "id": "8a90449f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "m1 = sm.OLS(wine['points'], wine['price']).fit()\n",
+        "m1.summary()"
+      ],
+      "id": "d636661f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Sklearn\n",
+        "\n",
+        "-   I'm much fonder of `sklearn` for this sort of thing.\n"
+      ],
+      "id": "736cb08b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "s1 = LinearRegression().fit(wine[['points']],wine['price'])\n",
+        "f'Intercept: {s1.intercept_}, Coefficients: {s1.coef_}'"
+      ],
+      "id": "5713a7b9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Let's draw it\n",
+        "\n",
+        ":::: {.columns}\n",
+        "\n",
+        "::: {.column width='50%'}\n",
+        "-   Python ggplot is `plotnine`\n",
+        "-   I prefer Seaborn (`sns`)\n",
+        "-   Also: `matplotlib`\n",
+        "-   Also: `plotly`\n",
+        ":::\n",
+        "\n",
+        "::: {.column width='50%'}"
+      ],
+      "id": "fea40b56"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sns.lmplot(x='points', y='price', \n",
+        "           data=wine, scatter=True, \n",
+        "           x_bins=range(80,101))"
+      ],
+      "id": "7ab9616a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        "::::\n",
+        "\n",
+        "## Multiple regression\n",
+        "\n",
+        "-   We can literally use the exact same formula in `smf`\n",
+        "-   I am unaccustomed to doing multiple regressions without interaction.\n",
+        "    -   Moving on.\n"
+      ],
+      "id": "6f8d3b78"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "m2 = smf.ols('price ~ points + bordeaux', data=wine).fit()\n",
+        "m2.summary()"
+      ],
+      "id": "db9d58ae",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## How about with an interaction?\n"
+      ],
+      "id": "38793633"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "m3 = smf.ols('price ~ points * bordeaux', data=wine).fit()\n",
+        "m3.summary()"
+      ],
+      "id": "3f9cc54f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Sklearinteraction\n",
+        "\n",
+        "-   `sklearn` defaults to multiple regression.\n"
+      ],
+      "id": "ff005980"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine['points_bordeaux'] = wine['points'] * wine['bordeaux']\n",
+        "\n",
+        "s3 = LinearRegression().fit(wine[['points','bordeaux']],\n",
+        "                            wine['price'])\n",
+        "f'Intercept: {s3.intercept_}, Coefficients: {s3.coef_}'"
+      ],
+      "id": "9b9db210",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Let's draw it\n"
+      ],
+      "id": "7272eb87"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sns.lmplot(x='points', y='price', \n",
+        "           data=wine, scatter=True, \n",
+        "           x_bins=range(80,101), hue='bordeaux')"
+      ],
+      "id": "fb78f961",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Moving to an ML framework\n",
+        "\n",
+        "## Split sample using Sklearn\n",
+        "-   Vs R, with a proliferation of libraries, Python ML is concentrated.\n",
+        "-   There are a few main libraries, `Sklearn` the first and most popular\n",
+        "-   So modelling and partitioning are all in `sklearn`, vs `stats` and `caret`\n"
+      ],
+      "id": "82c68c8e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "random_seed = 505\n",
+        "train, test = train_test_split(wine, random_state=random_seed)\n",
+        "print(test.head())"
+      ],
+      "id": "ceb9c122",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Compare RMSE across models\n",
+        "\n",
+        "-   Retrain the models on the training set only\n"
+      ],
+      "id": "c92b6b7d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "formulas = ['price ~ points', \n",
+        "            'price ~ points + bordeaux', \n",
+        "            'price ~ points * bordeaux']\n",
+        "ms = [smf.ols(f, data=train).fit() for f in formulas]"
+      ],
+      "id": "c782d1b4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   Test them all under the same conditions.\n"
+      ],
+      "id": "416aa155"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def rmse(m):\n",
+        "  residuals_sq = (test['price'] - m.predict(test)) ** 2\n",
+        "  mse = np.mean(residuals_sq)\n",
+        "  return mse ** .5\n",
+        "\n",
+        "[rmse(m) for m in ms]"
+      ],
+      "id": "2dc102d2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Exercise Problems\n",
+        "\n",
+        "-   *Bonus++. Pick a non-Bordeaux category.*\n",
+        "    -   We write a quick reserve-checker and apply it.\n",
+        "    -   Basically Python wasn't told all the data was textual\n",
+        "        -   Use `str` and `lower`\n",
+        "    -   Then use Pythonic `in` with a list of names\n",
+        "-   `apply` is like `mutate`, in a way.\n"
+      ],
+      "id": "a5753653"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "is_reserve = lambda x: str(x).lower() in ['reserve','reserva','riserva']\n",
+        "wine['reserve'] = wine['designation'].apply(is_reserve)"
+      ],
+      "id": "f4fed636",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## via Seaborn\n"
+      ],
+      "id": "0e7816c6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sns.lmplot(wine, x='points', y='price', x_bins=range(80,101), hue='reserve',\n",
+        "           x_estimator=np.mean, order=2) # polynomail regression, why not"
+      ],
+      "id": "6399004e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Classification and Ethics\n",
+        "\n",
+        "## The math of it...\n",
+        "\n",
+        "-   This problem used a R library to get data.\n",
+        "-   That R library is open source, \n",
+        "    -   It has reasonable documentation, and\n",
+        "    -   It's GitHub is linked from documentation.\n",
+        "-   I spent 30 seconds on a search engine to find it.\n",
+        "\n",
+        "## Partition our Data\n",
+        "-   The `.rda` file is at this url:\n",
+        "    -   [https://github.com/rafalab/dslabs/blob/master/data/heights.rda](https://github.com/rafalab/dslabs/blob/master/data/heights.rda){style=\"font-size:smaller\"}\n",
+        "    -   Change `blob` to `raw` to [download directly](https://github.com/rafalab/dslabs/raw/master/data/heights.rda).\n"
+      ],
+      "id": "e5e00143"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "url = 'https://github.com/rafalab/dslabs/raw/master/data/'\n",
+        "rds = 'heights.rda'\n",
+        "pyreadr.download_file(url + rds, rds) \n",
+        "heights = pyreadr.read_r(rds)['heights']      \n",
+        "random_seed = 505\n",
+        "train, test = train_test_split(heights, random_state=random_seed)"
+      ],
+      "id": "b839fca2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Note: this vignette is adapted from [this book](https://rafalab.github.io/dsbook/introduction-to-machine-learning.html)\n",
+        "\n",
+        "## Guessing\n",
+        "-   Let’s start by developing the simplest possible machine algorithm: guessing the outcome."
+      ],
+      "id": "38445cf7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y_hat = np.random.choice(['Male', 'Female'], len(test))"
+      ],
+      "id": "3d299a57",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Recall:\n",
+        "\n",
+        ">[Y hat (written ŷ ) is the predicted value of y (the dependent variable) in a regression equation. It can also be considered to be the average value of the response variable.](https://www.statisticshowto.com/y-hat-definition/)\n",
+        "\n",
+        "## Accuracy\n",
+        "-   The overall accuracy is simply defined as the overall proportion that is predicted correctly:"
+      ],
+      "id": "b407e84a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "np.mean(y_hat == test['sex'])"
+      ],
+      "id": "45f24292",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   What would we have expected the accuracy to be?\n",
+        "    -   What much would we have expected accuracy to deviate from that expectionation?\n",
+        "\n",
+        "## Let's do better...\n"
+      ],
+      "id": "c87edb5e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "hs = heights.groupby('sex')['height']\n",
+        "hs.std(), hs.mean()"
+      ],
+      "id": "f933de46",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## A simple predictive model\n",
+        "\n",
+        "-   Idea: Predict `'Male'` if observation is within 2 standard deviations\n"
+      ],
+      "id": "47858a72"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "male_mean_less_2sd = hs.mean()['Male'] - 2*hs.std()['Male']\n",
+        "\n",
+        "y_hat = heights['height'].apply(lambda x : 'Male' if x > male_mean_less_2sd else 'Female')\n",
+        "\n",
+        "print(male_mean_less_2sd, np.mean(heights['sex'] == y_hat))"
+      ],
+      "id": "8d541c99",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   The accuracy goes up from \\~0.50 to about \\~0.80!!\n",
+        "\n",
+        "## Let's optimize\n"
+      ],
+      "id": "60f0ad97"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "cutoff = list(range(61,71))\n",
+        "\n",
+        "def get_accuracy(y):\n",
+        "  f = lambda x : 'Male' if x > y else 'Female'\n",
+        "  y_hat = heights['height'].apply(f)\n",
+        "  return np.mean(heights['sex'] == y_hat)\n",
+        "\n",
+        "accuracy = list(map(get_accuracy, cutoff))\n",
+        "\n",
+        "accuracy"
+      ],
+      "id": "34719fa8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Optimal Cutoff\n"
+      ],
+      "id": "3c38f108"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "best_cutoff = cutoff[np.argmax(accuracy)]\n",
+        "_ = plt.plot(cutoff, accuracy), print('Optimal cutoff is', best_cutoff)"
+      ],
+      "id": "ad6573b1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "-   Should we be cutting at an integer?\n",
+        "\n",
+        "## Apply & Evaluate\n"
+      ],
+      "id": "1de2cff1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "test['y_hat'] = test['height'].apply(lambda x : 'Male' if x > best_cutoff else 'Female')\n",
+        "print('Accuracy is', np.mean(test['sex'] == test['y_hat']))"
+      ],
+      "id": "86e6b2e1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Confusion matrix"
+      ],
+      "id": "09ccbe61"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ConfusionMatrixDisplay.from_predictions(test['sex'], test['y_hat'])"
+      ],
+      "id": "06a40e8f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "*Took 7 lines / 350+ characters of handwritten ggplot*\n",
+        "\n",
+        "## Accuracy by sex\n"
+      ],
+      "id": "1492af16"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "test['acc'] = test['sex'] == test['y_hat']\n",
+        "test.groupby('sex')['acc'].mean()"
+      ],
+      "id": "f739b434",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "It's raining men.\n",
+        "\n",
+        "## Debrief\n",
+        "\n",
+        "\n",
+        ":::: {.columns}\n",
+        "\n",
+        "::: {.column width=\"50%\"}"
+      ],
+      "id": "a09c8bdd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "_ = sns.boxplot(heights, x='sex',y='height')"
+      ],
+      "id": "4b8c9dc3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        "::: {.column width=\"50%\"}"
+      ],
+      "id": "dbb041d8"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "_ = plt.pie(heights['sex'].value_counts(), labels=['♀','♂'])"
+      ],
+      "id": "33169c57",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        "::::\n",
+        "\n",
+        "# Machine Learning in Python"
+      ],
+      "id": "2daf04de"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\cd-desk\\AppData\\Local\\Programs\\Python\\Python312\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

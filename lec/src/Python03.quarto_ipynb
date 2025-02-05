@@ -1,0 +1,1045 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"$K$ Nearest Neighbors in Python\"\n",
+        "subtitle: \"Applied Machine Learning\"\n",
+        "author: \"Calvin\"\n",
+        "  \n",
+        "jupyter: python3\n",
+        "\n",
+        "execute:\n",
+        "    echo: true\n",
+        "    cache: true\n",
+        "    freeze: true  # never re-render during project render\n",
+        "---\n",
+        "\n",
+        "\n",
+        "## Agenda\n",
+        "\n",
+        "1. Review of Homeworks\n",
+        "2. A human understanding of regression\n",
+        "3. Dinner break\n",
+        "5. Preprocessing and BoxCox\n",
+        "6. The $K$NN algorithm and the Confusion Matrix\n",
+        "\n",
+        "# Homework\n",
+        "\n",
+        "## HW1\n",
+        "\n",
+        "- We need to work on writing quality.\n",
+        "- We need to work on RMSE intepretation.\n",
+        "- We need to work on using `summary` responsibly.\n",
+        "- We need to work on applying lecture topics to leading questions.\n",
+        "- We would benefit from use of the [`embed-resources`](https://quarto.org/docs/reference/formats/html.html) option in Quarto.\n",
+        "\n",
+        "## [HW1 Sols Posted](../hws/wine_of_pnw_sol.html)\n",
+        "\n",
+        "<iframe src=\"../hws/wine_of_pnw_sol.html\" height=\"500\" width=\"800\" title=\"Iframe Example\"></iframe> \n",
+        "\n",
+        "## HW2\n",
+        "\n",
+        "- Think\n",
+        "- Pair\n",
+        "- Share\n",
+        "\n",
+        "# Today\n",
+        "\n",
+        "## Setup\n",
+        "\n",
+        "## Import\n",
+        "\n",
+        "-   Python base data stack"
+      ],
+      "id": "888c32c0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns"
+      ],
+      "id": "c1ad2491",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## ML Library"
+      ],
+      "id": "c754a1a1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "from sklearn.linear_model import LinearRegression\n",
+        "from sklearn.preprocessing import PowerTransformer\n",
+        "from sklearn.model_selection import train_test_split, GridSearchCV\n",
+        "from sklearn.neighbors import KNeighborsClassifier\n",
+        "from sklearn.metrics import confusion_matrix, make_scorer, cohen_kappa_score\n",
+        "import re"
+      ],
+      "id": "5d364dec",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Setup\n",
+        "\n",
+        "-   `pyreadr` to read in an R dataset.\n"
+      ],
+      "id": "ff9fffb0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Local pickle as a performance concession.\n",
+        "# Same relative path as on GitHub\n",
+        "wine = pd.read_pickle(\"../../dat/wine.pickle\")     \n",
+        "wine['lprice'] = np.log(wine['price'])"
+      ],
+      "id": "1cabc358",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Reporting Impact from Regressions\n",
+        "\n",
+        "## Correlation\n",
+        "\n",
+        "[*Credit:* Modern Dive](https://moderndive.com/5-regression.html)\n",
+        "\n",
+        "[http://guessthecorrelation.com/](http://guessthecorrelation.com/) ...my high score is 72 (Jameson 122)\n",
+        "\n",
+        "![](./images/correlation.png)\n",
+        "\n",
+        "## Calculating correlation\n"
+      ],
+      "id": "6641eef1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine['price'].corr(wine['points']), wine['lprice'].corr(wine['points'])"
+      ],
+      "id": "49c596d9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Exercise\n",
+        "\n",
+        "1. Calculate the correlation between $\\log$(price) and points... \n",
+        "2. ...by variety...\n",
+        "3. ...for Oregon Chardonnay, Pinot Noir and Pinot Gris...\n",
+        "4. ...in the same expression!\n",
+        "\n",
+        "## Solution\n",
+        "\n",
+        "- Make a function...\n"
+      ],
+      "id": "eeb18af9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def var_cor(wine, var):\n",
+        "  df = wine[(wine['province'] == \"Oregon\") & \n",
+        "            (wine['variety']  == var)]\n",
+        "  return df['lprice'].corr(df['points'])"
+      ],
+      "id": "38bbbf50",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Eval\n"
+      ],
+      "id": "89dec691"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "vs = (\"Chardonnay\", \"Pinot Noir\", \"Pinot Gris\")\n",
+        "_ = [print(v, var_cor(wine, v)) for v in vs]"
+      ],
+      "id": "3874fb9a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Visualizing these different correlations\n"
+      ],
+      "id": "ccac511c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine = wine[(wine['province'] == \"Oregon\") & \n",
+        "                     (wine['variety'].isin(vs))]\n",
+        "g = sns.FacetGrid(wine, col=\"variety\", hue=\"variety\")\n",
+        "g.map_dataframe(sns.regplot, x=\"points\", y=\"lprice\")"
+      ],
+      "id": "3cb9a8b2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Graphing residuals (bad)\n"
+      ],
+      "id": "ac4caaf5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "X,y  = wine[['points']], wine['price']\n",
+        "wine['residual'] = y - LinearRegression().fit(X, y).predict(X)\n",
+        "sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)"
+      ],
+      "id": "adddd1e9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Graphing residuals (good)\n",
+        "\n",
+        "- Clearly should've made a function here."
+      ],
+      "id": "73f334e0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def resid_plot(df, x, y):\n",
+        "  X,y  = df[[x]], df[y]\n",
+        "  wine['residual'] = y - LinearRegression().fit(X, y).predict(X)\n",
+        "  return sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)"
+      ],
+      "id": "d12bf202",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Try it\n"
+      ],
+      "id": "f06b9bb6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "resid_plot(wine, \"points\", \"lprice\")"
+      ],
+      "id": "3b25ba27",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Try it on year\n"
+      ],
+      "id": "92ef6d71"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "resid_plot(wine, \"year\", \"lprice\")"
+      ],
+      "id": "65f3b3ad",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Interpreting the coefficients\n",
+        "\n",
+        "- Before examining many coefficients, a helper.\n"
+      ],
+      "id": "ebf42487"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def get_coef(df, x, y):\n",
+        "  X,y  = df[[x]], df[y]\n",
+        "  return (LinearRegression().fit(X,y)).coef_[0]"
+      ],
+      "id": "af0f7db3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## % Change\n"
+      ],
+      "id": "5a6fe83c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "get_pct = lambda x : (np.exp(x)- 1) * 100\n",
+        "\n",
+        "coef = get_coef(wine, \"points\", \"lprice\")\n",
+        "coef, get_pct(coef) "
+      ],
+      "id": "48672e2e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "- We logged the *dependent* variable (price)\n",
+        "  - A 1 point ratings increase = ~10% price\n",
+        "  - That is, a percent change in rating to an *absolute* change in the dependent variable. \n",
+        "- $(e^x - 1)*100$\n",
+        "\n",
+        "## Interpreting the coefficients\n"
+      ],
+      "id": "671f39b1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "coef = get_coef(wine, \"year\", \"lprice\")\n",
+        "coef, get_pct(coef)"
+      ],
+      "id": "b884bdb3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "- This is a *de facto* measure of inflation.\n",
+        "\n",
+        "## Some Examples\n",
+        "\n",
+        "::::{.columns}\n",
+        "\n",
+        ":::{.column width=50%}\n"
+      ],
+      "id": "feb9db90"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "_ = [print(x/10, get_pct(x/10)) for x in range(10)]"
+      ],
+      "id": "5694334a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        "\n",
+        ":::{.column width=50%}\n"
+      ],
+      "id": "21d4cac2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "_ = [print(x/100, get_pct(x/100)) for x in range(10)]"
+      ],
+      "id": "1a1112c9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        "::::\n",
+        "\n",
+        "## $\\log$ feature\n"
+      ],
+      "id": "94abb7d3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine['lpoints'] = np.log(wine['points'])\n",
+        "coef = get_coef(wine, \"lpoints\", \"price\")\n",
+        "coef, get_pct(coef) "
+      ],
+      "id": "3b8bc21d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "- What does the *sign* (positive or negative) tell us?\n",
+        "- Was $\\log$ appropriate here?\n",
+        "\n",
+        "## LogLog (also elasticity)\n"
+      ],
+      "id": "2681d6be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "coef = get_coef(wine, \"lpoints\", \"lprice\")\n",
+        "coef"
+      ],
+      "id": "40eafed4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "...a 1\\% increase in ratings gives a ~9.2% increase in price on average\n",
+        "\n",
+        "## Summary\n",
+        "\n",
+        "- Only the dependent/response variable is log-transformed. \n",
+        "  - Exponentiate the coefficient.\n",
+        "  - Subtract one from this number\n",
+        "  - Multiply by 100.\n",
+        "- This gives the percent increase (or decrease).\n",
+        "\n",
+        "## Units\n",
+        "\n",
+        "- Change is per one-unit increase in the independent variable. \n",
+        "  - Here, independent is points.\n",
+        "  - Dependent is price.\n",
+        "\n",
+        "## Example\n",
+        "\n",
+        "- For every 1% increase in the independent variable...\n",
+        "  - Basically, one point\n",
+        "  - Our dependent variable increases by about 9.2%.\n",
+        "- A $30 bottle of wine scoring 90 would be worth $32.75 as a 91."
+      ],
+      "id": "62c470be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "30 * (1 + 9.2/100)"
+      ],
+      "id": "292cbd93",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Graphing points by variety"
+      ],
+      "id": "19a95729"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sns.boxplot(x='variety', y='points', data=wine)"
+      ],
+      "id": "d59b76bf",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Summary"
+      ],
+      "id": "293265cb"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine.groupby('variety')['points'].mean()"
+      ],
+      "id": "8903555d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "- What are the percentage differences here?\n",
+        "\n",
+        "## Assumptions of linear regression\n",
+        "\n",
+        "1. **L**inearity of relationship between variables\n",
+        "2. **I**ndependence of the residuals\n",
+        "3. **N**ormality of the residuals\n",
+        "4. **E**quality of variance of the residuals\n",
+        "\n",
+        "## Linearity of relationship\n",
+        "[*Credit:* Modern Dive](https://moderndive.com/5-regression.html)\n",
+        "\n",
+        "![](./images/non-linear.png)\n",
+        "\n",
+        "What would the residuals look like?\n",
+        "\n",
+        "## Independence\n",
+        "\n",
+        "- Given our original model of \n",
+        "$$\n",
+        "\\log(\\text{price})=m*\\text{Points}+b\n",
+        "$$ \n",
+        "\n",
+        "- are there any problems with independence?\n",
+        "- How could we check?\n",
+        "\n",
+        "## Normality"
+      ],
+      "id": "90252e5c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "X = wine[[\"points\"]]\n",
+        "sns.histplot(y - LinearRegression().fit(X, wine[\"lprice\"]).predict(X))"
+      ],
+      "id": "45429c45",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## No equality in the variance\n",
+        "\n",
+        "[*Credit:* Modern Dive](https://moderndive.com/5-regression.html) (click)\n",
+        "\n",
+        "![](./images/unequal-variance.png)\n",
+        "\n",
+        "# Preprocessing and BoxCox\n",
+        "\n",
+        "## Setup\n",
+        "\n",
+        "- Pivot to pinot.\n",
+        "  - Say \"$\\pi^0$\"\n"
+      ],
+      "id": "0376aeb3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine = pd.read_pickle(\"../../dat/pinot_orig.pickle\") "
+      ],
+      "id": "4446f18e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Preprocessing\n",
+        "\n",
+        "- Box-Cox transformations use maximum likelihood estimate to estimate value for $\\lambda$\n",
+        "\n",
+        "$$\n",
+        "y(\\lambda) = \\frac{x^{\\lambda}-1}{\\lambda}\n",
+        "$$\n",
+        "\n",
+        "- The goal is to make data seem more like a normal distribution.\n",
+        "\n",
+        "## in R\n",
+        "\n",
+        "- LaTeX\n",
+        "\n",
+        "$$\n",
+        "y(\\lambda) = \\frac{x^{\\lambda}-1}{\\lambda}\n",
+        "$$\n",
+        "\n",
+        "- Py"
+      ],
+      "id": "a58a9b12"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "y = lambda l : lambda x : (x ** l - 1) / l"
+      ],
+      "id": "8585652e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Examples\n",
+        "\n",
+        "- When $\\lambda=1$, there is no transformation\n",
+        "\n",
+        "$$\n",
+        "y(1) = \\frac{x^{\\lambda}-1}{\\lambda} = \n",
+        "      \\frac{x^{1}-1}{1} =\n",
+        "        x-1 \\approx x\n",
+        "$$\n",
+        "\n",
+        "$$\n",
+        "f = y(-1) \\implies f(x) \\approx x\n",
+        "$$\n",
+        "\n",
+        "## Examples\n",
+        "\n",
+        "- When $\\lambda=0$, it is log transformed\n",
+        "\n",
+        "$$\n",
+        "y(0) = \\frac{x^{\\lambda}-1}{\\lambda} = \n",
+        "      \\frac{x^{0}-1}{0}\n",
+        "$$\n",
+        "\n",
+        "$$\n",
+        "f = y(0) \\implies f(x) \\approx \\log(x)\n",
+        "$$\n",
+        "\n",
+        "\n",
+        "- Zero is a special case, but using a little thing called \"calculus\" this sorta makes sense.\n",
+        "- Basically, negative infinity at 0, then increase slowly once positive.\n",
+        "\n",
+        "## $\\lambda = 0$\n"
+      ],
+      "id": "b89c6af3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "[y(10**-l)(4) - np.log(4) for l in range(5)]"
+      ],
+      "id": "d68cfb3f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Examples\n",
+        "\n",
+        "$$\n",
+        "y(1) = \\frac{x^{\\lambda}-1}{\\lambda} = \n",
+        "      \\frac{x^{.5}-1}{.5} =\n",
+        "      2\\times(\\sqrt{x}-1) \\approx \\sqrt{x}\n",
+        "$$\n",
+        "\n",
+        "$$\n",
+        "f = y(.5) \\implies f(x) \\approx \\sqrt{x}\n",
+        "$$\n",
+        "\n",
+        "\n",
+        "## Examples\n",
+        "\n",
+        "- When $\\lambda=-1$, it is an inverse\n",
+        "\n",
+        "$$\n",
+        "y(1) = \\frac{x^{\\lambda}-1}{\\lambda} = \n",
+        "      \\frac{x^{-1}-1}{-1} =\n",
+        "      \\frac{x^{-1}}{-1}+\\frac{-1}{-1} =\n",
+        "      \\frac{1}{-x}-1 = -x\n",
+        "$$\n",
+        "$$\n",
+        "f = y(.5) \\implies f(x) \\approx -x\n",
+        "$$\n",
+        "\n",
+        "## Just use the function\n",
+        "\n",
+        "- Use `PowerTransformer`"
+      ],
+      "id": "61a58416"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "data = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)\n",
+        "\n",
+        "# Apply PowerTransformer (Box-Cox transformation)\n",
+        "pt = PowerTransformer(method='box-cox')\n",
+        "boxcox_result = pt.fit_transform(data)\n",
+        "\n",
+        "# Print the result\n",
+        "print(\"Transformed data:\", boxcox_result.flatten())\n",
+        "print(\"Lambda value:\", pt.lambdas_)"
+      ],
+      "id": "0dc0edbd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## On Points\n"
+      ],
+      "id": "25e0a19f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "pt.fit_transform(wine[\"points\"].values.reshape(-1, 1))\n",
+        "print(\"Transformed data:\", boxcox_result.flatten())\n",
+        "print(\"Lambda value:\", pt.lambdas_)"
+      ],
+      "id": "e16c755c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## On Python\n",
+        "\n",
+        "- I like the Python [boxcox documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.boxcox.html):\n",
+        "\n",
+        "```{.haskell}\n",
+        "y = (x**lmbda - 1) / lmbda,  for lmbda != 0\n",
+        "    log(x),                  for lmbda = 0\n",
+        "```\n",
+        "\n",
+        "# The $K$NN Algorithm\n",
+        "\n",
+        "## Algorithm {.smaller}\n",
+        "\n",
+        "1. Load the data\n",
+        "2. Initialize $K$ to your chosen number of neighbors\n",
+        "3. For each example in the data\n",
+        "  - Calculate the distance between the query example and the current example from the data.\n",
+        "  - Add the distance and the index of the example to an ordered collection\n",
+        "4. Sort the ordered collection of distances and indices from smallest to largest (in ascending order) by the distances\n",
+        "5. Pick the first $K$ entries from the sorted collection\n",
+        "6. Get the labels of the selected $K$ entries\n",
+        "7. If regression, return the mean of the $K$ labels\n",
+        "8. If classification, return the mode of the $K$ labels\n",
+        "\n",
+        "## Basis\n",
+        "\n",
+        "- We assume:\n",
+        "  - Existing datapoints in something we think of as a space\n",
+        "    - That is, probably two numerical value per point in a coordinate plane\n",
+        "    - Categorical is fine - think a Punnett square\n",
+        "  - Existing datapoints are labelled\n",
+        "    - Numerical or categorical still fine!\n",
+        "- To visualize, we will have a 2d space with color labels.\n",
+        "\n",
+        "## Let's draw it\n",
+        "\n",
+        "<a  title=\"Antti Ajanki AnAj, CC BY-SA 3.0 &lt;http://creativecommons.org/licenses/by-sa/3.0/&gt;, via Wikimedia Commons\" href=\"https://commons.wikimedia.org/wiki/File:KnnClassification.svg\"><img style=\"background-color:white;\" width=\"50%\" alt=\"KnnClassification\" src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/KnnClassification.svg/256px-KnnClassification.svg.png?20101222011435\"></a>\n",
+        "\n",
+        "## Let's draw it 2\n",
+        "\n",
+        "\n",
+        "<a title=\"Paolo Bonfini, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons\" href=\"https://commons.wikimedia.org/wiki/File:KNN_decision_surface_animation.gif\"><img width=\"100%\" alt=\"KNN decision surface animation\" src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/KNN_decision_surface_animation.gif/512px-KNN_decision_surface_animation.gif?20240718130312\"></a>\n",
+        "\n",
+        "## Let's draw it 3\n",
+        "\n",
+        "\n",
+        "![](https://media.geeksforgeeks.org/wp-content/uploads/20231207103856/KNN-Algorithm-(1).png)\n",
+        "\n",
+        "[G4G](https://www.geeksforgeeks.org/k-nearest-neighbours/)\n",
+        "\n",
+        "## Engineering some features\n",
+        "\n",
+        "- Tasters, years, notes\n"
+      ],
+      "id": "33c49e1f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "wine = pd.get_dummies(wine, columns=['year', 'taster_name'], drop_first=True)\n",
+        "wine.columns = [re.sub(r'\\s+', '_', re.sub(r'-', '_', col.lower())) for col in wine.columns]\n",
+        "notes = ['cherry', 'chocolate', 'earth']\n",
+        "for note in notes:\n",
+        "    wine[f'note_{note}'] = wine['description'].str.contains(note, case=False, na=False)\n",
+        "\n",
+        "wine = wine.drop('description', axis=1)"
+      ],
+      "id": "e5dcde56",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Split\n"
+      ],
+      "id": "bf1fdc80"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "train, test = train_test_split(wine, test_size=0.2, stratify=wine['province'], random_state=505)"
+      ],
+      "id": "5f43dff3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Confusion matrix\n",
+        "\n",
+        "- Let's look at misses\n"
+      ],
+      "id": "8bb78d9a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "output-location": "slide"
+      },
+      "source": [
+        "X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])\n",
+        "knn = KNeighborsClassifier(n_neighbors=5)\n",
+        "knn.fit(X_train, train['province'])\n",
+        "y_pred = knn.predict(X_test)\n",
+        "conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)\n",
+        "sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')"
+      ],
+      "id": "cb9b73d6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Determine what dominates\n"
+      ],
+      "id": "a560e513"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def omit(prefix):\n",
+        "  X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])\n",
+        "  columns_to_drop = [col for col in X_train.columns if prefix in col]\n",
+        "  X_train = X_train.drop(columns=columns_to_drop)\n",
+        "  X_test = X_test.drop(columns=columns_to_drop)\n",
+        "  knn = KNeighborsClassifier(n_neighbors=5)\n",
+        "  knn.fit(X_train, train['province'])\n",
+        "  y_pred = knn.predict(X_test)\n",
+        "  conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)\n",
+        "  return sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')"
+      ],
+      "id": "1f9c523d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Test\n",
+        "\n",
+        "::::{.columns}\n",
+        "\n",
+        ":::{.column width=33%}\n"
+      ],
+      "id": "d778f53b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "omit('year')"
+      ],
+      "id": "123d101e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        ":::{.column width=33%}\n"
+      ],
+      "id": "5fde1687"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "omit('note')"
+      ],
+      "id": "be033bf4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        ":::{.column width=33%}\n"
+      ],
+      "id": "c159ad0f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "omit('taster')"
+      ],
+      "id": "6db18a91",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::\n",
+        "\n",
+        ":::\n",
+        "\n",
+        "## Drop it\n"
+      ],
+      "id": "49e9e13b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "columns_to_drop = [col for col in X_train.columns if 'taster' in col]\n",
+        "\n",
+        "train = train.drop(columns=columns_to_drop)\n",
+        "\n",
+        "test = test.drop(columns=columns_to_drop)"
+      ],
+      "id": "8613ac49",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Tuning and subsampling\n"
+      ],
+      "id": "50b93fea"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])\n",
+        "knn = KNeighborsClassifier()\n",
+        "param_grid = {'n_neighbors': range(1, 16)}\n",
+        "kappa_scorer = make_scorer(cohen_kappa_score)\n",
+        "grid_search = GridSearchCV(knn, param_grid, scoring=kappa_scorer)\n",
+        "grid_search.fit(X_train, train['province'])\n",
+        "cohen_kappa_score(test['province'], grid_search.best_estimator_.predict(X_test))"
+      ],
+      "id": "7356cf64",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Group modeling problem I\n",
+        "\n",
+        "* Practice running different versions of the model\n",
+        "* Create some new features and...\n",
+        "* See if you can achieve a Kappa >= 0.5!"
+      ],
+      "id": "60bf81be"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\cd-desk\\AppData\\Local\\Programs\\Python\\Python312\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

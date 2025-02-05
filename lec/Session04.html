@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.6.30">
 
   <meta name="author" content="Jameson > Hendrik > Calvin">
-  <title>K Nearest Neighbors</title>
+  <title>Naive Bayes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -390,7 +390,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title"><span class="math inline">\(K\)</span> Nearest Neighbors</h1>
+  <h1 class="title">Naive Bayes</h1>
   <p class="subtitle">Applied Machine Learning</p>
 
 <div class="quarto-title-authors">
@@ -405,10 +405,8 @@ Jameson &gt; Hendrik &gt; Calvin
 <section id="agenda" class="slide level2">
 <h2>Agenda</h2>
 <ol type="1">
-<li>Review of Homework 3</li>
-<li>RStudio Server and Parallel Processing</li>
+<li>Homework</li>
 <li>The Naive Bayes algorithm</li>
-<li>Dinner break</li>
 <li>Tidy text and bag of words</li>
 <li>Group work</li>
 <li>Vocabulary</li>
@@ -457,7 +455,15 @@ P({\rm A}~|~{\rm B}) = \frac{P({\rm B}~|~ \rm{A})P(\rm{A})}{P({\rm B})}
 <section id="bayes-theorem-example" class="slide level2">
 <h2>Bayes’ Theorem Example</h2>
 <ul>
-<li>Suppose half of all emails are spam, and you’ve just purchased some software (hurray) that filters spam emails, claiming to detect 99% of spam and that the probability of a false positive (marking non-spam as spam) is 5%.</li>
+<li>Suppose
+<ul>
+<li>Half of all emails are spam</li>
+<li>You’ve just purchased some software (hurray) that filters spam emails
+<ul>
+<li>It claims to detect 99% of spam</li>
+<li>It claims the probability of a false positive (marking non-spam as spam) is 5%.</li>
+</ul></li>
+</ul></li>
 </ul>
 </section>
 <section id="bayes-theorem-example-1" class="slide level2">
@@ -471,7 +477,7 @@ P({\rm A}~|~{\rm B}) = \frac{P({\rm B}~|~ \rm{A})P(\rm{A})}{P({\rm B})}
 <ul>
 <li><code>P(called_spam|is_spam) = .99</code></li>
 </ul></li>
-<li>“(marking non-spam as spam) is 5%””
+<li>“(marking non-spam as spam) is 5%”
 <ul>
 <li><code>P(called_spam|isnt_spam) = .5</code></li>
 </ul></li>
@@ -480,82 +486,137 @@ P({\rm A}~|~{\rm B}) = \frac{P({\rm B}~|~ \rm{A})P(\rm{A})}{P({\rm B})}
 <section id="bayes-theorem-example-2" class="slide level2">
 <h2>Bayes’ Theorem Example</h2>
 <ul>
-<li><p>Now suppose an incoming email is marked as spam. What is the probability that it’s a non-spam email?</p></li>
-<li><p>Thing 1 = email is non-spam email</p></li>
-<li><p>Thing 2 = email is marked as spam</p></li>
-<li><p>P(thing2 | thing1) =</p></li>
-<li><p>P(thing 1) =</p></li>
-<li><p>P(thing 2) =</p></li>
+<li>Now suppose an incoming email is marked as spam. What is the probability that it’s a non-spam email?</li>
+<li><span class="math inline">\(A\)</span> = email is non-spam email</li>
+<li><span class="math inline">\(B\)</span> = email is marked as spam</li>
+<li>P(<span class="math inline">\(B\)</span> | <span class="math inline">\(A\)</span>) =</li>
+<li>P(<span class="math inline">\(A\)</span>) =</li>
+<li>P(<span class="math inline">\(B\)</span>) =</li>
 </ul>
 </section>
 <section id="bayes-theorem-example-solution" class="slide level2">
 <h2>Bayes’ Theorem Example Solution</h2>
-<p>Solution:</p>
-<p>P(thing2 | thing1) = 5%</p>
-<p>P(thing1) = 50%</p>
-<p>P(thing 2) = 99% * 50% + 5% * 50%</p>
-<p><span class="math display">\[0.05*0.5 / (0.99*0.5 + 0.05*0.5) = 4.81\%\]</span></p>
+<ul>
+<li><span class="math inline">\(A\)</span> = email is non-spam email = .5</li>
+<li><span class="math inline">\(B\)</span> = email is marked as spam = ??</li>
+<li>P(<span class="math inline">\(B\)</span> | <span class="math inline">\(A\)</span>) = .05</li>
+<li>P(<span class="math inline">\(A\)</span>) = .5</li>
+<li>P(<span class="math inline">\(B\)</span>) = .99 * .5 + .05 * .5</li>
+<li>P(<span class="math inline">\(A\)</span> | <span class="math inline">\(B\)</span>) = .05 * .5 / (.99 * .5 + .05 * .5)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">c</span>(.<span class="dv">99</span> <span class="sc">*</span> .<span class="dv">5</span> <span class="sc">+</span> .<span class="dv">05</span> <span class="sc">*</span> .<span class="dv">5</span>, .<span class="dv">05</span> <span class="sc">*</span> .<span class="dv">5</span> <span class="sc">/</span> (.<span class="dv">99</span> <span class="sc">*</span> .<span class="dv">5</span> <span class="sc">+</span> .<span class="dv">05</span> <span class="sc">*</span> .<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.52000000 0.04807692</code></pre>
+</div>
+</div>
 </section>
-<section id="bayes-theorem-exercises" class="slide level2">
-<h2>Bayes’ Theorem Exercises!</h2>
-<ol type="1">
-<li><p>You have three cards: one is red on both sides, one is black on both sides, and one has one red side and one black side. You pick a card at random, and put it on the table on a random side, and the color showing is red. What is the probability that the other side is black?</p></li>
-<li><p>Let’s imagine half of all rainy days start off cloudy in the morning. However, we live in a cloudy place, and about 40% of days start off cloudy, and you know that 90% of days this time of year do not have rain. What are the odds it will rain today?</p></li>
-</ol>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise 1</h2>
+<ul>
+<li>You have three cards:
+<ul>
+<li>one is red on both sides,</li>
+<li>one is black on both sides, and</li>
+<li>one has one red side and one black side.</li>
+</ul></li>
+<li>You pick a card at random, and
+<ul>
+<li>put it on the table on a random side, and</li>
+<li>the color showing is red.</li>
+</ul></li>
+<li>What is the probability that the other side is black?</li>
+</ul>
 </section>
-<section id="solutions" class="slide level2">
-<h2>Solutions</h2>
-<ol type="1">
-<li>Solution:</li>
-</ol>
-<p>Thing 1 = card is red-black</p>
-<p>thing 2 = side up is red</p>
-<p>P(side up is red | card is red-black) = 1/2</p>
-<p>P(thing 1) = 1/3</p>
-<p>P(thing 2) = 100% * 1/3 + 50% * 1/3 + 0% * 1/3</p>
-<p>so P(card is red-black | side up is red) = 1/3 * 1/2 / (1/3 + 1/6) = 1/3</p>
-<ol start="2" type="1">
-<li>Solution:</li>
-</ol>
-<p>thing 1 = rain during the day</p>
-<p>thing 2 = cloudy in the morning</p>
-<p>P (thing 2 | thing 1) = 50%</p>
-<p>P(thing 1) = 10%</p>
-<p>P(thing 2) = 40%</p>
-<p>so we get P(thing 1 | thing 2) = 0.1*0.5 / 0.4 = 0.125</p>
+<section id="solution-1" class="slide level2">
+<h2>Solution 1</h2>
+<ul>
+<li><span class="math inline">\(A\)</span> = card is red-black = 1/3</li>
+<li><span class="math inline">\(B\)</span> = side up is red = ??</li>
+<li>P(<span class="math inline">\(B\)</span> | <span class="math inline">\(A\)</span>) == 1/2</li>
+<li>P(<span class="math inline">\(B\)</span>) = 1 * 1/3 + 1/2 * 1/3 + 0 * 1/3 = 1.5/3 = 1/2</li>
+<li>P(<span class="math inline">\(A\)</span> | <span class="math inline">\(B\)</span>) = 1/3 * 1/2 / (1/2) = 1/3</li>
+</ul>
+</section>
+<section id="exercise-2" class="slide level2">
+<h2>Exercise 2</h2>
+<ul>
+<li>Imagine half of all rainy days start off cloudy in the morning.</li>
+<li>However, we live in a cloudy place, and…
+<ul>
+<li>about 40% of days start off cloudy, and…</li>
+<li>90% of days this time of year do not have rain.</li>
+</ul></li>
+<li>What are the odds it will rain today?</li>
+</ul>
+</section>
+<section id="solution-2" class="slide level2">
+<h2>Solution 2</h2>
+<ul>
+<li><span class="math inline">\(A\)</span> = rain during the day = .1</li>
+<li><span class="math inline">\(B\)</span> = cloudy in the morning = .4</li>
+<li>P(<span class="math inline">\(B\)</span> | <span class="math inline">\(A\)</span>) = .5</li>
+<li>P(<span class="math inline">\(A\)</span> | <span class="math inline">\(B\)</span>) = 0.1*0.5 / 0.4 = 0.125</li>
+</ul>
 </section>
 <section id="algorithm" class="slide level2">
 <h2>Algorithm</h2>
-<p><span class="math display">\[ P(L~|~{\rm features}) = \frac{P({\rm features}~|~L)P(L)}{P({\rm features})} \]</span></p>
-<p>If we only care about choosing between two labels L1 and L2, then we only need the ratio:</p>
-<p><span class="math display">\[ \frac{P(L_1~|~{\rm features})}{P(L_2~|~{\rm features})} = \frac{P({\rm features}~|~L_1)}{P({\rm features}~|~L_2)}\frac{P(L_1)}{P(L_2)} \]</span></p>
-<p>But how on earth can we get P(features | L)? Well, we have to make an assumption. “Naive” in Naive Bayes means we keep it simple.</p>
-<p>Really we would need P(Cherry, Fruit, Bordeaux | Chardonnay), “Naive” assumption is independence so the algorithm calculates P(Cherry | Chardonnay) * P(Fruit | Chardonnay) * P(Bordeaux | Chardonnay).</p>
+<p><span class="math display">\[
+P({\rm Cherry}~|~{\rm Chardonnay}) * P({\rm Fruit}~|~{\rm Chardonnay}) * P({\rm Bordeaux}~|~{\rm Chardonnay})
+\]</span></p>
+<ul>
+<li>Choosing between two labels <span class="math inline">\(L_1\)</span> and <span class="math inline">\(L_2\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\frac{P(L_1~|~{\rm features})}{P(L_2~|~{\rm features})} = \frac{P({\rm features}~|~L_1)}{P({\rm features}~|~L_2)}\frac{P(L_1)}{P(L_2)}
+\]</span></p>
+</section>
+<section id="uh-oh" class="slide level2">
+<h2>Uh oh</h2>
+<ul>
+<li>But how on earth can we get <span class="math inline">\(P({\rm features}~|~L)\)</span>$?</li>
+<li>Well, we have to make an assumption.</li>
+<li>“Naive” in Naive Bayes means we keep it simple.</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>Really we would need P(Cherry, Fruit, Bordeaux | Chardonnay)</li>
+<li>“Naive” assumption is independence so the algorithm calculates:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+P({\rm Cherry} &amp;~|~ {\rm Chardonnay}) *\\ P({\rm Fruit} &amp;~|~ {\rm Chardonnay}) *\\ P({\rm Bordeaux} &amp;~|~ {\rm Chardonnay})
+\end{align}
+\]</span></p>
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a></a><span class="fu">library</span>(caret)</span>
-<span id="cb1-3"><a></a><span class="fu">library</span>(fastDummies)</span>
-<span id="cb1-4"><a></a><span class="fu">library</span>(thematic)</span>
-<span id="cb1-5"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
-<span id="cb1-6"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span>
-<span id="cb1-7"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot.rds"</span>)))</span>
-<span id="cb1-8"><a></a><span class="fu">names</span>(wine)[<span class="fu">names</span>(wine) <span class="sc">==</span> <span class="st">'id'</span>] <span class="ot">=</span> <span class="st">'ID'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a></a><span class="fu">library</span>(caret)</span>
+<span id="cb3-3"><a></a><span class="fu">library</span>(fastDummies)</span>
+<span id="cb3-4"><a></a><span class="fu">library</span>(thematic)</span>
+<span id="cb3-5"><a></a><span class="fu">library</span>(naivebayes) <span class="co"># New</span></span>
+<span id="cb3-6"><a></a><span class="fu">library</span>(tidytext) <span class="co"># New</span></span>
+<span id="cb3-7"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
+<span id="cb3-8"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span>
+<span id="cb3-9"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot.rds"</span>)))</span>
+<span id="cb3-10"><a></a><span class="fu">names</span>(wine)[<span class="fu">names</span>(wine) <span class="sc">==</span> <span class="st">'id'</span>] <span class="ot">=</span> <span class="st">'ID'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="some-basic-features" class="slide level2">
 <h2>Some basic features</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>wino <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a></a>  <span class="fu">mutate</span>(<span class="at">year_f =</span> <span class="fu">as.factor</span>(year)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-3"><a></a>  <span class="fu">mutate</span>(<span class="at">cherry =</span> <span class="fu">str_detect</span>(description,<span class="st">"cherry"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-4"><a></a>  <span class="fu">mutate</span>(<span class="at">chocolate =</span> <span class="fu">str_detect</span>(description,<span class="st">"chocolate"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a></a>  <span class="fu">mutate</span>(<span class="at">earth =</span> <span class="fu">str_detect</span>(description,<span class="st">"earth"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description, year)</span>
-<span id="cb2-7"><a></a></span>
-<span id="cb2-8"><a></a><span class="fu">glimpse</span>(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>wino <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a></a>  <span class="fu">mutate</span>(<span class="at">year_f =</span> <span class="fu">as.factor</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a></a>  <span class="fu">mutate</span>(<span class="at">cherry =</span> <span class="fu">str_detect</span>(description,<span class="st">"cherry"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a></a>  <span class="fu">mutate</span>(<span class="at">chocolate =</span> <span class="fu">str_detect</span>(description,<span class="st">"chocolate"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a></a>  <span class="fu">mutate</span>(<span class="at">earth =</span> <span class="fu">str_detect</span>(description,<span class="st">"earth"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>description, year)</span>
+<span id="cb4-7"><a></a></span>
+<span id="cb4-8"><a></a><span class="fu">glimpse</span>(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 8,380
 Columns: 9
@@ -571,13 +632,13 @@ $ earth     &lt;lgl&gt; TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FAL
 </div>
 </div>
 </section>
-<section id="a-couple-conditional-probabilities" class="slide level2">
-<h2>A couple conditional probabilities</h2>
+<section id="conditional-probability" class="slide level2">
+<h2>Conditional probability</h2>
 <p><span class="math inline">\(p(Oregon | cherry) = \frac{p(Oregon \space\&amp;\space Cherry)}{p(Cherry)}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>oregon_and_cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">&amp;</span> cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
-<span id="cb4-2"><a></a>cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
-<span id="cb4-3"><a></a>oregon_and_cherry<span class="sc">/</span>cherry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>oregon_and_cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">&amp;</span> cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
+<span id="cb6-2"><a></a>cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
+<span id="cb6-3"><a></a>oregon_and_cherry<span class="sc">/</span>cherry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3196551</code></pre>
 </div>
@@ -587,15 +648,666 @@ $ earth     &lt;lgl&gt; TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FAL
 <h2>How about New York?</h2>
 <p><span class="math inline">\(p(NY | cherry) = \frac{p(NY \space\&amp;\space Cherry)}{p(Cherry)}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>ny_and_cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, province<span class="sc">==</span><span class="st">"New_York"</span> <span class="sc">&amp;</span> cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
-<span id="cb6-2"><a></a>ny_and_cherry<span class="sc">/</span>cherry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>ny_and_cherry <span class="ot">&lt;-</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(wino, province<span class="sc">==</span><span class="st">"New_York"</span> <span class="sc">&amp;</span> cherry))<span class="sc">/</span><span class="fu">nrow</span>(wino)</span>
+<span id="cb8-2"><a></a>ny_and_cherry<span class="sc">/</span>cherry</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.03122212</code></pre>
 </div>
 </div>
+</section>
+<section id="a-basic-model" class="slide level2">
+<h2>A basic model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="fu">set.seed</span>(<span class="dv">505</span>)</span>
+<span id="cb10-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb10-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb10-5"><a></a></span>
+<span id="cb10-6"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb10-7"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb10-8"><a></a>             <span class="at">method =</span> <span class="st">"naive_bayes"</span>,</span>
+<span id="cb10-9"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>,</span>
+<span id="cb10-10"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>))</span>
+<span id="cb10-11"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
+</section>
+<section id="a-basic-model-output" class="slide level2 output-location-slide"><h2>A basic model</h2><div class="cell output-location-slide">
+<div class="cell-output cell-output-stdout">
+<pre><code>Naive Bayes 
 
+6707 samples
+   8 predictor
+   6 classes: 'Burgundy', 'California', 'Casablanca_Valley', 'Marlborough', 'New_York', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 6037, 6037, 6036, 6036, 6036, 6037, ... 
+Resampling results across tuning parameters:
+
+  usekernel  Accuracy   Kappa     
+  FALSE      0.4792050  0.17112459
+   TRUE      0.3553707  0.03408878
+
+Tuning parameter 'laplace' was held constant at a value of 0
+Tuning
+ parameter 'adjust' was held constant at a value of 1
+Kappa was used to select the optimal model using the largest value.
+The final values used for the model were laplace = 0, usekernel = FALSE
+ and adjust = 1.</code></pre>
+</div>
+</div></section><section id="maybe-bin-the-data" class="slide level2">
+<h2>Maybe bin the data?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"year_"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a></a>  <span class="fu">mutate</span>(<span class="at">points_f =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-4"><a></a>    points <span class="sc">&lt;</span> <span class="dv">90</span> <span class="sc">~</span> <span class="st">"low"</span>,</span>
+<span id="cb12-5"><a></a>    points <span class="sc">&gt;=</span> <span class="dv">90</span> <span class="sc">&amp;</span> points <span class="sc">&lt;</span> <span class="dv">96</span> <span class="sc">~</span> <span class="st">"med"</span>,</span>
+<span id="cb12-6"><a></a>    points <span class="sc">&gt;=</span> <span class="dv">96</span> <span class="sc">~</span> <span class="st">"high"</span></span>
+<span id="cb12-7"><a></a>  )</span>
+<span id="cb12-8"><a></a>           )  <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a></a>  <span class="fu">mutate</span>(<span class="at">price_f =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-10"><a></a>    price <span class="sc">&lt;</span> <span class="dv">16</span> <span class="sc">~</span> <span class="st">"low"</span>,</span>
+<span id="cb12-11"><a></a>    price <span class="sc">&gt;=</span> <span class="dv">16</span> <span class="sc">&amp;</span> price <span class="sc">&lt;</span> <span class="dv">41</span> <span class="sc">~</span> <span class="st">"med"</span>,</span>
+<span id="cb12-12"><a></a>    price <span class="sc">&gt;=</span> <span class="dv">41</span> <span class="sc">~</span> <span class="st">"high"</span></span>
+<span id="cb12-13"><a></a>  )</span>
+<span id="cb12-14"><a></a>           )  <span class="sc">%&gt;%</span> </span>
+<span id="cb12-15"><a></a>  <span class="fu">mutate</span>(<span class="at">year_f =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-16"><a></a>    year <span class="sc">&lt;</span> <span class="dv">2005</span> <span class="sc">~</span> <span class="st">"old"</span>,</span>
+<span id="cb12-17"><a></a>    year <span class="sc">&gt;=</span> <span class="dv">2005</span> <span class="sc">&amp;</span> year <span class="sc">&lt;</span> <span class="dv">2011</span> <span class="sc">~</span> <span class="st">"recent"</span>,</span>
+<span id="cb12-18"><a></a>    year <span class="sc">&gt;=</span> <span class="dv">2011</span> <span class="sc">~</span> <span class="st">"current"</span></span>
+<span id="cb12-19"><a></a>  )</span>
+<span id="cb12-20"><a></a>           ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-21"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>price,<span class="sc">-</span>points,<span class="sc">-</span>year)</span>
+<span id="cb12-22"><a></a></span>
+<span id="cb12-23"><a></a><span class="fu">head</span>(wino)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="maybe-bin-the-data-output" class="slide level2 output-location-slide"><h2>Maybe bin the data?</h2><div class="cell output-location-slide">
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID   province cherry chocolate earth points_f price_f  year_f
+1  1     Oregon  FALSE     FALSE  TRUE      low    high current
+2  2     Oregon  FALSE      TRUE FALSE      low     med current
+3  3 California  FALSE     FALSE  TRUE      low    high current
+4  4     Oregon  FALSE     FALSE FALSE      low    high  recent
+5  5     Oregon  FALSE     FALSE  TRUE      low     med  recent
+6  6     Oregon  FALSE     FALSE FALSE      low     med current</code></pre>
+</div>
+</div></section><section id="binned-model" class="slide level2">
+<h2>Binned model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="fu">set.seed</span>(<span class="dv">505</span>)</span>
+<span id="cb14-2"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb14-3"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb14-4"><a></a></span>
+<span id="cb14-5"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb14-6"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb14-7"><a></a>             <span class="at">method =</span> <span class="st">"naive_bayes"</span>,</span>
+<span id="cb14-8"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>,</span>
+<span id="cb14-9"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>))</span>
+<span id="cb14-10"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="binned-model-output" class="slide level2 output-location-slide"><h2>Binned model</h2><div class="cell output-location-slide">
+<div class="cell-output cell-output-stdout">
+<pre><code>Naive Bayes 
+
+6707 samples
+   7 predictor
+   6 classes: 'Burgundy', 'California', 'Casablanca_Valley', 'Marlborough', 'New_York', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 6036, 6034, 6036, 6038, 6034, 6038, ... 
+Resampling results across tuning parameters:
+
+  usekernel  Accuracy   Kappa    
+  FALSE      0.4544189  0.2545278
+   TRUE      0.5206607  0.1511061
+
+Tuning parameter 'laplace' was held constant at a value of 0
+Tuning
+ parameter 'adjust' was held constant at a value of 1
+Kappa was used to select the optimal model using the largest value.
+The final values used for the model were laplace = 0, usekernel = FALSE
+ and adjust = 1.</code></pre>
+</div>
+</div></section><section id="confusion-matrix" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(fit, test),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               208        308                10          20        6
+  California              19        421                 2          10       10
+  Casablanca_Valley        2         23                10           4        3
+  Marlborough              0          3                 1           1        1
+  New_York                 1          5                 1           7        5
+  Oregon                   8         31                 2           3        1
+                   Reference
+Prediction          Oregon
+  Burgundy             269
+  California           140
+  Casablanca_Valley      8
+  Marlborough           10
+  New_York              11
+  Oregon               109
+
+Overall Statistics
+                                          
+               Accuracy : 0.4507          
+                 95% CI : (0.4267, 0.4749)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : 0.9669          
+                                          
+                  Kappa : 0.2464          
+                                          
+ Mcnemar's Test P-Value : &lt;2e-16          
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.8739            0.5322                 0.384615
+Specificity                   0.5728            0.7948                 0.975713
+Pos Pred Value                0.2533            0.6993                 0.200000
+Neg Pred Value                0.9648            0.6545                 0.990142
+Prevalence                    0.1423            0.4728                 0.015541
+Detection Rate                0.1243            0.2516                 0.005977
+Detection Prevalence          0.4907            0.3598                 0.029886
+Balanced Accuracy             0.7234            0.6635                 0.680164
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                   0.0222222        0.192308       0.19927
+Specificity                   0.9907862        0.984821       0.96004
+Pos Pred Value                0.0625000        0.166667       0.70779
+Neg Pred Value                0.9734460        0.987219       0.71165
+Prevalence                    0.0268978        0.015541       0.32696
+Detection Rate                0.0005977        0.002989       0.06515
+Detection Prevalence          0.0095637        0.017932       0.09205
+Balanced Accuracy             0.5065042        0.588564       0.57965</code></pre>
+</div>
+</div>
 </section></section>
+<section>
+<section id="tidytext-and-frequency-distributions" class="title-slide slide level1 center">
+<h1>Tidytext and frequency distributions</h1>
+
+</section>
+<section id="tidytext" class="slide level2">
+<h2>Tidytext</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="fu">data</span>(stop_words)</span>
+<span id="cb18-2"><a></a><span class="fu">head</span>(stop_words, <span class="dv">25</span>)<span class="sc">$</span>word</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "a"           "a's"         "able"        "about"       "above"      
+ [6] "according"   "accordingly" "across"      "actually"    "after"      
+[11] "afterwards"  "again"       "against"     "ain't"       "all"        
+[16] "allow"       "allows"      "almost"      "alone"       "along"      
+[21] "already"     "also"        "although"    "always"      "am"         </code></pre>
+</div>
+</div>
+</section>
+<section id="stop-words" class="slide level2">
+<h2>Stop Words</h2>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Stop_word">Stop words are the words in a stop list (or stoplist or negative dictionary) which are filtered out (i.e.&nbsp;stopped) before or after processing of natural language data (text) because they are deemed insignificant.</a></p>
+</blockquote>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>From <a href="https://rdrr.io/cran/tidytext/man/stop_words.html">tidytext</a></li>
+<li>From <a href="http://snowball.tartarus.org/algorithms/english/stop.txt">Snowball</a></li>
+</ul>
+<p><iframe style="background-color:white;width:80%;height:60%" src="../dat/stop.txt" title="An English stop word list."></iframe></p>
+</section>
+<section id="matrix" class="slide level2">
+<h2>Matrix</h2>
+<ul>
+<li>We adopt the convention of refering to our dataframe as “df”</li>
+<li>Short for <code>drofessor falvin</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>df <span class="ot">&lt;-</span> wine</span>
+<span id="cb20-2"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID   province price points year
+1  1     Oregon    65     87 2012
+2  2     Oregon    20     87 2013
+3  3 California    69     87 2011
+4  4     Oregon    50     86 2010
+5  5     Oregon    22     86 2009
+6  6     Oregon    25     86 2015
+                                                                                                                                                                                                                                                                                       description
+1                                        Much like the regular bottling from 2012, this comes across as rather rough and tannic, with rustic, earthy, herbal characteristics. Nonetheless, if you think of it as a pleasantly unfussy country wine, it's a good companion to a hearty winter stew.
+2                                                        A sleek mix of tart berry, stem and herb, along with a hint of oak and chocolate, this is a fair value in a widely available, drink-now Oregon Pinot. The wine oak-aged for six months, whether in neutral or re-staved is not indicated.
+3                              Oak and earth intermingle around robust aromas of wet forest floor in this vineyard-designated Pinot that hails from a high-elevation site. Small in production, it offers intense, full-bodied raspberry and blackberry steeped in smoky spice and smooth texture.
+4                                               As with many of the Erath 2010 vineyard designates, this is strongly herbal. The notes of leaf and herb create somewhat unripe flavor impressions, with a touch of bitterness on the finish. The fruit just passes the ripeness of sweet tomatoes.
+5                                                                                                                              A stiff, tannic wine, this slowly opens and brings brambly berry flavors into play, along with notes of earthy herbs. There's a touch of bitterness to the tannins.
+6 Some rosés are made simply by bleeding the juice from the fermenter, to concentrate the remaining wine. Whether or not that is the case here, the wine has the simple pleasant lightly candied strawberry flavors one might expect from such a technique. It's fruity and undemanding. Drink up.</code></pre>
+</div>
+</div>
+<ul>
+<li>We’ll build it incrementally and check-in as we go.</li>
+</ul>
+</section>
+<section id="bird-up" class="slide level2">
+<h2>Bird Up</h2>
+<ul>
+<li>With apologies to Eric Andre</li>
+<li>We really just want words, don’t need them in like sentences or whatever.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a></a>  <span class="fu">unnest_tokens</span>(word, description) </span>
+<span id="cb22-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID province price points year     word
+1  1   Oregon    65     87 2012     much
+2  1   Oregon    65     87 2012     like
+3  1   Oregon    65     87 2012      the
+4  1   Oregon    65     87 2012  regular
+5  1   Oregon    65     87 2012 bottling
+6  1   Oregon    65     87 2012     from</code></pre>
+</div>
+</div>
+</section>
+<section id="grammy-snub" class="slide level2">
+<h2>Grammy Snub</h2>
+<ul>
+<li>Anti (2016) was snubbed don’t @ me</li>
+<li>Remove “boring” words</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a></a>  <span class="fu">anti_join</span>(stop_words)</span>
+<span id="cb24-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID province price points year     word
+1  1   Oregon    65     87 2012  regular
+2  1   Oregon    65     87 2012 bottling
+3  1   Oregon    65     87 2012     2012
+4  1   Oregon    65     87 2012    rough
+5  1   Oregon    65     87 2012   tannic
+6  1   Oregon    65     87 2012   rustic</code></pre>
+</div>
+</div>
+</section>
+<section id="pi0" class="slide level2">
+<h2><span class="math inline">\(\pi^0\)</span></h2>
+<ul>
+<li>Won’t see much visible change here.</li>
+<li>But including these could cook our data.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a></a>  <span class="fu">filter</span>(word <span class="sc">!=</span> <span class="st">"wine"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a></a>  <span class="fu">filter</span>(word <span class="sc">!=</span> <span class="st">"pinot"</span>)</span>
+<span id="cb26-4"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID province price points year     word
+1  1   Oregon    65     87 2012  regular
+2  1   Oregon    65     87 2012 bottling
+3  1   Oregon    65     87 2012     2012
+4  1   Oregon    65     87 2012    rough
+5  1   Oregon    65     87 2012   tannic
+6  1   Oregon    65     87 2012   rustic</code></pre>
+</div>
+</div>
+</section>
+<section id="id-ego-superego" class="slide level2">
+<h2>Id, Ego, Superego</h2>
+<ul>
+<li>We left in IDs like 3 hours ago.</li>
+<li>Use them to aggregate words.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a></a>  <span class="fu">count</span>(ID, word) </span>
+<span id="cb28-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID            word n
+1  1            2012 1
+2  1        bottling 1
+3  1 characteristics 1
+4  1       companion 1
+5  1         country 1
+6  1          earthy 1</code></pre>
+</div>
+</div>
+</section>
+<section id="group-ease" class="slide level2">
+<h2>Group Ease</h2>
+<ul>
+<li>With words attached to IDs…</li>
+<li>We can structure into a wine compatibile dataframe</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a></a>  <span class="fu">group_by</span>(ID)</span>
+<span id="cb30-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+# Groups:   ID [1]
+     ID word                n
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;
+1     1 2012                1
+2     1 bottling            1
+3     1 characteristics     1
+4     1 companion           1
+5     1 country             1
+6     1 earthy              1</code></pre>
+</div>
+</div>
+</section>
+<section id="big-ole-freq" class="slide level2">
+<h2>Big Ole Freq</h2>
+<ul>
+<li>Just like Megan’s first charting song…</li>
+<li>Most words occur once</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a></a>  <span class="fu">mutate</span>(<span class="at">freq =</span> n<span class="sc">/</span><span class="fu">sum</span>(n))</span>
+<span id="cb32-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+# Groups:   ID [1]
+     ID word                n   freq
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt;
+1     1 2012                1 0.0588
+2     1 bottling            1 0.0588
+3     1 characteristics     1 0.0588
+4     1 companion           1 0.0588
+5     1 country             1 0.0588
+6     1 earthy              1 0.0588</code></pre>
+</div>
+</div>
+</section>
+<section id="exists" class="slide level2">
+<h2><span class="math inline">\(\exists\)</span></h2>
+<ul>
+<li>Make sure words occur AT ALL</li>
+<li><span class="math inline">\(\forall {\rm words} \exists {\rm ID }\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a></a>  <span class="fu">mutate</span>(<span class="at">exists =</span> (n<span class="sc">&gt;</span><span class="dv">0</span>))</span>
+<span id="cb34-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+# Groups:   ID [1]
+     ID word                n   freq exists
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt; &lt;lgl&gt; 
+1     1 2012                1 0.0588 TRUE  
+2     1 bottling            1 0.0588 TRUE  
+3     1 characteristics     1 0.0588 TRUE  
+4     1 companion           1 0.0588 TRUE  
+5     1 country             1 0.0588 TRUE  
+6     1 earthy              1 0.0588 TRUE  </code></pre>
+</div>
+</div>
+</section>
+<section id="individualism" class="slide level2">
+<h2>Individualism</h2>
+<ul>
+<li>Words were grouped up by ID</li>
+<li>Pool them back together.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb36-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+     ID word                n   freq exists
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt; &lt;lgl&gt; 
+1     1 2012                1 0.0588 TRUE  
+2     1 bottling            1 0.0588 TRUE  
+3     1 characteristics     1 0.0588 TRUE  
+4     1 companion           1 0.0588 TRUE  
+5     1 country             1 0.0588 TRUE  
+6     1 earthy              1 0.0588 TRUE  </code></pre>
+</div>
+</div>
+</section>
+<section id="transpose" class="slide level2">
+<h2>Transpose</h2>
+<ul>
+<li>Group on words now that frequencies are found for ids.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a></a>  <span class="fu">group_by</span>(word)</span>
+<span id="cb38-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+# Groups:   word [6]
+     ID word                n   freq exists
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt; &lt;lgl&gt; 
+1     1 2012                1 0.0588 TRUE  
+2     1 bottling            1 0.0588 TRUE  
+3     1 characteristics     1 0.0588 TRUE  
+4     1 companion           1 0.0588 TRUE  
+5     1 country             1 0.0588 TRUE  
+6     1 earthy              1 0.0588 TRUE  </code></pre>
+</div>
+</div>
+</section>
+<section id="accumulate" class="slide level2">
+<h2>Accumulate</h2>
+<ul>
+<li>At long last, we have a description as some numerical data type.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a></a>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">sum</span>(n))</span>
+<span id="cb40-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+# Groups:   word [6]
+     ID word                n   freq exists total
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt; &lt;lgl&gt;  &lt;int&gt;
+1     1 2012                1 0.0588 TRUE      71
+2     1 bottling            1 0.0588 TRUE     849
+3     1 characteristics     1 0.0588 TRUE      61
+4     1 companion           1 0.0588 TRUE      22
+5     1 country             1 0.0588 TRUE      11
+6     1 earthy              1 0.0588 TRUE     804</code></pre>
+</div>
+</div>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+<ul>
+<li>We essential have words by popularity.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a></a>  <span class="fu">count</span>(word) <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-4"><a></a>  <span class="fu">head</span>(<span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 25 × 2
+# Groups:   word [25]
+   word        n
+   &lt;chr&gt;   &lt;int&gt;
+ 1 fruit    3724
+ 2 cherry   3423
+ 3 flavors  3048
+ 4 black    2029
+ 5 palate   2025
+ 6 red      1976
+ 7 finish   1973
+ 8 tannins  1937
+ 9 acidity  1856
+10 aromas   1431
+# ℹ 15 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="join" class="slide level2">
+<h2>Join</h2>
+<ul>
+<li>Have you seen <code>LEFT JOIN</code> in 503 yet?</li>
+<li>W3</li>
+</ul>
+<pre><code>The LEFT JOIN keyword returns all records from the left table (table1), and the matching records from the right table (table2). The result is 0 records from the right side, if there is no match.</code></pre>
+<ul>
+<li>G4G</li>
+</ul>
+<pre><code>In SQL, LEFT JOIN retrieves all records from the left table and only the matching records from the right table. When there is no matching record found, NULL values are returned for columns from the right table. This makes LEFT JOIN extremely useful for queries where you need to retain all records from one table, even if there is no corresponding match in the other table.</code></pre>
+</section>
+<section id="ids" class="slide level2">
+<h2>IDs</h2>
+<ul>
+<li>Keep your ID around…
+<ul>
+<li>We are so back.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a></a>  <span class="fu">left_join</span>(<span class="fu">select</span>(wine, ID, province), <span class="at">by =</span> <span class="st">"ID"</span>)</span>
+<span id="cb46-3"><a></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+# Groups:   word [6]
+     ID word                n   freq exists total province
+  &lt;int&gt; &lt;chr&gt;           &lt;int&gt;  &lt;dbl&gt; &lt;lgl&gt;  &lt;int&gt; &lt;chr&gt;   
+1     1 2012                1 0.0588 TRUE      71 Oregon  
+2     1 bottling            1 0.0588 TRUE     849 Oregon  
+3     1 characteristics     1 0.0588 TRUE      61 Oregon  
+4     1 companion           1 0.0588 TRUE      22 Oregon  
+5     1 country             1 0.0588 TRUE      11 Oregon  
+6     1 earthy              1 0.0588 TRUE     804 Oregon  </code></pre>
+</div>
+</div>
+</section>
+<section id="use-those-words" class="slide level2">
+<h2>Use those words!</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a></a>  <span class="fu">count</span>(province, word) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a></a>  <span class="fu">group_by</span>(province) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-4"><a></a>  <span class="fu">top_n</span>(<span class="dv">5</span>,n) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-5"><a></a>  <span class="fu">arrange</span>(province, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-6"><a></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+# Groups:   province [2]
+  word    province       n
+  &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt;
+1 tannins Burgundy     763
+2 drink   Burgundy     673
+3 acidity Burgundy     652
+4 red     Burgundy     630
+5 fruits  Burgundy     575
+6 cherry  California  1917</code></pre>
+</div>
+</div>
+</section>
+<section id="group-exercise" class="slide level2">
+<h2>Group exercise</h2>
+<p>Use the top words by province to…</p>
+<ol type="1">
+<li>Engineer more features that capture the essence of Casablanca, Marlborough and New York</li>
+<li>Look for difference between California and Oregon</li>
+<li>Use what you find to run naive Bayes models that achieve a Kappa that approaches 0.5</li>
+</ol>
+</section>
+<section id="vocabulary" class="slide level2">
+<h2>Vocabulary</h2>
+<ul>
+<li>Naive Bayes</li>
+<li>Correlation</li>
+<li>Residual</li>
+<li>Kappa</li>
+<li>Parameter Tuning</li>
+<li>Conditional Probability</li>
+</ul>
+</section>
+<section id="stinger" class="slide level2">
+<h2>Stinger</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a><span class="fu">library</span>(scales)</span>
+<span id="cb50-2"><a></a>wtxt <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span> </span>
+<span id="cb50-3"><a></a>  <span class="fu">unnest_tokens</span>(word, description) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-4"><a></a>  <span class="fu">anti_join</span>(stop_words) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-5"><a></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(<span class="at">string =</span> word, <span class="at">pattern =</span> <span class="st">"[a-z+]"</span>)) <span class="sc">%&gt;%</span>  <span class="co"># get rid weird non alphas</span></span>
+<span id="cb50-6"><a></a>  <span class="fu">filter</span>(<span class="fu">str_length</span>(word)<span class="sc">&gt;</span><span class="dv">3</span>) <span class="sc">%&gt;%</span>  <span class="co"># get rid of strings shorter than 3 characters</span></span>
+<span id="cb50-7"><a></a>  <span class="fu">group_by</span>(word) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-8"><a></a>  <span class="fu">mutate</span>(<span class="at">total=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-9"><a></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb50-10"><a></a></span>
+<span id="cb50-11"><a></a>wtxt <span class="sc">%&gt;%</span> </span>
+<span id="cb50-12"><a></a>    <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">|</span> province<span class="sc">==</span><span class="st">"California"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-13"><a></a>    <span class="fu">filter</span>(<span class="sc">!</span>(word <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"wine"</span>,<span class="st">"pinot"</span>,<span class="st">"drink"</span>,<span class="st">"noir"</span>,<span class="st">"vineyard"</span>,<span class="st">"palate"</span>,<span class="st">"notes"</span>,<span class="st">"flavors"</span>,<span class="st">"bottling"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-14"><a></a>    <span class="fu">filter</span>(total <span class="sc">&gt;</span> <span class="dv">400</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-15"><a></a>    <span class="fu">group_by</span>(province, word) <span class="sc">%&gt;%</span></span>
+<span id="cb50-16"><a></a>    <span class="fu">count</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb50-17"><a></a>    <span class="fu">group_by</span>(province) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-18"><a></a>    <span class="fu">mutate</span>(<span class="at">proportion =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-19"><a></a>    <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> word, <span class="at">names_from =</span> province, <span class="at">values_from =</span> proportion) <span class="sc">%&gt;%</span> </span>
+<span id="cb50-20"><a></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Oregon, <span class="at">y =</span> California, <span class="at">color =</span> <span class="fu">abs</span>(Oregon <span class="sc">-</span> California))) <span class="sc">+</span></span>
+<span id="cb50-21"><a></a>    <span class="fu">geom_abline</span>(<span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb50-22"><a></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">height =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb50-23"><a></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> word), <span class="at">check_overlap =</span> <span class="cn">TRUE</span>, <span class="at">vjust =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb50-24"><a></a>    <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb50-25"><a></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb50-26"><a></a>    <span class="fu">scale_color_gradient</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>), <span class="at">low =</span> <span class="st">"darkslategray4"</span>, <span class="at">high =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb50-27"><a></a>    <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb50-28"><a></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Oregon"</span>, <span class="at">y =</span> <span class="st">"California"</span>, <span class="at">title =</span> <span class="st">"Words describing Pinot Noir from California and Oregon"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="stinger-output" class="slide level2 output-location-slide"><h2>Stinger</h2><div class="cell output-location-slide">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Session04_files/figure-revealjs/unnamed-chunk-24-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div></section><section id="stinger-1" class="slide level2">
+<h2>Stinger</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>dtxt <span class="ot">&lt;-</span> wtxt <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a></a>  <span class="fu">filter</span>(province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">|</span> province<span class="sc">==</span><span class="st">"California"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-3"><a></a>  <span class="fu">filter</span>(<span class="sc">!</span>(word <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"wine"</span>,<span class="st">"pinot"</span>,<span class="st">"drink"</span>,<span class="st">"noir"</span>,<span class="st">"vineyard"</span>,<span class="st">"palate"</span>,<span class="st">"notes"</span>,<span class="st">"flavors"</span>,<span class="st">"bottling"</span>,<span class="st">"bottle"</span>,<span class="st">"finish"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-4"><a></a>  <span class="fu">filter</span>(total <span class="sc">&gt;</span> <span class="dv">400</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-5"><a></a>  <span class="fu">group_by</span>(province, word) <span class="sc">%&gt;%</span></span>
+<span id="cb51-6"><a></a>  <span class="fu">count</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb51-7"><a></a>  <span class="fu">group_by</span>(province) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-8"><a></a>  <span class="fu">mutate</span>(<span class="at">proportion =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-9"><a></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> word, <span class="at">names_from =</span> province, <span class="at">values_from =</span> proportion) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-10"><a></a>  <span class="fu">mutate</span>(<span class="at">diff=</span>Oregon<span class="sc">-</span>California) </span>
+<span id="cb51-11"><a></a></span>
+<span id="cb51-12"><a></a>dtxt <span class="sc">%&gt;%</span></span>
+<span id="cb51-13"><a></a>  <span class="fu">top_n</span>(<span class="dv">25</span>, diff) <span class="sc">%&gt;%</span></span>
+<span id="cb51-14"><a></a>  <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">reorder</span>(word, diff)) <span class="sc">%&gt;%</span></span>
+<span id="cb51-15"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(word, diff)) <span class="sc">+</span></span>
+<span id="cb51-16"><a></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb51-17"><a></a>  <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb51-18"><a></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+
+</section><section id="stinger-1-output" class="slide level2 output-location-slide"><h2>Stinger</h2><div class="cell output-location-slide">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Session04_files/figure-revealjs/unnamed-chunk-25-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div></section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

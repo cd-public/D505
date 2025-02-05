@@ -1,5 +1,5 @@
 ---
-title: "$K$ Nearest Neighbors"
+title: "Naive Bayes"
 subtitle: "Applied Machine Learning"
 author: "Jameson > Hendrik > Calvin"
   
@@ -11,10 +11,8 @@ execute:
 
 ## Agenda
 
-1. Review of Homework 3
-2. RStudio Server and Parallel Processing
+1. Homework
 3. The Naive Bayes algorithm
-4. Dinner break
 5. Tidy text and bag of words
 6. Group work
 7. Vocabulary
@@ -53,7 +51,11 @@ $$
 
 ## Bayes' Theorem Example
 
-- Suppose half of all emails are spam, and you've just purchased some software (hurray) that filters spam emails, claiming to detect 99% of spam and that the probability of a false positive (marking non-spam as spam) is 5%.
+- Suppose 
+  - Half of all emails are spam
+  - You've just purchased some software (hurray) that filters spam emails
+    - It claims to detect 99% of spam 
+    - It claims the probability of a false positive (marking non-spam as spam) is 5%.
 
 ## Bayes' Theorem Example
 
@@ -75,6 +77,8 @@ $$
 
 ## Bayes' Theorem Example Solution
 
+- $A$ = email is non-spam email = .5
+- $B$ = email is marked as spam = ??
 - P($B$ | $A$) = .05
 - P($A$) = .5
 - P($B$) = .99 * .5 + .05 * .5
@@ -95,52 +99,58 @@ c(.99 * .5 + .05 * .5, .05 * .5 / (.99 * .5 + .05 * .5))
   - the color showing is red. 
 - What is the probability that the other side is black?
 
-2. Let's imagine half of all rainy days start off cloudy in the morning. However, we live in a cloudy place, and about 40% of days start off cloudy, and you know that 90% of days this time of year do not have rain. What are the odds it will rain today?
 
+## Solution 1
 
-## Solutions
+- $A$ = card is red-black = 1/3
+- $B$ = side up is red = ??
+- P($B$ | $A$) == 1/2
+- P($B$) = 1 * 1/3 + 1/2 * 1/3 + 0 * 1/3 = 1.5/3 = 1/2
+- P($A$ | $B$) = 1/3 * 1/2 / (1/2) = 1/3
 
-1. Solution:
+## Exercise 2
 
-Thing 1 = card is red-black
+- Imagine half of all rainy days start off cloudy in the morning. 
+- However, we live in a cloudy place, and...
+  - about 40% of days start off cloudy, and...
+  - 90% of days this time of year do not have rain. 
+- What are the odds it will rain today?
 
-thing 2 = side up is red
+## Solution 2
 
-P(side up is red | card is red-black) = 1/2
-
-P(thing 1) = 1/3
-
-P(thing 2) = 100% * 1/3 + 50% * 1/3 + 0% * 1/3
-
-so P(card is red-black | side up is red) = 1/3 * 1/2 / (1/3 + 1/6) = 1/3
-
-2. Solution:
-
-thing 1 = rain during the day
-
-thing 2 = cloudy in the morning
-
-P (thing 2 | thing 1) = 50%
-
-P(thing 1) = 10%
-
-P(thing 2) = 40%
-
-so we get P(thing 1 | thing 2) = 0.1*0.5 / 0.4 = 0.125
+- $A$ = rain during the day = .1
+- $B$ = cloudy in the morning = .4
+- P($B$ | $A$) = .5
+- P($A$ | $B$) = 0.1*0.5 / 0.4 = 0.125
 
 ## Algorithm
 
-$$ P(L~|~{\rm features}) = \frac{P({\rm features}~|~L)P(L)}{P({\rm features})} $$
+$$ 
+P({\rm Cherry}~|~{\rm Chardonnay}) * P({\rm Fruit}~|~{\rm Chardonnay}) * P({\rm Bordeaux}~|~{\rm Chardonnay})
+$$
 
-If we only care about choosing between two labels L1 and L2, then we only need the ratio:
+- Choosing between two labels $L_1$ and $L_2$:
 
-$$ \frac{P(L_1~|~{\rm features})}{P(L_2~|~{\rm features})} = \frac{P({\rm features}~|~L_1)}{P({\rm features}~|~L_2)}\frac{P(L_1)}{P(L_2)} $$
+$$ 
+\frac{P(L_1~|~{\rm features})}{P(L_2~|~{\rm features})} = \frac{P({\rm features}~|~L_1)}{P({\rm features}~|~L_2)}\frac{P(L_1)}{P(L_2)} 
+$$
 
-But how on earth can we get P(features | L)? Well, we have to make an assumption. "Naive" in Naive Bayes means we keep it simple.
+## Uh oh
 
-Really we would need P(Cherry, Fruit, Bordeaux | Chardonnay), "Naive" assumption is independence so the algorithm calculates P(Cherry | Chardonnay) * P(Fruit | Chardonnay) * P(Bordeaux | Chardonnay).
+- But how on earth can we get $P({\rm features}~|~L)$$? 
+- Well, we have to make an assumption. 
+- "Naive" in Naive Bayes means we keep it simple.
 
+## Example
 
+- Really we would need P(Cherry, Fruit, Bordeaux | Chardonnay)
+- "Naive" assumption is independence so the algorithm calculates:
+
+$$
+\begin{align}
+P({\rm Cherry} &~|~ {\rm Chardonnay}) *\\ P({\rm Fruit} &~|~ {\rm Chardonnay}) *\\ P({\rm Bordeaux} &~|~ {\rm Chardonnay})
+\end{align}
+$$
 
 
 ## Setup
@@ -150,6 +160,8 @@ library(tidyverse)
 library(caret)
 library(fastDummies)
 library(thematic)
+library(naivebayes) # New
+library(tidytext) # New
 theme_set(theme_dark())
 thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
 wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
@@ -169,7 +181,7 @@ wino <- wine %>%
 glimpse(wino)
 ```
 
-## A couple conditional probabilities
+## Conditional probability
 
 $p(Oregon | cherry) = \frac{p(Oregon \space\&\space Cherry)}{p(Cherry)}$
 
@@ -185,4 +197,338 @@ $p(NY | cherry) = \frac{p(NY \space\&\space Cherry)}{p(Cherry)}$
 ```{r}
 ny_and_cherry <- nrow(filter(wino, province=="New_York" & cherry))/nrow(wino)
 ny_and_cherry/cherry
+```
+
+## A basic model
+
+```{r}
+#| output-location: slide
+set.seed(505)
+wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
+train <- wino[ wine_index, ]
+test <- wino[-wine_index, ]
+
+fit <- train(province ~ .,
+             data = train, 
+             method = "naive_bayes",
+             metric = "Kappa",
+             trControl = trainControl(method = "cv"))
+fit
+```
+
+## Maybe bin the data?
+
+```{r}
+#| output-location: slide
+wino <- wino %>%
+  select(-starts_with("year_")) %>% 
+  mutate(points_f = case_when(
+    points < 90 ~ "low",
+    points >= 90 & points < 96 ~ "med",
+    points >= 96 ~ "high"
+  )
+           )  %>% 
+  mutate(price_f = case_when(
+    price < 16 ~ "low",
+    price >= 16 & price < 41 ~ "med",
+    price >= 41 ~ "high"
+  )
+           )  %>% 
+  mutate(year_f = case_when(
+    year < 2005 ~ "old",
+    year >= 2005 & year < 2011 ~ "recent",
+    year >= 2011 ~ "current"
+  )
+           ) %>% 
+  select(-price,-points,-year)
+
+head(wino)
+```
+
+
+## Binned model
+
+```{r}
+#| output-location: slide
+set.seed(505)
+train <- wino[ wine_index, ]
+test <- wino[-wine_index, ]
+
+fit <- train(province ~ .,
+             data = train, 
+             method = "naive_bayes",
+             metric = "Kappa",
+             trControl = trainControl(method = "cv"))
+fit
+```
+
+## Confusion Matrix
+
+```{r}
+confusionMatrix(predict(fit, test),factor(test$province))
+```
+
+
+# Tidytext and frequency distributions
+
+## Tidytext
+
+```{r}
+data(stop_words)
+head(stop_words, 25)$word
+```
+
+## Stop Words
+
+> [Stop words are the words in a stop list (or stoplist or negative dictionary) which are filtered out (i.e. stopped) before or after processing of natural language data (text) because they are deemed insignificant.](https://en.wikipedia.org/wiki/Stop_word)
+
+## Example
+
+- From [tidytext](https://rdrr.io/cran/tidytext/man/stop_words.html)
+- From [Snowball](http://snowball.tartarus.org/algorithms/english/stop.txt)
+
+ <iframe style="background-color:white;width:80%;height:60%" src="../dat/stop.txt" title="An English stop word list."></iframe> 
+
+## Matrix
+
+- We adopt the convention of refering to our dataframe as "df"
+- Short for `drofessor falvin`
+```{r}
+df <- wine
+head(df)
+```
+- We'll build it incrementally and check-in as we go.
+
+## Bird Up
+
+- With apologies to Eric Andre
+- We really just want words, don't need them in like sentences or whatever.
+
+```{r}
+df <- df %>%
+  unnest_tokens(word, description) 
+head(df)
+```
+
+## Grammy Snub
+
+- Anti (2016) was snubbed don't @ me
+- Remove "boring" words
+
+```{r}
+df <- df %>%
+  anti_join(stop_words)
+head(df)
+```
+
+
+## $\pi^0$
+
+- Won't see much visible change here.
+- But including these could cook our data.
+
+```{r}
+df <- df %>%
+  filter(word != "wine") %>%
+  filter(word != "pinot")
+head(df)
+```
+
+
+## Id, Ego, Superego
+
+- We left in IDs like 3 hours ago.
+- Use them to aggregate words.
+
+```{r}
+df <- df %>%
+  count(ID, word) 
+head(df)
+```
+
+## Group Ease
+
+- With words attached to IDs...
+- We can structure into a wine compatibile dataframe
+
+```{r}
+df <- df %>%
+  group_by(ID)
+head(df)
+```
+
+## Big Ole Freq
+
+- Just like Megan's first charting song...
+- Most words occur once
+
+```{r}
+df <- df %>% 
+  mutate(freq = n/sum(n))
+head(df)
+```
+
+## $\exists$
+
+- Make sure words occur AT ALL
+- $\forall {\rm words} \exists {\rm ID }$
+
+```{r}
+df <- df %>% 
+  mutate(exists = (n>0))
+head(df)
+```
+
+## Individualism
+
+- Words were grouped up by ID
+- Pool them back together.
+
+```{r}
+df <- df %>% 
+  ungroup()
+head(df)
+```
+
+## Transpose
+
+- Group on words now that frequencies are found for ids.
+
+```{r}
+df <- df %>% 
+  group_by(word)
+head(df)
+```
+
+## Accumulate
+
+- At long last, we have a description as some numerical data type.
+
+```{r}
+df <- df %>%
+  mutate(total = sum(n))
+head(df)
+```
+
+## Results
+
+- We essential have words by popularity.
+
+```{r}
+df %>% 
+  count(word) %>%
+  arrange(desc(n)) %>% 
+  head(25)
+```
+
+## Join
+
+- Have you seen `LEFT JOIN` in 503 yet?
+- W3
+```
+The LEFT JOIN keyword returns all records from the left table (table1), and the matching records from the right table (table2). The result is 0 records from the right side, if there is no match.
+```
+- G4G
+```
+In SQL, LEFT JOIN retrieves all records from the left table and only the matching records from the right table. When there is no matching record found, NULL values are returned for columns from the right table. This makes LEFT JOIN extremely useful for queries where you need to retain all records from one table, even if there is no corresponding match in the other table.
+```
+
+## IDs
+
+- Keep your ID around...
+  - We are so back.
+
+```{r}
+df <- df %>% 
+  left_join(select(wine, ID, province), by = "ID")
+head(df)
+```
+
+## Use those words!
+
+```{r}
+df %>% 
+  count(province, word) %>%
+  group_by(province) %>% 
+  top_n(5,n) %>% 
+  arrange(province, desc(n)) %>%
+  head()
+```
+
+## Group exercise
+
+Use the top words by province to...
+
+1. Engineer more features that capture the essence of Casablanca, Marlborough and New York
+2. Look for difference between California and Oregon
+3. Use what you find to run naive Bayes models that achieve a Kappa that approaches 0.5
+
+
+## Vocabulary
+
+- Naive Bayes
+- Correlation
+- Residual
+- Kappa
+- Parameter Tuning
+- Conditional Probability
+
+## Stinger
+
+
+```{r}
+#| output-location: slide
+library(scales)
+wtxt <- wine %>% 
+  unnest_tokens(word, description) %>% 
+  anti_join(stop_words) %>% 
+  filter(str_detect(string = word, pattern = "[a-z+]")) %>%  # get rid weird non alphas
+  filter(str_length(word)>3) %>%  # get rid of strings shorter than 3 characters
+  group_by(word) %>% 
+  mutate(total=n()) %>% 
+  ungroup()
+
+wtxt %>% 
+    filter(province=="Oregon" | province=="California") %>% 
+    filter(!(word %in% c("wine","pinot","drink","noir","vineyard","palate","notes","flavors","bottling"))) %>% 
+    filter(total > 400) %>% 
+    group_by(province, word) %>%
+    count() %>% 
+    group_by(province) %>% 
+    mutate(proportion = n / sum(n)) %>% 
+    pivot_wider(id_cols = word, names_from = province, values_from = proportion) %>% 
+    ggplot(aes(x = Oregon, y = California, color = abs(Oregon - California))) +
+    geom_abline(color = "gray40", lty = 2) +
+    geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
+    geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
+    scale_x_log10(labels = percent_format()) +
+    scale_y_log10(labels = percent_format()) +
+    scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+    theme(legend.position="none") +
+    labs(x = "Oregon", y = "California", title = "Words describing Pinot Noir from California and Oregon")
+```
+
+## Stinger
+
+
+```{r}
+#| output-location: slide
+dtxt <- wtxt %>% 
+  filter(province=="Oregon" | province=="California") %>% 
+  filter(!(word %in% c("wine","pinot","drink","noir","vineyard","palate","notes","flavors","bottling","bottle","finish"))) %>% 
+  filter(total > 400) %>% 
+  group_by(province, word) %>%
+  count() %>% 
+  group_by(province) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  pivot_wider(id_cols = word, names_from = province, values_from = proportion) %>% 
+  mutate(diff=Oregon-California) 
+
+dtxt %>%
+  top_n(25, diff) %>%
+  mutate(word = reorder(word, diff)) %>%
+  ggplot(aes(word, diff)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip()
 ```
