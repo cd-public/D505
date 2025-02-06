@@ -62,7 +62,7 @@ library(tidyverse)
 library(caret)
 source('theme.R')
 
-wine <-  read_rds("../resources/pinot.rds") %>% 
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds"))) %>% 
   mutate(province = as.numeric(province=="Oregon")) %>% 
   rowid_to_column("id") %>% 
   select(-taster_name)

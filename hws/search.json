@@ -123,7 +123,7 @@
     "href": "knn.html#feature-engineering",
     "title": "\\(K\\)NN",
     "section": "3. Feature Engineering",
-    "text": "3. Feature Engineering\n\nRemove the taster_name column from the data.\nCreate a version of the year column that is a factor (instead of numeric).\nCreate dummy variables that indicate the presence of “cherry”, “chocolate” and “earth” in the description.\n\n\nTake care to handle upper and lower case characters.\n\n\nCreate 3 new features that represent the interaction between time and the cherry, chocolate and earth inidicators.\nRemove the description column from the data.\n\n\n# your code here"
+    "text": "3. Feature Engineering\n\nCreate a version of the year column that is a factor (instead of numeric).\nCreate dummy variables that indicate the presence of “cherry”, “chocolate” and “earth” in the description.\n\n\nTake care to handle upper and lower case characters.\n\n\nCreate 3 new features that represent the interaction between time and the cherry, chocolate and earth inidicators.\nRemove the description column from the data.\n\n\n# your code here"
   },
   {
     "objectID": "knn.html#preprocessing",
@@ -137,14 +137,14 @@
     "href": "knn.html#running-knn",
     "title": "\\(K\\)NN",
     "section": "5. Running \\(K\\)NN",
-    "text": "5. Running \\(K\\)NN\n\nSplit the dataframe into an 80/20 training and test set\nUse Caret to run a \\(K\\)NN model that uses your engineered features to predict province\n\n\nuse 5-fold cross validated subsampling\nallow Caret to try 15 different values for K\n\n\nDisplay the confusion matrix on the test data"
+    "text": "5. Running \\(K\\)NN\n\nSplit the dataframe into an 80/20 training and test set\nUse Caret to run a \\(K\\)NN model that uses our engineered features to predict province\n\n\nuse 5-fold cross validated subsampling\nallow Caret to try 15 different values for \\(K\\)\n\n\nDisplay the confusion matrix on the test data"
   },
   {
     "objectID": "knn.html#kappa",
     "href": "knn.html#kappa",
     "title": "\\(K\\)NN",
     "section": "6. Kappa",
-    "text": "6. Kappa\nHow do we determine whether a Kappa value is represents a good or bad outcome?\n\nTODO: Explain"
+    "text": "6. Kappa\nHow do we determine whether a Kappa value represents a good, bad or some other outcome?\n\nTODO: Explain"
   },
   {
     "objectID": "knn.html#improvement",

@@ -24,22 +24,41 @@ execute:
 
 ##  Publish
 
-1. An annotated QMD file, and 
-2. The .rds file that it generates, that
+0. Form groups of size 1 to 4, create
+1. An annotated `.*md` file, and 
+2. The .rds/.pickle/.parquet file that it generates, that
 3. Contains *only* the features you want in the model.
 
 Under version control, on GitHub.
 
 ##  Constraints
 
-1. Specify KNN or Naive Bayes and the *exact* values of any tuning parameters.
-2. Run with the following equation: "province ~ ." on your data frame (or the whole data frame in `scikit`)
-3. Use repeated 5-fold cross validation
-4. Use the same index for partitioning training and test sets for every group.
-5. Assignments must be turned in before class.
-6. Bragging rights for highest Kappa.
+I will run:
+1. The specify $K$NN or Naive Bayes model, (say in the .*md)
+2. With: `province ~ .` on your data frame (or the whole data frame in `scikit`)
+3. With repeated 5-fold cross validation
+4. With the same index for partitioning training and test sets for every group.
+5. On whatever is turned in before class.
+6. Bragging rights for highest Kappa
 
-Separate categories for `.py` and `.r` - you may enter both for up to 2x bragging rights.
+## Optional
+
+- Separate categories for `.py` and `.r`
+- The `.py` tooling is stronger but you are getting less training on it.
+- Let me know in advance if you intend to Python, or not.
+
+## Context
+
+- The "final exam" is that during the last class you will present your model results as though you are speaking to the
+managers of a large winery.
+- It should be presented from a Quarto presentation.
+- You must present via the in-room "teaching machine" computer, not your own physical device, to ensure that you are comfortable distributing your findings.
+
+## 10 minutes
+
+- Chat about forming groups
+- Don't need to lock in now if not everyone is here etc.
+- 
 
 # Logistic Regression
 
@@ -47,7 +66,9 @@ Separate categories for `.py` and `.r` - you may enter both for up to 2x braggin
 
 - Assume a linear relationship between the log odds and a set of predictor variables.
 
-$log(\frac{p}{1-p})=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}$
+$$
+log(\frac{p}{1-p})=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}
+$$
 
 With a bit of algebra you can get the probabilities as...
 
@@ -57,24 +78,33 @@ Why do we call this regression instead of classification?
 
 # Implementation with Caret
 
-## (Long) Setup
-```{r setup, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-library(tidyverse)
-library(caret)
-source('theme.R')
+## Libraries Setup
+```{r libs}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(caret))
+sh(library(tidytext))
+sh(library(tidytext))
+sh(library(SnowballC)) # new?
+sh(library(pROC))      # new?
+data(stop_words)
+sh(library(thematic))
+theme_set(theme_dark())
+thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
+```
 
-wine <-  read_rds("../resources/pinot.rds") %>% 
-  mutate(province = as.numeric(province=="Oregon")) %>% 
-  rowid_to_column("id") %>% 
-  select(-taster_name)
+## Dataframe
+
+```{r fg}
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
+names(wine)[names(wine) == 'id'] = 'id'
+```
+
 
 ## create a function to extract words with totals > j
 
-wine_words <- function(df, j = 1000, stem=F){ 
-  library(tidytext)
-  library(SnowballC)
-  data(stop_words)
+```{r wordfunc}
+wine_words <- function(df, j = 1000, stem=F) { 
 
   words <- df %>%
     unnest_tokens(word, description) %>%
@@ -82,15 +112,12 @@ wine_words <- function(df, j = 1000, stem=F){
     filter(!(word %in% c("wine","pinot","vineyard")))
   
   if(stem){
-    words <- words %>% 
-      mutate(word = wordStem(word))
+    words <- words %>% mutate(word = wordStem(word))
   }
   
   words <- words %>% 
     count(id, word) %>% 
-    group_by(id) %>% 
-    mutate(exists = (n>0)) %>% 
-    ungroup %>% 
+    group_by(id) %>% mutate(exists = (n>0)) %>% ungroup %>% 
     group_by(word) %>% 
     mutate(total = sum(n)) %>% 
     filter(total > j) %>% 
@@ -99,14 +126,13 @@ wine_words <- function(df, j = 1000, stem=F){
     drop_na() %>% 
     select(-id)
 }
-
-# create new dataframe with defaults from function
-wino <- wine_words(wine)
 ```
 
 ## Look at the data
 
-```{r}
+```{r w100}
+wino <- wine_words(wine, 500)
+
 wino %>% 
   head(10) %>% 
   select(1:5,province)
@@ -114,8 +140,7 @@ wino %>%
 
 ## Split the data 
 
-```{r warning=F}
-set.seed(504)
+```{r tt100}
 wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
@@ -124,102 +149,100 @@ table(train$province)
 
 ## A basic model
 
-```{r warning=F}
-control <- trainControl(method = "cv", number = 5)
-fit <- train(province ~ .,
-             data = train, 
-             trControl = control,
-             method = "glm",
-             family = "binomial")
+```{r getfit}
+control = trainControl(method = "cv", number = 5)
+get_fit <- function(df) {
+  train(province ~ .,
+        data = df, 
+        trControl = control,
+        method = "multinom",
+        maxit = 5) # speed it up - default 100
+}
+fit <- get_fit(train)
+```
 
-#show the odds ratios for top coefficients
-odds <- exp(coef(fit$finalModel))
-data.frame(name = names(odds), odds = odds) %>%  
-  mutate(probability=odds/(1+odds)) %>% 
-  arrange(desc(odds)) %>% 
+## Check Kappa
+
+```{r}
+fit
+```
+
+## Probability
+
+- See top coefficients
+
+```{r getodds}
+get_odds <- function(fit) {
+  as.data.frame(t(exp(coef(fit$finalModel))))   %>%
+  rownames_to_column(var = "name") %>%
+  pivot_longer(-name, names_to = "class", values_to = "odds") %>%
+  arrange(desc(odds)) %>%
   head()
+}
+get_odds(fit)
 ```
 
 ## Confusion Matrix
 
-```{r}
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
-
-confusionMatrix(factor(pred),factor(test$province))
+```{r getmatrix}
+get_matrix <- function(fit, df) {
+  pred <- factor(predict(fit, newdata = df))
+  confusionMatrix(pred,factor(df$province))
+}
+get_matrix(fit,test)
 ```
 
-Not bad. But what if we increase the number of words used?
+Not bad. But what if we decrease the number of words used?
 
 ## Using more words
 
-```{r}
-set.seed(504)
-wino <- wine_words(wine, j=500)
+```{r w500}
+wino <- wine_words(wine, 1000)
 wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
-fit <- train(province ~ .,
-             data = train, 
-             trControl = control,
-             method = "glm",
-             family = "binomial")
 
-#show the odds ratios for top coefficients
-odds <- exp(coef(fit$finalModel))
-data.frame(name = names(odds), odds = odds) %>%  
-  mutate(probability=odds/(1+odds)) %>% 
-  arrange(desc(odds)) %>% 
-  head()
+fit <- get_fit(train)
 ```
+
+## Check Kappa
+
+```{r}
+fit
+```
+
 
 ## Confusion Matrix
 
-```{r}
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
-
-confusionMatrix(factor(pred),factor(test$province))
+```{r 500matrix}
+get_matrix(fit,test)
 ```
 
 ## Using stems
 
-```{r}
-set.seed(504)
-wino <- wine_words(wine, j=500, stem = T)
+```{r stem}
+wino <- wine_words(wine, 1000, T)
 wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
-fit <- train(province ~ .,
-             data = train, 
-             trControl = control,
-             method = "glm",
-             family = "binomial")
 
-#show the odds ratios for top coefficients
-odds <- exp(coef(fit$finalModel))
-data.frame(name = names(odds), odds = odds) %>%  
-  mutate(probability=odds/(1+odds)) %>% 
-  arrange(desc(odds)) %>% 
-  head()
+fit <- get_fit(train)
+get_odds(fit)
+```
+
+## Check Kappa
+
+```{r}
+fit
 ```
 
 ## Confusion Matrix
 
-```{r}
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
-
-confusionMatrix(factor(pred),factor(test$province))
+```{r stematrix}
+get_matrix(fit,test)
 ```
 
 Even better!
-
-
-# Dinner (and high fives)
-
-![](images/confusion.png)
-
 
 # ROC Curve evaluation
 
@@ -230,14 +253,13 @@ $Sensitivity = \frac{truePos}{allPos} = TruePosRate$
 $Specificity = \frac{trueNeg}{allNeg} = TrueNegRate = 1 - FalsePosRate$
 
 
-```{r}
-library(pROC)
+```{.r}
 myRoc <- roc(test$province, prob)
 plot(myRoc)
 auc(myRoc)
 ```
 
-```{r}
+```{.r}
 labels <- test$province[order(prob, decreasing=TRUE)]
 roc_df <- data.frame(TruePosRate=cumsum(labels)/sum(labels), FalsePosRate=cumsum(!labels)/sum(!labels), labels)
 
@@ -246,11 +268,10 @@ roc_df %>%
 ```
 
 
-```{r}
+```{.r}
 roc_df %>% 
   ggplot(aes(FalsePosRate,TruePosRate))+
   geom_point()
-
 ```
 
 ## Exercise
@@ -262,7 +283,7 @@ roc_df %>%
 
 # Weigted Penalty
 
-```{r}
+```{.r}
 wine = read_rds("../resources/pinot.rds") %>% 
   mutate(province = as.numeric(province=="New_York")) %>% 
   rowid_to_column("id") %>% 
@@ -274,7 +295,7 @@ table(wino$province)
 
 ## Basic model
 
-```{r}
+```{.r}
 fit <- train(province ~ .,
              data = wino, 
              trControl = control,
@@ -291,7 +312,7 @@ confusionMatrix(factor(pred),factor(test$province))
 
 ## Create some weights
 
-```{r}
+```{.r}
 weight_train <- train %>% 
   mutate(weights=if_else(province==1,20,1))
 
@@ -310,7 +331,7 @@ confusionMatrix(factor(pred),factor(test$province))
 ```
 ## Top features
 
-```{r}
+```{.r}
 #show the odds ratios for top coefficients
 odds <- exp(coef(fit$finalModel))
 data.frame(name = names(odds), odds = odds) %>%  
@@ -330,7 +351,7 @@ $\min_{f}\sum_{i=1}^{n}V(f(x_{i}),y_{i})+\lambda R(f)$
 
 The amount of the penalty is fine-tuned using a constant called lambda. When lambda = 0, no penalty is enforced. The best lambda can be found by finding a value that minimizes prediction error after cross validating the model with different values.
 
-```{r}
+```{.r}
 library(glmnet)
 ```
 
@@ -361,7 +382,7 @@ Generally, lasso might perform better in a situation where some of the predictor
 Ridge regression will perform better when the outcome is a function of many predictors, all with coefficients of roughly equal size (James et al. 2014).
 
 
-```{r}
+```{.r}
 wine = read_rds("../resources/pinot.rds") %>% 
   mutate(province = as.numeric(province=="Burgundy")) %>% 
   rowid_to_column("id") %>% 
@@ -390,7 +411,7 @@ exp(coef(fit$finalModel, fit$bestTune$lambda))
 
 ## Confusion Matrix
 
-```{r}
+```{.r}
 prob <- predict(fit, newdata=test)
 pred <- ifelse(prob > 0.5, 1, 0)
 
@@ -399,7 +420,7 @@ confusionMatrix(factor(pred),factor(test$province))
 
 ## ROC Curve
 
-```{r}
+```{.r}
 myRoc <- roc(test$province, prob)
 plot(myRoc)
 auc(myRoc)

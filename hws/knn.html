@@ -4970,15 +4970,14 @@ The following object is masked from &#39;package:purrr&#39;:
 <section id="feature-engineering" class="level2">
 <h2 class="anchored" data-anchor-id="feature-engineering">3. Feature Engineering</h2>
 <ol type="1">
-<li>Remove the taster_name column from the data.</li>
 <li>Create a version of the year column that is a <em>factor</em> (instead of numeric).</li>
 <li>Create dummy variables that indicate the presence of “cherry”, “chocolate” and “earth” in the description.</li>
 </ol>
 <ul>
 <li>Take care to handle upper and lower case characters.</li>
 </ul>
-<ol start="4" type="1">
-<li>Create 3 new features that represent the interaction between time and the cherry, chocolate and earth inidicators.</li>
+<ol start="3" type="1">
+<li>Create 3 new features that represent the interaction between <em>time</em> and the cherry, chocolate and earth inidicators.</li>
 <li>Remove the description column from the data.</li>
 </ol>
 <div class="cell">
@@ -4999,11 +4998,11 @@ The following object is masked from &#39;package:purrr&#39;:
 <h2 class="anchored" data-anchor-id="running-knn">5. Running <span class="math inline">\(K\)</span>NN</h2>
 <ol type="1">
 <li>Split the dataframe into an 80/20 training and test set</li>
-<li>Use Caret to run a <span class="math inline">\(K\)</span>NN model that uses your engineered features to predict province</li>
+<li>Use Caret to run a <span class="math inline">\(K\)</span>NN model that uses our engineered features to predict province</li>
 </ol>
 <ul>
 <li>use 5-fold cross validated subsampling</li>
-<li>allow Caret to try 15 different values for K</li>
+<li>allow Caret to try 15 different values for <span class="math inline">\(K\)</span></li>
 </ul>
 <ol start="3" type="1">
 <li>Display the confusion matrix on the test data</li>
@@ -5011,7 +5010,7 @@ The following object is masked from &#39;package:purrr&#39;:
 </section>
 <section id="kappa" class="level2">
 <h2 class="anchored" data-anchor-id="kappa">6. Kappa</h2>
-<p>How do we determine whether a Kappa value is represents a good or bad outcome?</p>
+<p>How do we determine whether a Kappa value represents a good, bad or some other outcome?</p>
 <blockquote class="blockquote">
 <p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain</em></p>
 </blockquote>
