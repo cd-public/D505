@@ -58,7 +58,7 @@ managers of a large winery.
 
 - Chat about forming groups
 - Don't need to lock in now if not everyone is here etc.
-- 
+- Do need to lock in within the next 168 hours.
 
 # Logistic Regression
 

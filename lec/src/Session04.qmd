@@ -11,11 +11,28 @@ execute:
 
 ## Agenda
 
+0. Group Prep Work
 1. Homework
 3. The Naive Bayes algorithm
 5. Tidy text and bag of words
 6. Group work
 7. Vocabulary
+
+# Groups
+
+## Modeling Dates
+
+- Mar 10
+- Mar 17
+- Apr 28
+
+## Group Preference Form
+
+- Fill [this](https://docs.google.com/forms/d/e/1FAIpQLSfVBSbZkJVT_qnGlDTB2HSE34qOUSoVvPrd7QHZthjTwSHvbA/viewform) out.
+- Full link:
+```email
+https://forms.gle/8yGacsB1BinFVwyM7
+```
 
 # Homework
 
