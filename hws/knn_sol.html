@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your name here!">
+<meta name="author" content="Calvin Deutschbein">
 <meta name="dcterms.date" content="2025-02-10">
 
 <title>KNN</title>
@@ -4895,7 +4895,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Your name here! </p>
+               <p>Calvin Deutschbein </p>
             </div>
     </div>
       
@@ -4936,35 +4936,17 @@ window.Quarto = {
 <section id="setup" class="level1">
 <h1>1. Setup</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: lattice
-
-Attaching package: &#39;caret&#39;
-
-The following object is masked from &#39;package:purrr&#39;:
-
-    lift</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/pinot.rds&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> suppressPackageStartupMessages</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span>(<span class="fu">library</span>(caret))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span>(<span class="fu">library</span>(fastDummies))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span>(<span class="fu">library</span>(class))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">&quot;https://github.com/cd-public/D505/raw/master/dat/pinot.rds&quot;</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="knn-concepts" class="level2">
 <h2 class="anchored" data-anchor-id="knn-concepts">2. <span class="math inline">\(K\)</span>NN Concepts</h2>
 <blockquote class="blockquote">
-<p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain how the choice of K affects the quality of your prediction when using a <span class="math inline">\(K\)</span> Nearest Neighbors algorithm.</em></p>
+<p>Generally we regard selection of appropriate <span class="math inline">\(K\)</span> as similar to the context of precision and recall, discussed in <a href="wine_of_pnw_sol.html">earlier post</a>. However with <span class="math inline">\(K\)</span>NN we have a slightly different trade-off - between <em>bias</em>, where the model is overgeneralized and begins to lose nuance in niche cases, and <em>variance</em>, where a model captures noise within the data set and extrapolates it to the population. Small <span class="math inline">\(K\)</span> values tend to high variance, and larger <span class="math inline">\(K\)</span> values tend to high bias.</p>
 </blockquote>
 </section>
 <section id="feature-engineering" class="level2">
@@ -4981,7 +4963,16 @@ The following object is masked from &#39;package:purrr&#39;:
 <li>Remove the description column from the data.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fct_year =</span> <span class="fu">factor</span>(year)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">description =</span> <span class="fu">tolower</span>(description)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cherry =</span> <span class="fu">str_detect</span>(description, <span class="st">&quot;cherry&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">chocolate =</span> <span class="fu">str_detect</span>(description, <span class="st">&quot;chocolate&quot;</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">earth =</span> <span class="fu">str_detect</span>(description, <span class="st">&quot;earth&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cherry_year =</span> year<span class="sc">*</span>cherry,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">chocolate_year =</span> year<span class="sc">*</span>chocolate,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">earth_year =</span> year<span class="sc">*</span>earth) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="preprocessing" class="level2">
@@ -4991,7 +4982,12 @@ The following object is masked from &#39;package:purrr&#39;:
 <li>Create dummy variables for the <code>year</code> factor column</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wine <span class="ot">&lt;-</span> wine <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">preProcess</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;BoxCox&quot;</span>, <span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(wine) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dummy_cols</span>(<span class="at">select_columns =</span> <span class="st">&quot;fct_year&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">remove_most_frequent_dummy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">remove_selected_columns =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="running-knn" class="level2">
@@ -5007,19 +5003,90 @@ The following object is masked from &#39;package:purrr&#39;:
 <ol start="3" type="1">
 <li>Display the confusion matrix on the test data</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wine<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> wine[split, ]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> wine[<span class="sc">-</span>split, ]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> train, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">&quot;knn&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">metric =</span> <span class="st">&quot;Kappa&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">5</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="fu">predict</span>(fit, test),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               109         23                 3           6        0
+  California              59        675                13          17       15
+  Casablanca_Valley        0          1                 0           0        0
+  Marlborough              0          0                 0           0        0
+  New_York                 0          1                 1           0        2
+  Oregon                  70         91                 9          22        9
+                   Reference
+Prediction          Oregon
+  Burgundy              26
+  California           256
+  Casablanca_Valley      0
+  Marlborough            1
+  New_York               3
+  Oregon               261
+
+Overall Statistics
+                                          
+               Accuracy : 0.6258          
+                 95% CI : (0.6021, 0.6491)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.3794          
+                                          
+ Mcnemar&#39;s Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                  0.45798            0.8534                0.0000000
+Specificity                  0.95958            0.5918                0.9993928
+Pos Pred Value               0.65269            0.6522                0.0000000
+Neg Pred Value               0.91434            0.8182                0.9844498
+Prevalence                   0.14226            0.4728                0.0155409
+Detection Rate               0.06515            0.4035                0.0000000
+Detection Prevalence         0.09982            0.6186                0.0005977
+Balanced Accuracy            0.70878            0.7226                0.4996964
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                   0.0000000        0.076923        0.4771
+Specificity                   0.9993857        0.996964        0.8215
+Pos Pred Value                0.0000000        0.285714        0.5649
+Neg Pred Value                0.9730861        0.985594        0.7638
+Prevalence                    0.0268978        0.015541        0.3270
+Detection Rate                0.0000000        0.001195        0.1560
+Detection Prevalence          0.0005977        0.004184        0.2762
+Balanced Accuracy             0.4996929        0.536944        0.6493</code></pre>
+</div>
+</div>
 </section>
 <section id="kappa" class="level2">
 <h2 class="anchored" data-anchor-id="kappa">6. Kappa</h2>
 <p>How do we determine whether a Kappa value represents a good, bad or some other outcome?</p>
 <blockquote class="blockquote">
-<p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain</em></p>
+<p>In my training, I was taught regard Kappa values as within five “bins”, ranging from “not good” to “suspiciously good”:</p>
+<ul>
+<li>[0.0,0.2): Unusable</li>
+<li>[0.2,0.4): Bad</li>
+<li>[0.4,0.6): Okay</li>
+<li>[0.6,0.8): Excellent</li>
+<li>[0.8,1.0): Suspicious, likely overfit.</li>
+</ul>
 </blockquote>
 </section>
 <section id="improvement" class="level2">
 <h2 class="anchored" data-anchor-id="improvement">7. Improvement</h2>
 <p>How can we interpret the confusion matrix, and how can we improve in our predictions?</p>
 <blockquote class="blockquote">
-<p><span style="color:red;font-weight:bold">TODO</span>: <em>Explain</em></p>
+<p>For me, confusion between specifical Californian and Oregonian wins both jumps out numerical and is consistent with my own understand of the world - Both California and Oregon share a border on the Pacific coast of the United States, and are likely planting in similar volcanic soil in the temperate climate zones. They likely even experience similar rainfall! To differentiate specifically these two easily confusable wins, I think I should look into dedicated features that specifical capture the essense of the <em>difference</em> between California and Oregonian wins. Secondly, I notes that almost no wins are predicted to be in Marlborough or Casablanca - which isn’t too surprising with a <span class="math inline">\(K\)</span> getting pretty close to the number of wines from those regions as a whole! I would need either more data or more advanced numerical techniques to differentiate wines within in regions from the overwhelming popular California and Oregon wines.</p>
 </blockquote>
 
 
