@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.30">
+
+  <meta name="author" content="Jameson > Hendrik > Calvin">
+  <title>Decision Trees</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-ffcbf325be4bf09b74891d05b29692c2.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Decision Trees</h1>
+  <p class="subtitle">Applied Machine Learning</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Jameson &gt; Hendrik &gt; Calvin 
+</div>
+</div>
+</div>
+
+</section>
+<section>
+<section id="midterm-33" class="title-slide slide level1 center">
+<h1>Midterm 3/3</h1>
+
+</section>
+<section id="brief-recap-of-course-so-far" class="slide level2 smaller">
+<h2>Brief recap of course so far</h2>
+<ul>
+<li>Linear regression (e.g.&nbsp;<code>lprice ~ .</code>), assumptions of model, interpretation.</li>
+<li><span class="math inline">\(K\)</span>-NN (e.g., <code>province ~ .</code>), multi-class supervised classification. Hyperparameter <span class="math inline">\(k\)</span>.</li>
+<li>Naive Bayes (e.g., <code>province ~ .</code>), multi-class supervised classification.</li>
+<li>Logistic regression (e.g., <code>province=="Oregon" ~ .</code>), binary supervised classification. Elastic net.</li>
+<li>Feature engineering (logarithms, center/scaling, Box Cox, tidytext, etc.).</li>
+<li>Feature selection (correlation, linear / logistic coefficients, frequent words, frequent words by class, etc.).</li>
+</ul>
+</section>
+<section id="modality-discussion" class="slide level2">
+<h2>Modality Discussion</h2>
+<ul>
+<li>I would release an assignment electronically a 6 PM</li>
+<li>We can do in person or otherwise.</li>
+<li>It will be “cheat proof”
+<ul>
+<li>I will ask you nothing for which it matters how you determine the answer.</li>
+<li>If e.g.&nbsp;ChatGPT can be mind controlled into doing high quality feature engineering, you get points for mind controlling ChatGPT.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="first-model-due-310" class="title-slide slide level1 center">
+<h1>First Model Due 3/10</h1>
+
+</section>
+<section id="publish" class="slide level2">
+<h2>Publish</h2>
+<ul>
+<li>Each group should create:</li>
+</ul>
+<ol type="1">
+<li>An annotated <code>.*md</code> file, and</li>
+<li>The .rds/.pickle/.parquet file that it generates, that</li>
+<li>Contains <em>only</em> the features you want in the model.</li>
+</ol>
+<ul>
+<li>Under version control, on GitHub.</li>
+</ul>
+</section>
+<section id="constraints" class="slide level2">
+<h2>Constraints</h2>
+<ul>
+<li>I will run:</li>
+</ul>
+<ol type="1">
+<li>The specified <span class="math inline">\(K\)</span>NN or Naive Bayes model,</li>
+<li>With: <code>province ~ .</code> (or the whole data frame in <code>scikit</code>)</li>
+<li>With repeated 5-fold cross validation</li>
+<li>With the same index for partitioning training and test sets for every group.</li>
+<li>On whatever is turned in before class.</li>
+<li>Bragging rights for highest Kappa</li>
+</ol>
+</section>
+<section id="context" class="slide level2">
+<h2>Context</h2>
+<ul>
+<li>The “final exam” is that during the last class you will present your model results as though you are speaking to the managers of a large winery.</li>
+<li>It should be presented from a Quarto presentation on GitHub or perhaps e.g.&nbsp;RPubs.</li>
+<li>You must present via the in-room “teaching machine” computer, not your own physical device, to ensure that you are comfortable distributing your findings.</li>
+</ul>
+</section>
+<section id="group-meetings" class="slide level2">
+<h2>Group Meetings</h2>
+<ul>
+<li>You should have a group assignment</li>
+<li>Meet in your groups!</li>
+<li>Talk about your homework <em>with</em> your group.</li>
+</ul>
+</section></section>
+<section id="agenda" class="title-slide slide level1 center">
+<h1>Agenda</h1>
+<ol type="1">
+<li>Decision-trees</li>
+<li>Weighted models (revisited)</li>
+<li>Random forests</li>
+<li>Bagged models</li>
+<li>Group work</li>
+</ol>
+</section>
+
+<section>
+<section id="decision-trees" class="title-slide slide level1 center">
+<h1>Decision trees</h1>
+
+</section>
+<section id="libraries-setup" class="slide level2">
+<h2>Libraries Setup</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>sh <span class="ot">&lt;-</span> suppressPackageStartupMessages</span>
+<span id="cb1-2"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb1-3"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(caret))</span>
+<span id="cb1-4"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(tidytext))</span>
+<span id="cb1-5"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(SnowballC))</span>
+<span id="cb1-6"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(rpart)) <span class="co"># New?</span></span>
+<span id="cb1-7"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(randomForest)) <span class="co"># New?</span></span>
+<span id="cb1-8"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(doParallel)) <span class="co"># New?</span></span>
+<span id="cb1-9"><a></a><span class="fu">data</span>(stop_words)</span>
+<span id="cb1-10"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(thematic))</span>
+<span id="cb1-11"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
+<span id="cb1-12"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dataframe" class="slide level2">
+<h2>Dataframe</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot.rds"</span>)))</span>
+<span id="cb2-2"><a></a><span class="fu">names</span>(wine)[<span class="fu">names</span>(wine) <span class="sc">==</span> <span class="st">'id'</span>] <span class="ot">=</span> <span class="st">'id'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="wine-words" class="slide level2">
+<h2>Wine Words</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>wine_words <span class="ot">&lt;-</span> <span class="cf">function</span>(df, j, stem){ </span>
+<span id="cb3-2"><a></a>  words <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a></a>    <span class="fu">unnest_tokens</span>(word, description) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a></a>    <span class="fu">anti_join</span>(stop_words) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a></a>    <span class="fu">filter</span>(<span class="sc">!</span>(word <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"wine"</span>,<span class="st">"pinot"</span>,<span class="st">"vineyard"</span>)))</span>
+<span id="cb3-6"><a></a>  </span>
+<span id="cb3-7"><a></a>  <span class="cf">if</span>(stem){</span>
+<span id="cb3-8"><a></a>    words <span class="ot">&lt;-</span> words <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">wordStem</span>(word))</span>
+<span id="cb3-9"><a></a>  }</span>
+<span id="cb3-10"><a></a>  </span>
+<span id="cb3-11"><a></a>  words <span class="sc">%&gt;%</span> <span class="fu">count</span>(id, word) <span class="sc">%&gt;%</span>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">exists =</span> (n<span class="sc">&gt;</span><span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a></a>    ungroup <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(word) <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(total <span class="sc">&gt;</span> j) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-13"><a></a>    <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> id, <span class="at">names_from =</span> word, <span class="at">values_from =</span> exists, <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">exists=</span><span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a></a>    <span class="fu">right_join</span>(<span class="fu">select</span>(df,id,province)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>province, <span class="sc">~</span><span class="fu">replace_na</span>(.x, F)))</span>
+<span id="cb3-15"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="make-wino" class="slide level2">
+<h2>Make Wino</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">2000</span>, F) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a></a>  <span class="fu">filter</span>(province <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Oregon"</span>,<span class="st">"California"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a></a>  <span class="fu">arrange</span>(province)</span>
+<span id="cb4-4"><a></a></span>
+<span id="cb4-5"><a></a>wino</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6,696 × 8
+   fruit flavors tannins palate black cherry red   province  
+   &lt;lgl&gt; &lt;lgl&gt;   &lt;lgl&gt;   &lt;lgl&gt;  &lt;lgl&gt; &lt;lgl&gt;  &lt;lgl&gt; &lt;chr&gt;     
+ 1 FALSE FALSE   FALSE   TRUE   FALSE FALSE  FALSE California
+ 2 FALSE TRUE    FALSE   FALSE  TRUE  TRUE   FALSE California
+ 3 TRUE  FALSE   FALSE   FALSE  FALSE FALSE  TRUE  California
+ 4 FALSE TRUE    FALSE   FALSE  FALSE TRUE   FALSE California
+ 5 FALSE FALSE   FALSE   FALSE  FALSE TRUE   TRUE  California
+ 6 FALSE FALSE   FALSE   FALSE  FALSE TRUE   TRUE  California
+ 7 TRUE  TRUE    FALSE   TRUE   FALSE FALSE  FALSE California
+ 8 TRUE  FALSE   FALSE   TRUE   FALSE FALSE  FALSE California
+ 9 FALSE FALSE   FALSE   TRUE   TRUE  TRUE   TRUE  California
+10 FALSE TRUE    FALSE   TRUE   FALSE FALSE  FALSE California
+# ℹ 6,686 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="algorithm" class="slide level2">
+<h2>Algorithm</h2>
+<ol type="1">
+<li>Select the best attribute -&gt; <span class="math inline">\(A\)</span></li>
+<li>Assign <span class="math inline">\(A\)</span> as the decision attribute (test case) for the <code>NODE</code>.</li>
+<li>For each value of <span class="math inline">\(a \in A\)</span>, create a new descendant of the <code>NODE</code>.</li>
+<li>Sort the training examples to the appropriate descendant node leaf.</li>
+<li>If examples are perfectly classified, then <code>STOP</code> else iterate over the new leaf nodes.</li>
+</ol>
+</section>
+<section id="visualize" class="slide level2">
+<h2>Visualize</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/8/87/Beachdecisiontree.png" class="r-stretch"></section>
+<section id="in-practice" class="slide level2">
+<h2>In practice</h2>
+<ul>
+<li>Where are going on vacation?
+<ul>
+<li>If top 25 city in US, say city.
+<ul>
+<li>Chicago</li>
+</ul></li>
+<li>If US but not top 25 city, say state.
+<ul>
+<li>Utah</li>
+</ul></li>
+<li>If not US, say nation-state.
+<ul>
+<li>Colombia</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="information-gain" class="slide level2">
+<h2>Information Gain</h2>
+<ul>
+<li>The of a piece of information is how “surprising” it is.</li>
+<li>In sports, perhaps, wins above replacement.</li>
+<li>In grades, perhaps, standard deviations above the mean</li>
+<li>In weather, perhaps, date of a rainstorm in desert vs in rainforest.</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<ul>
+<li>I tell you 123456 is <em>not</em> going to win the lottery
+<ul>
+<li>Very little information, and very unsurprising.</li>
+</ul></li>
+<li>If I tell you 123456 <em>will</em> win the lottery
+<ul>
+<li>Very high information, very surprising.</li>
+</ul></li>
+</ul>
+</section>
+<section id="formula" class="slide level2">
+<h2>Formula</h2>
+<p><span class="math display">\[
+I(p) = \log \left(\frac{1}{p}\right)
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(p = 1\)</span>, information is <span class="math inline">\(0\)</span></li>
+<li>As <span class="math inline">\(p\)</span> becomes small, <span class="math inline">\(I(p)\)</span> grows.</li>
+</ul>
+</section>
+<section id="datasets" class="slide level2">
+<h2>Datasets</h2>
+<ul>
+<li>The <strong>entropy</strong> of a dataset is its “average information content”:</li>
+</ul>
+<p><span class="math display">\[
+{\rm Entropy}=\sum_{i=1}(p_i)\log\left(\frac{1}{p_i}\right) = \sum - p_i\log(p_i)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(p\)</span> is the proportion of the class under consideration.</li>
+<li>If we have only one category, then <span class="math inline">\(p_i = 1\)</span> and entropy is 0 (no “disorder”).</li>
+</ul>
+</section>
+<section id="samples" class="slide level2">
+<h2>Samples</h2>
+<ul>
+<li>It rains 36 days per year in Phoenix.</li>
+<li>There are exactly 360 days per year <a href="https://en.wikipedia.org/wiki/360-day_calendar">src</a></li>
+<li>The “parent” node decides if a day rains, or not, and sends to other decision makers.
+<ul>
+<li><span class="math inline">\(p_0 = .9\)</span>: No rain.</li>
+<li><span class="math inline">\(p_1 = .1\)</span>: Yes rain.</li>
+</ul></li>
+</ul>
+</section>
+<section id="entropy-calculation" class="slide level2">
+<h2>Entropy Calculation</h2>
+<p><span class="math display">\[
+\begin{align}
+{\rm Entropy} &amp;= \sum - p_i\log(p_i) \\
+&amp;= -.9 * \log(.9) -.1 * \log(.1)
+\end{align}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>entropy <span class="ot">&lt;-</span> <span class="sc">-</span>.<span class="dv">9</span> <span class="sc">*</span> <span class="fu">log</span>(.<span class="dv">9</span>) <span class="sc">-</span>.<span class="dv">1</span> <span class="sc">*</span> <span class="fu">log</span>(.<span class="dv">1</span>)</span>
+<span id="cb6-2"><a></a>entropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.325083</code></pre>
+</div>
+</div>
+</section>
+<section id="portland" class="slide level2">
+<h2>Portland</h2>
+<ul>
+<li>In Portland it rains 153-164 days a year.
+<ul>
+<li>That is exactly half of 365</li>
+<li>(Don’t check)</li>
+</ul></li>
+</ul>
+</section>
+<section id="entropy-calculation-1" class="slide level2">
+<h2>Entropy Calculation</h2>
+<p><span class="math display">\[
+\begin{align}
+{\rm Entropy} &amp;= \sum - p_i\log(p_i) \\
+&amp;= -.5 * \log(.5) -.5 * \log(.5)  \\
+&amp;= -\log(.5)
+\end{align}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>entropy <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(.<span class="dv">5</span>)</span>
+<span id="cb8-2"><a></a>entropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6931472</code></pre>
+</div>
+</div>
+</section>
+<section id="surpised" class="slide level2">
+<h2>Surpised?</h2>
+<ul>
+<li>It is more suprising to correctly guess half of days than correctly guess one tenth of days.</li>
+</ul>
+</section>
+<section id="optimize" class="slide level2">
+<h2>Optimize</h2>
+<ul>
+<li>A decision tree looks to determine the optimal binary split</li>
+<li>Said split maximizes <em>information gain</em>:
+<ul>
+<li>The entropy of the parent, less</li>
+<li>The entropy of the child nodes
+<ul>
+<li>Averaged</li>
+</ul></li>
+</ul></li>
+<li>Say probability of snow given precipitation</li>
+</ul>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<ul>
+<li>Say we wish to classify wines by province.
+<ul>
+<li>We could first see if they are fruity
+<ul>
+<li>“fruit” <span class="math inline">\(\in\)</span> <code>desc</code></li>
+</ul></li>
+<li>We could first see if they are tannic.
+<ul>
+<li>“tanni” <span class="math inline">\(\in\)</span> <code>desc</code></li>
+</ul></li>
+</ul></li>
+<li>Which is better?</li>
+</ul>
+</section>
+<section id="split-the-data" class="slide level2">
+<h2>Split the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-2"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb10-3"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb10-4"><a></a></span>
+<span id="cb10-5"><a></a><span class="fu">table</span>(train<span class="sc">$</span>province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+California     Oregon 
+      3168       2190 </code></pre>
+</div>
+</div>
+</section>
+<section id="fit-a-basic-model" class="slide level2">
+<h2>Fit a basic model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>ctrl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>)</span>
+<span id="cb12-2"><a></a></span>
+<span id="cb12-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb12-4"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb12-5"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb12-6"><a></a>             <span class="at">trControl =</span> ctrl,</span>
+<span id="cb12-7"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>)</span>
+<span id="cb12-8"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n= 5358 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 5358 2190 California (0.5912654 0.4087346)  
+   2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
+   3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
+     6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983) *
+     7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
+      14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864) *
+      15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134) *</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb14-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        705    271
+  Oregon             86    276
+                                          
+               Accuracy : 0.7332          
+                 95% CI : (0.7086, 0.7567)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.4176          
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.8913          
+            Specificity : 0.5046          
+         Pos Pred Value : 0.7223          
+         Neg Pred Value : 0.7624          
+             Prevalence : 0.5912          
+         Detection Rate : 0.5269          
+   Detection Prevalence : 0.7294          
+      Balanced Accuracy : 0.6979          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="lets-tune" class="slide level2">
+<h2>Let’s tune</h2>
+<ul>
+<li>By setting a tune control we can try more trees.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb16-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb16-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb16-4"><a></a>             <span class="at">trControl =</span> ctrl,</span>
+<span id="cb16-5"><a></a>             <span class="at">tuneLength =</span> <span class="dv">15</span>,</span>
+<span id="cb16-6"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>)</span>
+<span id="cb16-7"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n= 5358 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+  1) root 5358 2190 California (0.5912654 0.4087346)  
+    2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
+    3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
+      6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983)  
+       12) cherryTRUE&gt;=0.5 930  226 California (0.7569892 0.2430108) *
+       13) cherryTRUE&lt; 0.5 1085  473 California (0.5640553 0.4359447)  
+         26) blackTRUE&gt;=0.5 190   33 California (0.8263158 0.1736842) *
+         27) blackTRUE&lt; 0.5 895  440 California (0.5083799 0.4916201)  
+           54) flavorsTRUE&lt; 0.5 571  241 California (0.5779335 0.4220665)  
+            108) redTRUE&lt; 0.5 485  187 California (0.6144330 0.3855670)  
+              216) tanninsTRUE&lt; 0.5 419  149 California (0.6443914 0.3556086) *
+              217) tanninsTRUE&gt;=0.5 66   28 Oregon (0.4242424 0.5757576) *
+            109) redTRUE&gt;=0.5 86   32 Oregon (0.3720930 0.6279070) *
+           55) flavorsTRUE&gt;=0.5 324  125 Oregon (0.3858025 0.6141975) *
+      7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
+       14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864)  
+         28) cherryTRUE&gt;=0.5 109   30 California (0.7247706 0.2752294) *
+         29) cherryTRUE&lt; 0.5 170   85 California (0.5000000 0.5000000)  
+           58) blackTRUE&gt;=0.5 18    3 California (0.8333333 0.1666667) *
+           59) blackTRUE&lt; 0.5 152   70 Oregon (0.4605263 0.5394737) *
+       15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134)  
+         30) blackTRUE&gt;=0.5 319  143 Oregon (0.4482759 0.5517241)  
+           60) cherryTRUE&lt; 0.5 91   28 California (0.6923077 0.3076923) *
+           61) cherryTRUE&gt;=0.5 228   80 Oregon (0.3508772 0.6491228)  
+            122) flavorsTRUE&gt;=0.5 88   35 Oregon (0.3977273 0.6022727)  
+              244) tanninsTRUE&gt;=0.5 22    9 California (0.5909091 0.4090909) *
+              245) tanninsTRUE&lt; 0.5 66   22 Oregon (0.3333333 0.6666667) *
+            123) flavorsTRUE&lt; 0.5 140   45 Oregon (0.3214286 0.6785714) *
+         31) blackTRUE&lt; 0.5 1303  298 Oregon (0.2287030 0.7712970) *</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-1" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb18-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        640    174
+  Oregon            151    373
+                                          
+               Accuracy : 0.7571          
+                 95% CI : (0.7332, 0.7799)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.4942          
+                                          
+ Mcnemar's Test P-Value : 0.2223          
+                                          
+            Sensitivity : 0.8091          
+            Specificity : 0.6819          
+         Pos Pred Value : 0.7862          
+         Neg Pred Value : 0.7118          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4783          
+   Detection Prevalence : 0.6084          
+      Balanced Accuracy : 0.7455          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+<ul>
+<li>Kappa 0.3538 -&gt; 0.4668</li>
+<li>Mostly by finding more Oregon wines.</li>
+</ul>
+</section>
+<section id="variable-importance" class="slide level2">
+<h2>Variable Importance</h2>
+<ul>
+<li>Permutation importance</li>
+<li>Average split quality</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>fit<span class="sc">$</span>finalModel<span class="sc">$</span>variable.importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> palateTRUE   fruitTRUE   blackTRUE  cherryTRUE     redTRUE flavorsTRUE 
+  295.18088   219.35139    72.24610    59.15589    56.38056    16.92861 
+tanninsTRUE 
+   14.87028 </code></pre>
+</div>
+</div>
+</section>
+<section id="potential-overfitting" class="slide level2">
+<h2>Potential Overfitting</h2>
+<ul>
+<li><p>Should we prune on…</p>
+<ul>
+<li>Depth?</li>
+<li>Class size?</li>
+<li>Complexity?</li>
+<li>Minimum Information Gain?</li>
+</ul></li>
+</ul>
+</section>
+<section id="weighted-models" class="slide level2">
+<h2>Weighted Models</h2>
+<ul>
+<li>Remember weights?
+<ul>
+<li>California is TOO BIG</li>
+<li>Repeal Prop 13</li>
+</ul></li>
+<li>Where do these weights come from?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>weight_train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a></a>  <span class="fu">mutate</span>(<span class="at">weights=</span><span class="fu">case_when</span>(</span>
+<span id="cb22-3"><a></a>    province<span class="sc">==</span><span class="st">"Burgundy"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb22-4"><a></a>    province<span class="sc">==</span><span class="st">"California"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb22-5"><a></a>    province<span class="sc">==</span><span class="st">"Casablanca_Valley"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
+<span id="cb22-6"><a></a>    province<span class="sc">==</span><span class="st">"Marlborough"</span> <span class="sc">~</span> <span class="fl">18.5</span>,</span>
+<span id="cb22-7"><a></a>    province<span class="sc">==</span><span class="st">"New_York"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
+<span id="cb22-8"><a></a>    province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">~</span> <span class="fl">1.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="progressive-overload" class="slide level2">
+<h2>Progressive overload</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb23-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb23-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb23-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
+<span id="cb23-5"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights,</span>
+<span id="cb23-6"><a></a>             <span class="at">trControl =</span> ctrl)</span>
+<span id="cb23-7"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n= 5358 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+  1) root 5358 3066.0 California (0.50818094 0.49181906)  
+    2) palateTRUE&gt;=0.5 1442  273.0 California (0.82039474 0.17960526)  
+      4) blackTRUE&gt;=0.5 519   37.8 California (0.92865232 0.07134768) *
+      5) blackTRUE&lt; 0.5 923  235.2 California (0.76247223 0.23752777)  
+       10) redTRUE&gt;=0.5 239   25.2 California (0.89764419 0.10235581) *
+       11) redTRUE&lt; 0.5 684  210.0 California (0.71774194 0.28225806)  
+         22) fruitTRUE&lt; 0.5 446   98.0 California (0.79324895 0.20675105)  
+           44) flavorsTRUE&lt; 0.5 302   57.4 California (0.81972362 0.18027638) *
+           45) flavorsTRUE&gt;=0.5 144   40.6 California (0.73907455 0.26092545) *
+         23) fruitTRUE&gt;=0.5 238  112.0 California (0.58518519 0.41481481)  
+           46) cherryTRUE&lt; 0.5 153   61.6 California (0.63892145 0.36107855)  
+             92) flavorsTRUE&lt; 0.5 110   36.4 California (0.69767442 0.30232558) *
+             93) flavorsTRUE&gt;=0.5 43   25.0 Oregon (0.49800797 0.50199203) *
+           47) cherryTRUE&gt;=0.5 85   49.0 Oregon (0.49295775 0.50704225)  
+             94) flavorsTRUE&gt;=0.5 25   12.6 California (0.55944056 0.44055944) *
+             95) flavorsTRUE&lt; 0.5 60   33.0 Oregon (0.46610169 0.53389831) *
+    3) palateTRUE&lt; 0.5 3916 1921.0 Oregon (0.40750955 0.59249045)  
+      6) fruitTRUE&lt; 0.5 2015  978.6 California (0.57352044 0.42647956)  
+       12) cherryTRUE&gt;=0.5 930  316.4 California (0.68992552 0.31007448)  
+         24) flavorsTRUE&lt; 0.5 550  119.0 California (0.79623288 0.20376712)  
+           48) redTRUE&gt;=0.5 93   11.2 California (0.88357588 0.11642412)  
+             96) tanninsTRUE&gt;=0.5 9    0.0 California (1.00000000 0.00000000) *
+             97) tanninsTRUE&lt; 0.5 84   11.2 California (0.87155963 0.12844037)  
+              194) blackTRUE&gt;=0.5 16    1.4 California (0.91463415 0.08536585) *
+              195) blackTRUE&lt; 0.5 68    9.8 California (0.86158192 0.13841808) *
+           49) redTRUE&lt; 0.5 457  107.8 California (0.77900779 0.22099221)  
+             98) blackTRUE&lt; 0.5 276   61.6 California (0.79019074 0.20980926) *
+             99) blackTRUE&gt;=0.5 181   46.2 California (0.76210093 0.23789907) *
+         25) flavorsTRUE&gt;=0.5 380  197.4 California (0.54766269 0.45233731)  
+           50) redTRUE&gt;=0.5 70   16.8 California (0.77540107 0.22459893) *
+           51) redTRUE&lt; 0.5 310  180.6 California (0.50055310 0.49944690)  
+            102) blackTRUE&gt;=0.5 115   57.4 California (0.56316591 0.43683409) *
+            103) blackTRUE&lt; 0.5 195  107.0 Oregon (0.46481321 0.53518679)  
+              206) tanninsTRUE&gt;=0.5 28   14.0 California (0.56250000 0.43750000) *
+              207) tanninsTRUE&lt; 0.5 167   89.0 Oregon (0.44904137 0.55095863) *
+       13) cherryTRUE&lt; 0.5 1085  612.0 Oregon (0.48030137 0.51969863)  
+         26) blackTRUE&gt;=0.5 190   46.2 California (0.77263780 0.22736220) *
+         27) blackTRUE&lt; 0.5 895  455.0 Oregon (0.42483660 0.57516340)  
+           54) flavorsTRUE&lt; 0.5 571  330.0 Oregon (0.49445610 0.50554390)  
+            108) redTRUE&lt; 0.5 485  261.8 California (0.53233298 0.46766702)  
+              216) tanninsTRUE&lt; 0.5 419  208.6 California (0.56414542 0.43585458) *
+              217) tanninsTRUE&gt;=0.5 66   28.0 Oregon (0.34482759 0.65517241) *
+            109) redTRUE&gt;=0.5 86   32.0 Oregon (0.29739777 0.70260223) *
+           55) flavorsTRUE&gt;=0.5 324  125.0 Oregon (0.30971259 0.69028741) *
+      7) fruitTRUE&gt;=0.5 1901  605.0 Oregon (0.25006200 0.74993800)  
+       14) redTRUE&gt;=0.5 279  161.0 California (0.50461538 0.49538462)  
+         28) cherryTRUE&gt;=0.5 109   42.0 California (0.65289256 0.34710744)  
+           56) flavorsTRUE&gt;=0.5 44   11.2 California (0.76271186 0.23728814)  
+            112) tanninsTRUE&gt;=0.5 17    1.4 California (0.91954023 0.08045977) *
+            113) tanninsTRUE&lt; 0.5 27    9.8 California (0.67114094 0.32885906) *
+           57) flavorsTRUE&lt; 0.5 65   30.8 California (0.58265583 0.41734417)  
+            114) tanninsTRUE&lt; 0.5 57   25.2 California (0.60747664 0.39252336) *
+            115) tanninsTRUE&gt;=0.5 8    4.0 Oregon (0.41666667 0.58333333) *
+         29) cherryTRUE&lt; 0.5 170   85.0 Oregon (0.41666667 0.58333333)  
+           58) blackTRUE&gt;=0.5 18    4.2 California (0.78125000 0.21875000) *
+           59) blackTRUE&lt; 0.5 152   70.0 Oregon (0.37878788 0.62121212) *
+       15) redTRUE&lt; 0.5 1622  441.0 Oregon (0.21056150 0.78943850)  
+         30) blackTRUE&gt;=0.5 319  143.0 Oregon (0.36723164 0.63276836)  
+           60) cherryTRUE&lt; 0.5 91   39.2 California (0.61643836 0.38356164)  
+            120) flavorsTRUE&lt; 0.5 57   18.2 California (0.70739550 0.29260450) *
+            121) flavorsTRUE&gt;=0.5 34   19.0 Oregon (0.47500000 0.52500000)  
+              242) tanninsTRUE&gt;=0.5 10    5.6 California (0.51724138 0.48275862) *
+              243) tanninsTRUE&lt; 0.5 24   13.0 Oregon (0.45774648 0.54225352) *
+           61) cherryTRUE&gt;=0.5 228   80.0 Oregon (0.27855153 0.72144847)  
+            122) flavorsTRUE&gt;=0.5 88   35.0 Oregon (0.32051282 0.67948718)  
+              244) tanninsTRUE&gt;=0.5 22   12.6 California (0.50781250 0.49218750) *
+              245) tanninsTRUE&lt; 0.5 66   22.0 Oregon (0.26315789 0.73684211) *
+            123) flavorsTRUE&lt; 0.5 140   45.0 Oregon (0.25280899 0.74719101)  
+              246) tanninsTRUE&lt; 0.5 104   36.0 Oregon (0.27439024 0.72560976) *
+              247) tanninsTRUE&gt;=0.5 36    9.0 Oregon (0.19230769 0.80769231) *
+         31) blackTRUE&lt; 0.5 1303  298.0 Oregon (0.17478006 0.82521994) *</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-2" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb25-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        606    143
+  Oregon            185    404
+                                          
+               Accuracy : 0.7549          
+                 95% CI : (0.7309, 0.7777)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt; 2e-16         
+                                          
+                  Kappa : 0.4988          
+                                          
+ Mcnemar's Test P-Value : 0.02358         
+                                          
+            Sensitivity : 0.7661          
+            Specificity : 0.7386          
+         Pos Pred Value : 0.8091          
+         Neg Pred Value : 0.6859          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4529          
+   Detection Prevalence : 0.5598          
+      Balanced Accuracy : 0.7523          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="tune-grids" class="slide level2">
+<h2>Tune grids</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a>hyperparam_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">cp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>))</span>
+<span id="cb27-2"><a></a></span>
+<span id="cb27-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb27-4"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb27-5"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb27-6"><a></a>             <span class="at">trControl =</span> ctrl,</span>
+<span id="cb27-7"><a></a>             <span class="at">tuneGrid =</span> hyperparam_grid,</span>
+<span id="cb27-8"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>)</span>
+<span id="cb27-9"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n= 5358 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+  1) root 5358 2190 California (0.5912654 0.4087346)  
+    2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
+    3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
+      6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983)  
+       12) cherryTRUE&gt;=0.5 930  226 California (0.7569892 0.2430108) *
+       13) cherryTRUE&lt; 0.5 1085  473 California (0.5640553 0.4359447)  
+         26) blackTRUE&gt;=0.5 190   33 California (0.8263158 0.1736842) *
+         27) blackTRUE&lt; 0.5 895  440 California (0.5083799 0.4916201)  
+           54) flavorsTRUE&lt; 0.5 571  241 California (0.5779335 0.4220665)  
+            108) redTRUE&lt; 0.5 485  187 California (0.6144330 0.3855670)  
+              216) tanninsTRUE&lt; 0.5 419  149 California (0.6443914 0.3556086) *
+              217) tanninsTRUE&gt;=0.5 66   28 Oregon (0.4242424 0.5757576) *
+            109) redTRUE&gt;=0.5 86   32 Oregon (0.3720930 0.6279070) *
+           55) flavorsTRUE&gt;=0.5 324  125 Oregon (0.3858025 0.6141975) *
+      7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
+       14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864)  
+         28) cherryTRUE&gt;=0.5 109   30 California (0.7247706 0.2752294) *
+         29) cherryTRUE&lt; 0.5 170   85 California (0.5000000 0.5000000)  
+           58) blackTRUE&gt;=0.5 18    3 California (0.8333333 0.1666667) *
+           59) blackTRUE&lt; 0.5 152   70 Oregon (0.4605263 0.5394737) *
+       15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134)  
+         30) blackTRUE&gt;=0.5 319  143 Oregon (0.4482759 0.5517241)  
+           60) cherryTRUE&lt; 0.5 91   28 California (0.6923077 0.3076923) *
+           61) cherryTRUE&gt;=0.5 228   80 Oregon (0.3508772 0.6491228)  
+            122) flavorsTRUE&gt;=0.5 88   35 Oregon (0.3977273 0.6022727)  
+              244) tanninsTRUE&gt;=0.5 22    9 California (0.5909091 0.4090909) *
+              245) tanninsTRUE&lt; 0.5 66   22 Oregon (0.3333333 0.6666667) *
+            123) flavorsTRUE&lt; 0.5 140   45 Oregon (0.3214286 0.6785714) *
+         31) blackTRUE&lt; 0.5 1303  298 Oregon (0.2287030 0.7712970) *</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-3" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb29-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        640    174
+  Oregon            151    373
+                                          
+               Accuracy : 0.7571          
+                 95% CI : (0.7332, 0.7799)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.4942          
+                                          
+ Mcnemar's Test P-Value : 0.2223          
+                                          
+            Sensitivity : 0.8091          
+            Specificity : 0.6819          
+         Pos Pred Value : 0.7862          
+         Neg Pred Value : 0.7118          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4783          
+   Detection Prevalence : 0.6084          
+      Balanced Accuracy : 0.7455          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise?</h2>
+<ul>
+<li>Can you try to <em>overfit</em> as much as possible?
+<ul>
+<li>Set <code>cp = 0</code>,</li>
+<li>Generate tons of features,</li>
+<li>See how out of sample performance is?</li>
+</ul></li>
+<li><code>cp</code> = complexity parameter.</li>
+<li>Solution on next slide, more or less.</li>
+</ul>
+</section>
+<section id="solution" class="slide level2">
+<h2>Solution</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb31-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb31-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb31-4"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method=</span><span class="st">"none"</span>),</span>
+<span id="cb31-5"><a></a>             <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">cp =</span> <span class="dv">0</span>))</span>
+<span id="cb31-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CART 
+
+5358 samples
+   7 predictor
+   2 classes: 'California', 'Oregon' 
+
+No pre-processing
+Resampling: None </code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-4" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb33-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        640    174
+  Oregon            151    373
+                                          
+               Accuracy : 0.7571          
+                 95% CI : (0.7332, 0.7799)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.4942          
+                                          
+ Mcnemar's Test P-Value : 0.2223          
+                                          
+            Sensitivity : 0.8091          
+            Specificity : 0.6819          
+         Pos Pred Value : 0.7862          
+         Neg Pred Value : 0.7118          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4783          
+   Detection Prevalence : 0.6084          
+      Balanced Accuracy : 0.7455          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="variance" class="title-slide slide level1 center">
+<h1>Variance</h1>
+<p><a href="Understanding the Bias-Variance Tradeoff">Understanding the Bias-Variance Tradeoff by Scott Fortman-Roe</a></p>
+<table class="caption-top" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th"></td>
+<td>Low Variance</td>
+<td>High Variance</td>
+</tr>
+<tr class="even">
+<td class="r90">Low Bias</td>
+<td><div id="bullsEyeLBLV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="95.2417299219265" cy="98.78231506348611" r="2.5"></circle><circle class="arrow" cx="94.98877477792978" cy="98.35369950854978" r="2.5"></circle><circle class="arrow" cx="98.64499086445454" cy="90.1611985381718" r="2.5"></circle><circle class="arrow" cx="98.29842135491629" cy="103.46102989370513" r="2.5"></circle><circle class="arrow" cx="95.79393665077546" cy="100.68784532768193" r="2.5"></circle><circle class="arrow" cx="99.98795100308158" cy="101.81130596018545" r="2.5"></circle><circle class="arrow" cx="89.34113757239132" cy="96.3757227502656" r="2.5"></circle><circle class="arrow" cx="92.93663382940163" cy="93.85728904385391" r="2.5"></circle><circle class="arrow" cx="91.27400877365645" cy="92.74432495644449" r="2.5"></circle><circle class="arrow" cx="98.35171143651966" cy="90.25639751501993" r="2.5"></circle><circle class="arrow" cx="89.84479267773501" cy="89.80271518867866" r="2.5"></circle><circle class="arrow" cx="102.92811906669978" cy="102.31429122988574" r="2.5"></circle><circle class="arrow" cx="98.43292822053172" cy="94.33502755999424" r="2.5"></circle><circle class="arrow" cx="100.03977392090455" cy="88.32650985799843" r="2.5"></circle><circle class="arrow" cx="90.45638062240717" cy="91.38063914598084" r="2.5"></circle><circle class="arrow" cx="91.814500886036" cy="105.83526025811605" r="2.5"></circle><circle class="arrow" cx="93.48689316677351" cy="94.63423346645308" r="2.5"></circle><circle class="arrow" cx="93.2603587976381" cy="98.98875335330786" r="2.5"></circle><circle class="arrow" cx="96.46568926721694" cy="92.17361145704697" r="2.5"></circle><circle class="arrow" cx="91.90571922505733" cy="88.55473443715668" r="2.5"></circle><circle class="arrow" cx="103.20972223139" cy="96.86760959426755" r="2.5"></circle><circle class="arrow" cx="90.45135687581899" cy="102.46241789283684" r="2.5"></circle><circle class="arrow" cx="96.83775784414765" cy="109.14141342737429" r="2.5"></circle><circle class="arrow" cx="88.47009267490499" cy="102.33783592020343" r="2.5"></circle><circle class="arrow" cx="103.08969765418682" cy="99.25599334201341" r="2.5"></circle>
+</svg>
+</div></td>
+<td><div id="bullsEyeLBHV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="135.30208525468566" cy="109.53667975411805" r="2.5"></circle><circle class="arrow" cx="128.43144410223016" cy="73.55338417474053" r="2.5"></circle><circle class="arrow" cx="62.46329544014869" cy="115.09033226489368" r="2.5"></circle><circle class="arrow" cx="126.27343247249648" cy="66.14548779266283" r="2.5"></circle><circle class="arrow" cx="87.5311440807998" cy="96.79804569434428" r="2.5"></circle><circle class="arrow" cx="89.86553587619488" cy="73.31114567408036" r="2.5"></circle><circle class="arrow" cx="72.14224642068129" cy="71.56278538776868" r="2.5"></circle><circle class="arrow" cx="133.67943947732815" cy="99.4197165637036" r="2.5"></circle><circle class="arrow" cx="95.39079143636448" cy="118.7690125167322" r="2.5"></circle><circle class="arrow" cx="94.97114920044513" cy="89.90155532250407" r="2.5"></circle><circle class="arrow" cx="97.76397547830885" cy="104.44717591002323" r="2.5"></circle><circle class="arrow" cx="89.30844911697717" cy="85.24513430882038" r="2.5"></circle><circle class="arrow" cx="84.9656556483016" cy="110.46435847056802" r="2.5"></circle><circle class="arrow" cx="94.47025121828862" cy="111.22511714783076" r="2.5"></circle><circle class="arrow" cx="81.19000260405745" cy="87.45496868419164" r="2.5"></circle><circle class="arrow" cx="52.31412324140461" cy="109.70597207613788" r="2.5"></circle><circle class="arrow" cx="84.07493934147824" cy="121.38043888867571" r="2.5"></circle><circle class="arrow" cx="79.96730411760538" cy="96.32433545651551" r="2.5"></circle><circle class="arrow" cx="97.5698900562818" cy="104.32403135668825" r="2.5"></circle><circle class="arrow" cx="64.83727832847151" cy="102.24003307409187" r="2.5"></circle><circle class="arrow" cx="96.43564661227427" cy="111.54952202719106" r="2.5"></circle><circle class="arrow" cx="113.09578479104827" cy="118.67825786463287" r="2.5"></circle><circle class="arrow" cx="103.04118268265579" cy="107.66971927290987" r="2.5"></circle><circle class="arrow" cx="76.27875910415312" cy="128.31617509558063" r="2.5"></circle><circle class="arrow" cx="129.12754678814048" cy="95.5293181876095" r="2.5"></circle>
+</svg>
+</div></td>
+</tr>
+<tr class="odd">
+<td class="r90">High Bias</td>
+<td><div id="bullsEyeHBLV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="93.27374996049726" cy="42.328637258595556" r="2.5"></circle><circle class="arrow" cx="105.52581398889991" cy="44.93556686811315" r="2.5"></circle><circle class="arrow" cx="95.26101246647794" cy="46.7755302240622" r="2.5"></circle><circle class="arrow" cx="112.05060873387474" cy="52.86933183374843" r="2.5"></circle><circle class="arrow" cx="110.17742629325286" cy="57.67330743618805" r="2.5"></circle><circle class="arrow" cx="102.62633835599787" cy="47.63329341720682" r="2.5"></circle><circle class="arrow" cx="104.97396150323235" cy="53.86880949845978" r="2.5"></circle><circle class="arrow" cx="103.76256282114713" cy="48.3116835441338" r="2.5"></circle><circle class="arrow" cx="97.84406081280112" cy="48.05373982750756" r="2.5"></circle><circle class="arrow" cx="105.47413674536088" cy="60.8819662990806" r="2.5"></circle><circle class="arrow" cx="101.32433258243718" cy="50.42653499700785" r="2.5"></circle><circle class="arrow" cx="107.75895816267607" cy="53.5123837318865" r="2.5"></circle><circle class="arrow" cx="102.34151233023265" cy="43.22134477028904" r="2.5"></circle><circle class="arrow" cx="102.74836927714325" cy="48.99085752653546" r="2.5"></circle><circle class="arrow" cx="103.5514955929248" cy="50.700765047971295" r="2.5"></circle><circle class="arrow" cx="99.66489163788832" cy="52.960882058099266" r="2.5"></circle><circle class="arrow" cx="104.03334679960989" cy="50.56365067938392" r="2.5"></circle><circle class="arrow" cx="112.40294162147084" cy="51.05603578517508" r="2.5"></circle><circle class="arrow" cx="103.77185736249525" cy="48.69041724555987" r="2.5"></circle><circle class="arrow" cx="105.75923213844915" cy="52.16305294199713" r="2.5"></circle><circle class="arrow" cx="100.02620538056256" cy="45.76240834088125" r="2.5"></circle><circle class="arrow" cx="92.6900668670068" cy="49.1548990106344" r="2.5"></circle><circle class="arrow" cx="102.52276709795272" cy="54.66889873214721" r="2.5"></circle><circle class="arrow" cx="92.63240239912123" cy="54.816287121818064" r="2.5"></circle><circle class="arrow" cx="93.67433387840616" cy="44.1308081872826" r="2.5"></circle>
+</svg>
+</div></td>
+<td><div id="bullsEyeHBHV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="103.71226190486529" cy="35.245951954634805" r="2.5"></circle><circle class="arrow" cx="85.66758527040301" cy="67.2447331281883" r="2.5"></circle><circle class="arrow" cx="62.28568550397415" cy="32.140931024292215" r="2.5"></circle><circle class="arrow" cx="44.453050499204494" cy="27.594136705300244" r="2.5"></circle><circle class="arrow" cx="65.5267486415562" cy="34.97572973546029" r="2.5"></circle><circle class="arrow" cx="52.31696098385054" cy="63.901284157820186" r="2.5"></circle><circle class="arrow" cx="48.16744830325244" cy="18.83190221128146" r="2.5"></circle><circle class="arrow" cx="74.76574746979051" cy="45.429332524802895" r="2.5"></circle><circle class="arrow" cx="93.43125456438462" cy="10.626913149263643" r="2.5"></circle><circle class="arrow" cx="68.5906869780192" cy="46.07543950204163" r="2.5"></circle><circle class="arrow" cx="76.78805778650607" cy="37.09650785588681" r="2.5"></circle><circle class="arrow" cx="72.76655176927713" cy="50.971128326292146" r="2.5"></circle><circle class="arrow" cx="42.724353763919886" cy="61.927273912222816" r="2.5"></circle><circle class="arrow" cx="112.20625419743854" cy="39.15213297199204" r="2.5"></circle><circle class="arrow" cx="88.36900320964696" cy="38.854779509806455" r="2.5"></circle><circle class="arrow" cx="63.66053914630819" cy="56.46641986123598" r="2.5"></circle><circle class="arrow" cx="68.96191500872605" cy="43.16404842444755" r="2.5"></circle><circle class="arrow" cx="35.635519046608465" cy="28.74648178852344" r="2.5"></circle><circle class="arrow" cx="68.60182810836173" cy="59.740609767146466" r="2.5"></circle><circle class="arrow" cx="95.5153403974868" cy="25.547080430710736" r="2.5"></circle><circle class="arrow" cx="46.37075852226722" cy="19.62606830684345" r="2.5"></circle><circle class="arrow" cx="89.9950666768221" cy="50.71556277512999" r="2.5"></circle><circle class="arrow" cx="64.45958584171213" cy="42.52949470919935" r="2.5"></circle><circle class="arrow" cx="95.57718864645554" cy="4.197361489016814" r="2.5"></circle><circle class="arrow" cx="70.63354751617322" cy="32.127872854044625" r="2.5"></circle>
+</svg>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="random-forest-subsets-of-features" class="slide level2">
+<h2>Random Forest (subsets of features)</h2>
+
+<img data-src="images/randomForest.jpg" class="r-stretch"><div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb35-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb35-3"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb35-4"><a></a>             <span class="at">trControl =</span> ctrl)</span>
+<span id="cb35-5"><a></a></span>
+<span id="cb35-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+5358 samples
+   7 predictor
+   2 classes: 'California', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 4822, 4822, 4823, 4822, 4822, 4823, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+  2     0.7512094  0.4783983
+  4     0.7506486  0.4805403
+  7     0.7513977  0.4814780
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 7.</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-5" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb37-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        638    174
+  Oregon            153    373
+                                          
+               Accuracy : 0.7556          
+                 95% CI : (0.7317, 0.7784)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.4914          
+                                          
+ Mcnemar's Test P-Value : 0.2687          
+                                          
+            Sensitivity : 0.8066          
+            Specificity : 0.6819          
+         Pos Pred Value : 0.7857          
+         Neg Pred Value : 0.7091          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4768          
+   Detection Prevalence : 0.6069          
+      Balanced Accuracy : 0.7442          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="bagging-subsets-of-data" class="slide level2">
+<h2>Bagging (subsets of data)</h2>
+<ul>
+<li>“Bootstrap aggregating”</li>
+<li>Builds multiple models with bootstrap samples (combinations with repetitions) using a single algorithm.</li>
+<li>The models’ predictions are combined with voting (for classification) or averaging (for numeric prediction).</li>
+<li>Voting means the bagging model’s prediction is based on the majority of learners’ prediction for a class.</li>
+</ul>
+</section>
+<section id="treebag" class="slide level2">
+<h2>Treebag</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb39-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb39-3"><a></a>             <span class="at">trControl =</span> ctrl,</span>
+<span id="cb39-4"><a></a>             <span class="at">method =</span> <span class="st">"treebag"</span>)</span>
+<span id="cb39-5"><a></a></span>
+<span id="cb39-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bagged CART 
+
+5358 samples
+   7 predictor
+   2 classes: 'California', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 4822, 4823, 4822, 4822, 4822, 4822, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.7510232  0.4822114</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-6" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb41-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        636    172
+  Oregon            155    375
+                                          
+               Accuracy : 0.7556          
+                 95% CI : (0.7317, 0.7784)
+    No Information Rate : 0.5912          
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
+                                          
+                  Kappa : 0.492           
+                                          
+ Mcnemar's Test P-Value : 0.3763          
+                                          
+            Sensitivity : 0.8040          
+            Specificity : 0.6856          
+         Pos Pred Value : 0.7871          
+         Neg Pred Value : 0.7075          
+             Prevalence : 0.5912          
+         Detection Rate : 0.4753          
+   Detection Prevalence : 0.6039          
+      Balanced Accuracy : 0.7448          
+                                          
+       'Positive' Class : California      
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="random-forest-with-class-weights" class="slide level2">
+<h2>Random forest with class weights</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb43-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb43-3"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb43-4"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights,</span>
+<span id="cb43-5"><a></a>             <span class="at">trControl =</span> ctrl)</span>
+<span id="cb43-6"><a></a></span>
+<span id="cb43-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+5358 samples
+   7 predictor
+   2 classes: 'California', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 4822, 4822, 4823, 4822, 4822, 4822, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+  2     0.7508390  0.4766032
+  4     0.7525244  0.4845587
+  7     0.7515895  0.4821915
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 4.</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-7" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb45-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            Reference
+Prediction   California Oregon
+  California        639    172
+  Oregon            152    375
+                                         
+               Accuracy : 0.7578         
+                 95% CI : (0.734, 0.7806)
+    No Information Rate : 0.5912         
+    P-Value [Acc &gt; NIR] : &lt;2e-16         
+                                         
+                  Kappa : 0.4962         
+                                         
+ Mcnemar's Test P-Value : 0.2912         
+                                         
+            Sensitivity : 0.8078         
+            Specificity : 0.6856         
+         Pos Pred Value : 0.7879         
+         Neg Pred Value : 0.7116         
+             Prevalence : 0.5912         
+         Detection Rate : 0.4776         
+   Detection Prevalence : 0.6061         
+      Balanced Accuracy : 0.7467         
+                                         
+       'Positive' Class : California     
+                                         </code></pre>
+</div>
+</div>
+</section>
+<section id="model-comparison" class="slide level2">
+<h2>Model Comparison</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>cl <span class="ot">&lt;-</span> <span class="fu">makePSOCKcluster</span>(<span class="dv">3</span>)</span>
+<span id="cb47-2"><a></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb47-3"><a></a><span class="fu">system.time</span>({</span>
+<span id="cb47-4"><a></a>  rpart.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"rpart"</span>,<span class="at">trControl=</span>ctrl);</span>
+<span id="cb47-5"><a></a>  treebag.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"treebag"</span>, <span class="at">trControl=</span>ctrl);</span>
+<span id="cb47-6"><a></a>  rf.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"rf"</span>, <span class="at">trControl=</span>ctrl);</span>
+<span id="cb47-7"><a></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+   1.73    0.22   19.07 </code></pre>
+</div>
+</div>
+</section>
+<section id="results-1" class="slide level2">
+<h2>Results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a><span class="fu">stopCluster</span>(cl) <span class="co"># close multi-core cluster</span></span>
+<span id="cb49-2"><a></a><span class="fu">rm</span>(cl)</span>
+<span id="cb49-3"><a></a></span>
+<span id="cb49-4"><a></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">DecisionTree=</span>rpart.fit, <span class="at">BaggedTree=</span>treebag.fit, <span class="at">RandomForest=</span>rf.fit))</span>
+<span id="cb49-5"><a></a><span class="fu">summary</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results)
+
+Models: DecisionTree, BaggedTree, RandomForest 
+Number of resamples: 10 
+
+Accuracy 
+                  Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+DecisionTree 0.7052239 0.7168843 0.7285448 0.7316142 0.7421790 0.7705224    0
+BaggedTree   0.7252336 0.7318995 0.7537313 0.7515776 0.7639925 0.7835821    0
+RandomForest 0.7220149 0.7420709 0.7500000 0.7549568 0.7692731 0.7943925    0
+
+Kappa 
+                  Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+DecisionTree 0.3554849 0.3877091 0.4268022 0.4268717 0.4534515 0.5234901    0
+BaggedTree   0.4297905 0.4368892 0.4882581 0.4823907 0.5069644 0.5590417    0
+RandomForest 0.4213099 0.4626138 0.4775361 0.4891242 0.5174596 0.5724019    0</code></pre>
+</div>
+</div>
+</section>
+<section id="pros" class="slide level2">
+<h2>Pros</h2>
+<ul>
+<li>Easy to use and understand.</li>
+<li>Can handle both categorical and numerical data.</li>
+<li>Resistant to outliers, hence require little data preprocessing.</li>
+<li>New features can be easily added.</li>
+<li>Can be used to build larger classifiers by using ensemble methods.</li>
+</ul>
+</section>
+<section id="cons" class="slide level2">
+<h2>Cons</h2>
+<ul>
+<li>Prone to overfitting.</li>
+<li>Require some kind of measurement as to how well they are doing.</li>
+<li>Need to be careful with parameter tuning.</li>
+<li>Can create biased learned trees if some classes dominate.</li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p><a href="../index.html">Home</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

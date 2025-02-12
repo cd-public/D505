@@ -24,7 +24,7 @@ execute:
 
 ##  Publish
 
-0. Form groups of size 1 to 4, create
+Each group should create:
 1. An annotated `.*md` file, and 
 2. The .rds/.pickle/.parquet file that it generates, that
 3. Contains *only* the features you want in the model.
@@ -34,31 +34,26 @@ Under version control, on GitHub.
 ##  Constraints
 
 I will run:
-1. The specify $K$NN or Naive Bayes model, (say in the .*md)
-2. With: `province ~ .` on your data frame (or the whole data frame in `scikit`)
+
+1. The specified $K$NN or Naive Bayes model,
+2. With: `province ~ .` (or the whole data frame in `scikit`)
 3. With repeated 5-fold cross validation
 4. With the same index for partitioning training and test sets for every group.
 5. On whatever is turned in before class.
 6. Bragging rights for highest Kappa
 
-## Optional
-
-- Separate categories for `.py` and `.r`
-- The `.py` tooling is stronger but you are getting less training on it.
-- Let me know in advance if you intend to Python, or not.
-
 ## Context
 
 - The "final exam" is that during the last class you will present your model results as though you are speaking to the
 managers of a large winery.
-- It should be presented from a Quarto presentation.
+- It should be presented from a Quarto presentation on GitHub or perhaps e.g. RPubs.
 - You must present via the in-room "teaching machine" computer, not your own physical device, to ensure that you are comfortable distributing your findings.
 
-## 10 minutes
+## Group Meetings
 
-- Chat about forming groups
-- Don't need to lock in now if not everyone is here etc.
-- Do need to lock in within the next 168 hours.
+- You should have a group assignment
+- Meet in your groups!
+- Talk about your homework *with* your group.
 
 # Logistic Regression
 
@@ -72,9 +67,138 @@ $$
 
 With a bit of algebra you can get the probabilities as...
 
-$p=\frac{1}{1+e^{-(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2})}}$
+$$
+p=\frac{1}{1+e^{-(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2})}}
+$$
 
-Why do we call this regression instead of classification?
+## 
+$$
+log(\frac{p}{1-p})=\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}
+$$
+
+'p' represents the probability of the event occurring.
+
+- Represented as natural log `ln`...
+- of the odds ratio ($\frac{p}{1-p}$)...
+- as a linear combination of 
+  - predictor variables ($x_1$, $x_2$) and
+  - their corresponding coefficients ($\beta_1$, $\beta_2$) 
+  - plus an intercept ($\beta_0$). 
+
+## Understanding check?
+
+- Why do we call this regression instead of classification?
+- Quick Algebra review
+  - Look, it's better to be comfortable with algebra than not.
+
+##
+
+<a title="Canley, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Exam_pass_logistic_curve.svg"><img width="100%" alt="Logistic regression curve showing probability of passing an exam versus hours studying" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Exam_pass_logistic_curve.svg/512px-Exam_pass_logistic_curve.svg.png?20220327133556"></a>
+
+
+## Log Odds
+
+- **1. Start with the log-odds equation:**
+
+$$
+log(\frac{p}{1-p}) = \beta_0 + \beta_1x_1 + \beta_2x_2
+$$
+
+
+
+## Exponentiate
+
+- **2. Exponentiate both sides:**
+
+- To remove the logarithm, we take the exponential (e) of both sides of the equation:
+
+$$
+e^{log(\frac{p}{1-p})} = e^{\beta_0 + \beta_1x_1 + \beta_2x_2}
+$$
+
+## Simplify
+
+- **3. Simplify the left side:**
+
+- The exponential function and the natural logarithm are inverse functions of each other.  
+- Therefore, $e^{log(x)} = x$.  This simplifies the left side:
+
+$$
+\frac{p}{1-p} = e^{\beta_0 + \beta_1x_1 + \beta_2x_2}
+$$
+
+## Rewrite
+
+- **4. Rewrite the right side using exponent rules:**
+
+- We can rewrite the right side using the rule $e^{a+b} = e^a * e^b$:
+
+$$
+\frac{p}{1-p} = e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}
+$$
+
+## Find $p$ 1
+
+* 5. Find $p$
+  * **Multiply both sides by (1-p):**
+
+$$
+p = (1-p) * e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}
+$$
+
+## Find $p$ 2
+
+* 5. Find $p$
+  * **Distribute the right-hand side (RHS):**
+
+$$
+p = e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2} - p * e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}
+$$
+
+## Find $p$ 2
+
+* 5. Find $p$
+  * **Move the $p$ term to the left side:**
+
+$$
+p + p * e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2} = e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}
+$$
+
+## Find $p$ 3
+
+* 5. Find $p$
+  * **Factor out $p$ on the left side:**
+
+$$
+p * (1 + e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}) = e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}
+$$
+
+## Find $p$ 4
+
+* 5. Find $p$
+  * **Divide both sides by the term in parentheses:**
+$$
+p = \frac{e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}}{1 + e^{\beta_0} * e^{\beta_1x_1} * e^{\beta_2x_2}}
+$$
+
+## Simplify
+
+- **6. Simplify the expression:**
+
+- We can further simplify by multiplying the numerator and denominator by $e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2)}$:
+
+$$
+p = \frac{1}{e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2)} + 1}
+$$
+
+## Rewrite
+
+- Which is commonly written as:
+
+$$
+p = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2)}}
+$$
+
 
 # Implementation with Caret
 
@@ -84,9 +208,9 @@ sh <- suppressPackageStartupMessages
 sh(library(tidyverse))
 sh(library(caret))
 sh(library(tidytext))
-sh(library(tidytext))
 sh(library(SnowballC)) # new?
 sh(library(pROC))      # new?
+sh(library(glmnet))
 data(stop_words)
 sh(library(thematic))
 theme_set(theme_dark())
@@ -101,26 +225,139 @@ names(wine)[names(wine) == 'id'] = 'id'
 ```
 
 
-## create a function to extract words with totals > j
+## Extract certain words
 
-```{r wordfunc}
-wine_words <- function(df, j = 1000, stem=F) { 
+- We'll proceed in a few steps.
+  - First, a function to extract all words.
+    - We'll omit stopwords
+      - Remember those? Like "of" and "a"
+    - We'll omit a few words-of-choice
+      - Like "pinot"
 
-  words <- df %>%
+## Extract all words
+
+```{r desc_to_words}
+desc_to_words <- function(df, omits) { 
+  df %>%
     unnest_tokens(word, description) %>%
     anti_join(stop_words) %>% # get rid of stop words
-    filter(!(word %in% c("wine","pinot","vineyard")))
-  
-  if(stem){
-    words <- words %>% mutate(word = wordStem(word))
-  }
-  
-  words <- words %>% 
+    filter(!(word %in% omits))
+}
+```
+
+## Extract all  words
+
+```{r run desc_to_words}
+words <- desc_to_words(wine, c("wine","pinot","vineyard"))
+# The second argument is our custom stopwards, as a vector
+head(words)
+```
+
+## Extract certain words
+
+- We'll proceed in a few steps.
+  - Optionally, look at stems
+    - This is really cool.
+    - Do I care about the difference between "acidic" and "acidity"?
+      - The linguistics consensus leans toward no.
+
+## STEM
+
+- Short for data *S*cience, da*T*a science, data scienc*E*, and *M*achine learning.
+```{r words_to_stems}
+words_to_stems <- function(df) { 
+  df %>%
+    mutate(word = wordStem(word))
+}
+```
+- We want to use a `tidytext` built-in here, of course.
+  - We aren't domain experts in linguistics...
+  - But we are domain experts in using R libraries.
+
+## Example
+
+> [Stem may either consist of a root (e.g. run) alone or a compound word, such as meatball and bottleneck (examples of compound nouns) or blacken and standardize (examples of compound verbs). The stem of the verb to wait is wait: it is the part that is common to all its inflected variants.](https://en.wikipedia.org/wiki/Word_stem#Root_vs_stem)
+
+## Wait
+
+- 'wait' (infinitive, imperative, present subjunctive, and present indicative except in the 3rd-person singular)
+- 'waits' (3rd person singular simple present indicative)
+- 'waited' (simple past)
+- 'waited' (past participle)
+- 'waiting' (present participle)
+
+## STEM
+
+```{r run words_to_stems}
+stems <- words_to_stems(words)
+head(stems)
+```
+
+## Bottl
+
+- Another example.
+
+```{r g6}
+g6_df <- tibble(description = "Popping bottles in the ice; like a blizzard.")
+words_to_stems(desc_to_words(g6_df, c("ice")))
+```
+
+## Like a G6
+
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/w4s6H4ku6ZY?si=DWmx3skbebkcm1Dk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+## Word Count
+
+- With either or words or our stems, we can see how many of each word we have easily enough.
+  - And eliminate words will less than a certain count!
+```{r filter_by_count}
+filter_by_count <- function(df, j) { 
+  df %>%
     count(id, word) %>% 
     group_by(id) %>% mutate(exists = (n>0)) %>% ungroup %>% 
     group_by(word) %>% 
     mutate(total = sum(n)) %>% 
-    filter(total > j) %>% 
+    filter(total > j)
+}
+```
+
+## Check it 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r check words}
+fwords = filter_by_count(words, 1000)
+head(fwords)
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r check stems}
+fstems = filter_by_count(stems, 1000)
+head(fstems)
+```
+
+:::
+
+::::
+
+## Back to Wine
+
+- We currently have multiple entries per ID in a tidy dataframe
+- We would like to get back to have features for each ID, as each ID is some wine.
+- One way to do so, is to make columns from the word data.
+- We use `pivot_wider`
+
+## Pivot
+
+```{r pivoter}
+pivoter <- function(words, df) {
+  words %>%
     pivot_wider(id_cols = id, names_from = word, values_from = exists, values_fill = list(exists=0)) %>% 
     right_join(select(df,id,province)) %>% 
     drop_na() %>% 
@@ -128,10 +365,51 @@ wine_words <- function(df, j = 1000, stem=F) {
 }
 ```
 
+## Check it 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r pivot words}
+head(pivoter(fwords, wine))
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r pivot stems}
+head(pivoter(fstems, wine))
+```
+
+:::
+
+::::
+
+## Full Function
+
+- Create a function to extract words with totals > j
+
+```{r wordfunc}
+wine_words <- function(df, j, stem) { 
+
+  words <- desc_to_words(df, c("wine","pinot","vineyard"))
+  
+  if (stem) {
+    words <- words_to_stems(words)
+  }
+  
+  words <- filter_by_count(words, j)
+
+  pivoter(words, df)
+}
+```
+
 ## Look at the data
 
 ```{r w100}
-wino <- wine_words(wine, 500)
+wino <- wine_words(wine, 1000, F)
 
 wino %>% 
   head(10) %>% 
@@ -192,12 +470,12 @@ get_matrix <- function(fit, df) {
 get_matrix(fit,test)
 ```
 
-Not bad. But what if we decrease the number of words used?
+Not bad. But what if we decrease threshold for a word to be included?
 
 ## Using more words
 
 ```{r w500}
-wino <- wine_words(wine, 1000)
+wino <- wine_words(wine, 500, F)
 wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
@@ -211,6 +489,11 @@ fit <- get_fit(train)
 fit
 ```
 
+## Check odds
+
+```{r}
+get_odds(fit)
+```
 
 ## Confusion Matrix
 
@@ -227,7 +510,6 @@ train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
 
 fit <- get_fit(train)
-get_odds(fit)
 ```
 
 ## Check Kappa
@@ -236,165 +518,275 @@ get_odds(fit)
 fit
 ```
 
+## Check odds
+
+```{r}
+get_odds(fit)
+```
+
 ## Confusion Matrix
 
 ```{r stematrix}
 get_matrix(fit,test)
 ```
 
-Even better!
+Even better?
 
-# ROC Curve evaluation
+# Receiver Operating Characteristic (ROC) Curve
 
-**Note:**
+## ROC Curve
 
-$Sensitivity = \frac{truePos}{allPos} = TruePosRate$
+> [A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the performance of a binary classifier model (can be used for multi class classification as well) at varying threshold values.](https://en.wikipedia.org/wiki/Receiver_operating_characteristic)
 
-$Specificity = \frac{trueNeg}{allNeg} = TrueNegRate = 1 - FalsePosRate$
+## Image
 
+![](https://upload.wikimedia.org/wikipedia/commons/6/6b/Roccurves.png)
 
-```{.r}
-myRoc <- roc(test$province, prob)
+## Sensitivity
+
+- **Sensitivity**: True Positive Rate 
+- Measures how well the model detects true positives.
+  - TP: True Positive
+  - FN: False Negative
+  
+$$ 
+\text{Sensitivity} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+$$ 
+
+## Specificifity
+
+- **Specificity**: True Negative Rate
+- Measures how well the model avoids false positives.
+  - FP: False Positive
+  - TN: True Negative
+
+$$  
+\text{Specificity} = \frac{\text{TN}}{\text{TN} + \text{FP}}
+$$  
+
+## Storm Prediction
+
+- **True Positive (TP):** The model predicts a storm, and a storm actually occurs.
+- **False Positive (FP):** The model predicts a storm, but no storm occurs (false alarm).
+- **True Negative (TN):** The model predicts no storm, and no storm occurs.
+- **False Negative (FN):** The model predicts no storm, but a storm actually occurs (missed event).
+
+## Goals
+
+- A perfect model would have both 
+  - high sensitivity 
+    - (detecting all real storms) and 
+  - high specificity 
+    - (avoiding false alarms). 
+- The ROC curve helps analyze this trade-off.
+
+## Interpreting the ROC Curve
+
+- A point near (0,1) on the ROC curve represents high sensitivity and high specificity (ideal performance).
+
+![](https://upload.wikimedia.org/wikipedia/commons/3/36/ROC_space-2.png)
+
+## Interpreting the ROC Curve
+
+- A curve closer to the **diagonal line** (random guessing) indicates poor predictive ability.
+
+![](https://upload.wikimedia.org/wikipedia/commons/3/36/ROC_space-2.png)
+
+## Interpreting the ROC Curve
+
+- The **Area Under the Curve (AUC)** quantifies the overall model performance, with **AUC = 1** being perfect and **AUC = 0.5** being no better than chance.
+
+![](https://upload.wikimedia.org/wikipedia/commons/1/13/Roc_curve.svg)
+
+## Model Tuning
+
+- In e.g. a storm model....
+- adjusting the model's decision threshold 
+  -  (e.g., how strong a weather signal needs to be before predicting a storm), 
+  - we can move along the ROC curve to balance 
+    - sensitivity and 
+    - specificity.
+
+##  ROC Curve evaluation
+
+- Have to use numeric data.
+
+```{r numeric}
+winor <- wine_words(wine, 1000, T) %>% 
+           mutate(oregon = as.factor(province == "Oregon")) %>%
+           select(-province)
+wine_index <- createDataPartition(winor$oregon, p = 0.80, list = FALSE)
+train <- winor[wine_index, ]
+test <- winor[-wine_index, ]
+```
+
+## Use a numeric legal regression.
+
+```{r legal}
+fit <- train(oregon ~ .,
+             data = train, 
+             trControl = control,
+             method = "glm",
+             family = "binomial")
+```
+
+## See the curve
+
+```{r}
+prob <- predict(fit, newdata = test, type = "prob")[,2]
+myRoc <- roc(test$oregon, prob)
 plot(myRoc)
 auc(myRoc)
 ```
-
-```{.r}
-labels <- test$province[order(prob, decreasing=TRUE)]
-roc_df <- data.frame(TruePosRate=cumsum(labels)/sum(labels), FalsePosRate=cumsum(!labels)/sum(!labels), labels)
-
-roc_df %>% 
-  slice(110:120) 
-```
-
-
-```{.r}
-roc_df %>% 
-  ggplot(aes(FalsePosRate,TruePosRate))+
-  geom_point()
-```
-
 ## Exercise
 
 1. Gather into your prediction teams.
 2. Choose a Pinot province other than Oregon or California
 3. Use logistic regression to find the words/terms that increase the odds of choosing that province the most
 
-
 # Weigted Penalty
 
-```{.r}
-wine = read_rds("../resources/pinot.rds") %>% 
-  mutate(province = as.numeric(province=="New_York")) %>% 
-  rowid_to_column("id") %>% 
-  select(-taster_name)
+```{r}
+wino <- wine_words(wine, 1000, T)
+wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
+train <- wino[ wine_index, ]
+test <- wino[-wine_index, ]
 
-wino <- wine_words(wine, j=500, stem = T)
-table(wino$province)
+fit <- get_fit(train)
 ```
 
-## Basic model
+## Matrix
 
-```{.r}
-fit <- train(province ~ .,
-             data = wino, 
-             trControl = control,
-             method = "glm",
-             family = "binomial")
-
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
-
-confusionMatrix(factor(pred),factor(test$province))
-
+```{r}
+get_matrix(fit,test)
 ```
-
 
 ## Create some weights
 
-```{.r}
+```{r weight_train}
 weight_train <- train %>% 
-  mutate(weights=if_else(province==1,20,1))
+  mutate(weights=if_else(province=="California",1,20))
 
+```
+
+## Add weight to model
+
+- Look closely:
+  - Train over `train` dataframe
+  - Provide weights from `weight_train` data frame
+  - That way it won't train on weights!
+
+```{r model weight}
 fit <- train(province ~ .,
              data = train, 
-             trControl = trainControl(method = "cv", number = 5),
-             method = "glm",
-             family = "binomial",
+             trControl = control,
+             method = "multinom",
+             maxit = 5, # speed it up - default 100
              weights = weight_train$weights)
+```
 
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
+## Matrix
 
-confusionMatrix(factor(pred),factor(test$province))
-
+```{r weightrix}
+get_matrix(fit,test)
 ```
 ## Top features
 
-```{.r}
-#show the odds ratios for top coefficients
-odds <- exp(coef(fit$finalModel))
-data.frame(name = names(odds), odds = odds) %>%  
-  mutate(probability=odds/(1+odds)) %>% 
-  arrange(desc(odds)) %>% 
-  head(10)
+```{r}
+get_odds(fit)
 ```
-
 
 # Regularization
 
-![](images/Regularization.png)
+![](https://upload.wikimedia.org/wikipedia/commons/0/02/Regularization.svg)
 
-Often also called 'penalized' because it adds a penalizing term to the loss function.
+## Penalty
+
+- Often also called 'penalized' because it adds a penalizing term to the loss function.
 
 $\min_{f}\sum_{i=1}^{n}V(f(x_{i}),y_{i})+\lambda R(f)$
 
-The amount of the penalty is fine-tuned using a constant called lambda. When lambda = 0, no penalty is enforced. The best lambda can be found by finding a value that minimizes prediction error after cross validating the model with different values.
+- *De facto* application of Occam's Razor.
+
+## Penalties
+
+- The amount of the penalty is fine-tuned using a constant lambda $\lambda$. 
+- When $\lambda = 0$, no penalty is enforced. 
+- The best lambda can be found by finding a value that minimizes prediction error after cross validating the model with different values.
+
+## Included earlier...
 
 ```{.r}
 library(glmnet)
 ```
 
+## Lasso Regression
+
+- Given $p$ features and $N$ observations. 
+- $\beta$'s are coefficients.
+- The $\lambda$ term is evaluated via absolute value $|\beta_j|$
+
+$$
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} |\beta_j|
+$$
+
+## LASSO
+
+- Least Absolute Shrinkage and Selection Operator. 
+- Shrinks the regression coefficients toward zero.
+- Penalizing the regression model with a penalty term called **L1-norm**
+  - The sum of the absolute coefficients.
+  - I learned about L1 in a class called "Real Analysis"
+  - Its the streetmap distance (roads and avenues)
 
 ## Lasso Regression
 
-$\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} |\beta_j|$
-
-Lasso stands for Least Absolute Shrinkage and Selection Operator. It shrinks the regression coefficients toward zero by penalizing the regression model with a penalty term called L1-norm, which is the sum of the absolute coefficients.
-
-In the case of lasso regression, the penalty has the effect of forcing some of the coefficient estimates, with a minor contribution to the model, to be exactly equal to zero. This means that, lasso can be also seen as an alternative to the subset selection methods for performing variable selection in order to reduce the complexity of the model.
+- Zeroes out some coefficients
+  - With a minor contribution to the model, can't "resist" the penalty. 
+- Lasso can be also seen as an alternative to the subset selection methods.
+  - A form of variable selection.
 
 ## Ridge Regression
 
-$\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} \beta_j^2$
+- Given $p$ features and $N$ observations. 
+- $\beta$'s are coefficients.
+- The $\lambda$ term is evaluated via square $\beta_j^2$
 
-Ridge regression shrinks the regression coefficients, so that variables, with minor contribution to the outcome, have their coefficients close to zero.
 
-The shrinkage of the coefficients is achieved by penalizing the regression model with a penalty term called **L2-norm**, which is the sum of the squared coefficients. 
+$$
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} \beta_j^2
+$$
+
+## Ridge
+
+- Also Tikhonov regularization, named for Andrey Tikhonov
+- Shrinks the regression coefficients toward zero.
+- Penalizing the regression model with a penalty term called **L2-norm**
+  - The sum of the sqared coefficients.
+  - I *also* learned about L2 in  "Real Analysis"
+  - Its the as-birds-fly distance (point-to-point)
 
 
 ## Elastic Net
 
-$\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}  \right) ^ 2 + \alpha\lambda \sum_{j=1}^{p} |\beta_j|+(1-\alpha)\lambda \sum_{j=1}^{p} \beta_j^2$
+- Given $p$ features and $N$ observations. 
+- $\beta$'s are coefficients.
+- Add both together and weight them comparatively via parameter $\alpha$
+  - Lower case alpha.
 
-Generally, lasso might perform better in a situation where some of the predictors have large coefficients, and the remaining predictors have very small coefficients.
+$$
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}  \right) ^ 2 + \alpha\lambda \sum_{j=1}^{p} |\beta_j|+(1-\alpha)\lambda \sum_{j=1}^{p} \beta_j^2
+$$
 
-Ridge regression will perform better when the outcome is a function of many predictors, all with coefficients of roughly equal size (James et al. 2014).
+## Deciding
 
+- Lasso better in a situation where some of the predictors have large coefficients, and the remaining predictors have very small coefficients.
+- Ridge regression better when many predictors with coefficients of roughly equal size.
 
-```{.r}
-wine = read_rds("../resources/pinot.rds") %>% 
-  mutate(province = as.numeric(province=="Burgundy")) %>% 
-  rowid_to_column("id") %>% 
-  select(-taster_name)
+## Example
 
-wino <- wine_words(wine, j=500, stem = T)
-
-set.seed(504)
-wino <- wine_words(wine)
-wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
-train <- wino[ wine_index, ]
-test <- wino[-wine_index, ]
+```{r net}
+# This took forever to run
 fit <- train(
   province ~., 
   data = train,
@@ -406,25 +798,9 @@ fit <- train(
 # Best tuning parameter
 fit$bestTune
 # to specify the best lambda
-exp(coef(fit$finalModel, fit$bestTune$lambda))
+c(fit$finalModel, fit$bestTune$lambda)
 ```
 
-## Confusion Matrix
-
-```{.r}
-prob <- predict(fit, newdata=test)
-pred <- ifelse(prob > 0.5, 1, 0)
-
-confusionMatrix(factor(pred),factor(test$province))
-```
-
-## ROC Curve
-
-```{.r}
-myRoc <- roc(test$province, prob)
-plot(myRoc)
-auc(myRoc)
-```
 # Vocabulary
 
 - Logistic Regression
@@ -433,17 +809,3 @@ auc(myRoc)
 - Specificity
 - ROC
 - AUC
-
-# Extra reading
-
-https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62
-https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5
-
-# References
-
-James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2014. An Introduction to Statistical Learning: With Applications in R. Springer Publishing Company, Incorporated.
-
-http://www.sthda.com/english/articles/37-model-selection-essentials-in-r/153-penalized-regression-essentials-ridge-lasso-elastic-net/
-
-https://en.wikipedia.org/wiki/Regularization_(mathematics)
-

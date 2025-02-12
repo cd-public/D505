@@ -1,0 +1,246 @@
+---
+title: "Decision Trees"
+subtitle: "Applied Machine Learning"
+author: "Jameson > Hendrik > Calvin"
+  
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+---
+
+
+## Brief recap of course so far
+
+- Linear regression (e.g. `lprice ~ .`), assumptions of model, interpretation.
+- KNN (e.g., `province ~ .`), multi-class supervised classification. Hyperparameter k.
+- Naive Bayes (e.g., `province ~ .`), multi-class supervised classification.
+ - Logistic regression (e.g., `province=="Oregon" ~ .`), binary supervised classification. Elastic net. 
+- Feature engineering (logarithms, center/scaling, Box Cox, tidytext, etc.).
+- Feature selection (correlation, linear / logistic coefficients, frequent words, frequent words by class, etc.).
+
+
+# First Model Due 3/10
+
+##  Publish
+
+Each group should create:
+1. An annotated `.*md` file, and 
+2. The .rds/.pickle/.parquet file that it generates, that
+3. Contains *only* the features you want in the model.
+
+Under version control, on GitHub.
+
+##  Constraints
+
+I will run:
+
+1. The specified $K$NN or Naive Bayes model,
+2. With: `province ~ .` (or the whole data frame in `scikit`)
+3. With repeated 5-fold cross validation
+4. With the same index for partitioning training and test sets for every group.
+5. On whatever is turned in before class.
+6. Bragging rights for highest Kappa
+
+## Context
+
+- The "final exam" is that during the last class you will present your model results as though you are speaking to the
+managers of a large winery.
+- It should be presented from a Quarto presentation on GitHub or perhaps e.g. RPubs.
+- You must present via the in-room "teaching machine" computer, not your own physical device, to ensure that you are comfortable distributing your findings.
+
+## Group Meetings
+
+- You should have a group assignment
+- Meet in your groups!
+- Talk about your homework *with* your group.
+
+
+# Agenda
+
+1. Decision-trees
+2. Weighted models (revisited)
+3. Random forests
+4. Bagged models
+5. Group work
+
+# Decision trees
+
+
+## Libraries Setup
+```{.r libs}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(caret))
+sh(library(tidytext))
+sh(library(SnowballC))
+sh(library(rpart)) # New?
+data(stop_words)
+sh(library(thematic))
+theme_set(theme_dark())
+thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
+```
+
+## Dataframe
+
+```{.r fg}
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
+names(wine)[names(wine) == 'id'] = 'id'
+```
+
+## Wine Words
+
+```{.r setup}
+
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
+
+wine_words <- function(df, j, stem){ 
+  words <- df %>%
+    unnest_tokens(word, description) %>%
+    anti_join(stop_words) %>% 
+    filter(!(word %in% c("wine","pinot","vineyard")))
+  
+  if(stem){
+    words <- words %>% mutate(word = wordStem(word))
+  }
+  
+  words %>% count(id, word) %>%  group_by(id) %>%  mutate(exists = (n>0)) %>% 
+    ungroup %>% group_by(word) %>%  mutate(total = sum(n)) %>% filter(total > j) %>% 
+    pivot_wider(id_cols = id, names_from = word, values_from = exists, values_fill = list(exists=0)) %>% 
+    right_join(select(df,id,province)) %>% select(-id) %>% mutate(across(-province, ~replace_na(.x, F)))
+}
+```
+
+## Make Wino
+
+```{.r wino}
+wino <- wine_words(wine, j=2000, stem=F) %>% 
+  filter(province %in% c("Oregon","California")) %>% 
+  head() %>% 
+  arrange(province)
+
+wino
+```
+
+## Algorithm
+
+1. Select the best attribute -> $A$ 
+2. Assign $A$ as the decision attribute (test case) for the `NODE`. 
+3. For each value of $a \in A$, create a new descendant of the `NODE`. 
+4. Sort the training examples to the appropriate descendant node leaf.
+5. If examples are perfectly classified, then `STOP` else iterate over the new leaf nodes.
+
+## Visualize
+
+![](https://upload.wikimedia.org/wikipedia/commons/8/87/Beachdecisiontree.png)
+
+## In practice
+
+- Where are going on vacation?
+  - If top 25 city in US, say city.
+    - Chicago
+  - If US but not top 25 city, say state.
+    - Utah
+  - If not US, say nation-state.
+    - Colombia
+
+## Information Gain
+
+- The \emph{information content} of a piece of information is how "surprising" it is.
+- In sports, perhaps, wins above replacement.
+- In grades, perhaps, standard deviations above the mean
+- In weather, perhaps, date of a rainstorm in desert vs in rainforest.
+
+## Example
+
+- I tell you 123456 is *not* going to win the lottery
+  - Very little information, and very unsurprising. 
+- If I tell you 123456 *will* win the lottery
+  - Very high information, very surprising. 
+
+
+## Formula 
+
+$$ 
+I(p) = \log \left(\frac{1}{p}\right)
+$$
+
+- If $p = 1$, information is $0$
+- As $p$ becomes small, $I(p)$ grows. 
+
+## Datasets
+
+- The **entropy** of a dataset is its "average information content":
+
+$$
+{\rm Entropy}=\sum_{i=1}(p_i)\log\left(\frac{1}{p_i}\right) = \sum - p_i\log(p_i)
+$$
+
+- $p$ is the proportion of the class under consideration. 
+- If we have only one category, then $p_i = 1$ and entropy is 0 (no "disorder"). 
+
+## Samples
+
+- It rains 36 days per year in Phoenix.
+- There are exactly 360 days per year [src](https://en.wikipedia.org/wiki/360-day_calendar)
+- The "parent" node decides if a day rains, or not, and sends to other decision makers.
+    - $p_0 = .9$: No rain.
+    - $p_1 = .1$: Yes rain.
+
+## Entropy Calculation
+
+$$
+\begin{align}
+{\rm Entropy} &= \sum - p_i\log(p_i) \\
+&= -.9 * \log(.9) -.1 * \log(.1) 
+\end{align}
+$$
+
+```{r}
+entropy <- -.9 * log(.9) -.1 * log(.1)
+entropy
+```
+
+
+## Portland
+
+- In Portland it rains 153-164 days a year.
+    - That is exactly half of 365
+    - (Don't check)
+
+## Surpised?
+
+- It is more suprising to correctly guess half of days than correctly guess one tenth of days.
+
+## Entropy Calculation
+
+$$
+\begin{align}
+{\rm Entropy} &= \sum - p_i\log(p_i) \\
+&= -.5 * \log(.5) -.5 * \log(.5)  \\
+&= -\log(.5) 
+\end{align}
+$$
+
+```{r}
+entropy <- -log(.5)
+entropy
+```
+
+## Optimize
+
+- A decision tree looks to determine the optimal binary split
+- Said split maximizes *information gain*:
+    - The entropy of the parent, less
+    - The entropy of the child nodes
+        - Averaged
+- Say probability of snow given precipitation
+
+## Exercise
+
+- Say we wish to classify wines by province.
+    - We could first see if they are fruity
+        - "fruit" $\in$ `desc`
+    - We could first see if they are tannic.
+        - "tanni" $\in$ `desc`
+- Which is better?

@@ -1,0 +1,121 @@
+---
+title: $K$NN
+author: "Calvin Deutschbein"
+date: "02/10/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme: superhero  
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+**Abstract:**
+
+This is a technical blog post of **both** an HTML file *and* [.qmd file](https://raw.githubusercontent.com/cd-public/D505/refs/heads/master/hws/src/knn.qmd) hosted on GitHub pages.
+
+# 0. Quarto Type-setting
+
+- This document is rendered with Quarto, and configured to embed an images using the `embed-resources` option in the header.
+- If you wish to use a similar header, here's is the format specification for this document:
+
+```email
+format: 
+  html:
+    embed-resources: true
+```
+
+# 1. Setup
+
+```{r}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(caret))
+sh(library(fastDummies))
+sh(library(class))
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/pinot.rds")))
+```
+
+## 2. $K$NN Concepts
+
+> Generally we regard selection of appropriate $K$ as similar to the context of precision and recall, discussed in [earlier post](wine_of_pnw_sol.html). However with $K$NN we have a slightly different trade-off - between *bias*, where the model is overgeneralized and begins to lose nuance in niche cases, and *variance*, where a model captures noise within the data set and extrapolates it to the population. Small $K$ values tend to high variance, and larger $K$ values tend to high bias.
+
+## 3. Feature Engineering
+
+1. Create a version of the year column that is a *factor* (instead of numeric).
+2. Create dummy variables that indicate the presence of "cherry", "chocolate" and "earth" in the description.
+  - Take care to handle upper and lower case characters.
+3. Create 3 new features that represent the interaction between *time* and the cherry, chocolate and earth inidicators.
+4. Remove the description column from the data.
+
+```{r}
+wine <- wine %>%
+  mutate(fct_year = factor(year)) %>%
+  mutate(description = tolower(description)) %>%
+  mutate(cherry = str_detect(description, "cherry"),
+         chocolate = str_detect(description, "chocolate"),
+         earth = str_detect(description, "earth")) %>%
+  mutate(cherry_year = year*cherry,
+         chocolate_year = year*chocolate,
+         earth_year = year*earth) %>%
+  select(-description)
+```
+## 4. Preprocessing
+
+1. Preprocess the dataframe from the previous code block using BoxCox, centering and scaling of the numeric features
+2. Create dummy variables for the `year` factor column
+
+```{r}
+wine <- wine %>%
+  preProcess(method = c("BoxCox", "center", "scale")) %>%
+  predict(wine) %>%
+  dummy_cols(select_columns = "fct_year",
+             remove_most_frequent_dummy = TRUE,
+             remove_selected_columns = TRUE)
+```
+
+
+## 5. Running $K$NN
+
+1. Split the dataframe into an 80/20 training and test set
+2. Use Caret to run a $K$NN model that uses our engineered features to predict province
+  - use 5-fold cross validated subsampling 
+  - allow Caret to try 15 different values for $K$
+3. Display the confusion matrix on the test data
+
+
+```{r}
+split <- createDataPartition(wine$province, p = 0.8, list = FALSE)
+train <- wine[split, ]
+test <- wine[-split, ]
+fit <- train(province ~ .,
+             data = train, 
+             method = "knn",
+             tuneLength = 15,
+             metric = "Kappa",
+             trControl = trainControl(method = "cv", number = 5))
+confusionMatrix(predict(fit, test),factor(test$province))
+```
+
+## 6. Kappa
+
+How do we determine whether a Kappa value represents a good, bad or some other outcome?
+
+<blockquote>
+In my training, I was taught regard Kappa values as within five "bins", ranging from "not good" to "suspiciously good":
+
+* [0.0,0.2): Unusable
+* [0.2,0.4): Bad
+* [0.4,0.6): Okay
+* [0.6,0.8): Excellent
+* [0.8,1.0): Suspicious, likely overfit.
+</blockquote>
+
+## 7. Improvement
+
+How can we interpret the confusion matrix, and how can we improve in our predictions?
+
+> For me, confusion between specifical Californian and Oregonian wins both jumps out numerical and is consistent with my own understand of the world - Both California and Oregon share a border on the Pacific coast of the United States, and are likely planting in similar volcanic soil in the temperate climate zones. They likely even experience similar rainfall! To differentiate specifically these two easily confusable wins, I think I should look into dedicated features that specifical capture the essense of the *difference* between California and Oregonian wins.  Secondly, I notes that almost no wins are predicted to be in Marlborough or Casablanca - which isn't too surprising with a $K$ getting pretty close to the number of wines from those regions as a whole! I would need either more data or more advanced numerical techniques to differentiate wines within in regions from the overwhelming popular California and Oregon wines.

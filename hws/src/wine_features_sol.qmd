@@ -33,7 +33,7 @@ wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/wine
 > We will proceed as follows:<br>
 - Suppress `library` load warnings, as we addressed them prior to publication.<br>
 - Use Tidy data sets via the `tidyverse` package<br>
-- Perform classification and regression via the 'caret' package<br>
+- Perform classification and regression via the `caret` package<br>
 - Engineer features via the `fastDummies` package<br>
 - Load in the `wine.rds` dataframe, hosted publicly on [GitHub](https://github.com/cd-public/D505/raw/master/dat/wine.rds).
 

@@ -21,13 +21,11 @@ output:
 # Decision trees
 
 ## (Long) Setup
-```{r setup, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```{r setup}
 library(tidyverse)
 library(caret)
-source('theme.R')
 
-wine = read_rds("../resources/pinot.rds") %>% 
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/pinot.rds")))
   rowid_to_column("id") 
 
 wine_words <- function(df, j = 1000, stem=F){ 
