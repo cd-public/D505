@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.30">
+
+  <meta name="author" content="Calvin x (Jameson x Hendrik)">
+  <title>Bagging and Boosting</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-ffcbf325be4bf09b74891d05b29692c2.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Bagging and Boosting</h1>
+  <p class="subtitle">Applied Machine Learning</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Calvin x (Jameson x Hendrik) 
+</div>
+</div>
+</div>
+
+</section>
+<section id="agenda" class="title-slide slide level1 center">
+<h1>Agenda</h1>
+<ol start="0" type="1">
+<li>Course Announcements</li>
+<li>Weighted models</li>
+<li>Bagged models</li>
+<li>Boosting</li>
+<li>Group work</li>
+</ol>
+</section>
+
+<section>
+<section id="midterm-317" class="title-slide slide level1 center">
+<h1>Midterm 3/17</h1>
+
+</section>
+<section id="brief-recap-of-course-so-far" class="slide level2 smaller">
+<h2>Brief recap of course so far</h2>
+<ul>
+<li>Linear regression (e.g.&nbsp;<code>lprice ~ .</code>), assumptions of model, interpretation.</li>
+<li><span class="math inline">\(K\)</span>-NN (e.g., <code>province ~ .</code>), multi-class supervised classification. Hyperparameter <span class="math inline">\(k\)</span>.</li>
+<li>Naive Bayes (e.g., <code>province ~ .</code>), multi-class supervised classification.</li>
+<li>Logistic regression (e.g., <code>province=="Oregon" ~ .</code>), binary supervised classification. Elastic net.</li>
+<li>Feature engineering (logarithms, center/scaling, Box Cox, tidytext, etc.).</li>
+<li>Feature selection (correlation, linear / logistic coefficients, frequent words, frequent words by class, etc.).</li>
+</ul>
+</section>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
+<ul>
+<li>Practice midterm out.</li>
+<li>You will go over it on 10 Mar.</li>
+<li>It is based on the 5 homeworks.</li>
+<li>It is based on the prior slide.
+<ul>
+<li>Little to no computatational linguistics</li>
+<li>I’m regarding <code>tidytext</code> as extension, not core, content.</li>
+</ul></li>
+</ul>
+</section>
+<section id="modality-update" class="slide level2">
+<h2>Modality Update</h2>
+<ul>
+<li>Reminder for me if we haven’t set modality.</li>
+</ul>
+</section></section>
+<section>
+<section id="first-model-due-310" class="title-slide slide level1 center">
+<h1>First Model Due 3/10</h1>
+
+</section>
+<section id="publish" class="slide level2">
+<h2>Publish</h2>
+<ul>
+<li>Each group should create:</li>
+</ul>
+<ol type="1">
+<li>An annotated <code>.*md</code> file, and</li>
+<li>The .rds/.pickle/.parquet file that it generates, that</li>
+<li>Contains <em>only</em> the features you want in the model.</li>
+</ol>
+<ul>
+<li>Under version control, on GitHub.</li>
+</ul>
+</section>
+<section id="constraints" class="slide level2">
+<h2>Constraints</h2>
+<ul>
+<li>I will run:</li>
+</ul>
+<ol type="1">
+<li>The specified <span class="math inline">\(K\)</span>NN or Naive Bayes model,</li>
+<li>With: <code>province ~ .</code> (or the whole data frame in <code>scikit</code>)</li>
+<li>With repeated 5-fold cross validation</li>
+<li>With the same index for partitioning training and test sets for every group.</li>
+<li>On whatever is turned in before class.</li>
+<li>Bragging rights for highest Kappa</li>
+</ol>
+</section>
+<section id="context" class="slide level2">
+<h2>Context</h2>
+<ul>
+<li>The “final exam” is that during the last class you will present your model results as though you are speaking to the managers of a large winery.</li>
+<li>It should be presented from a Quarto presentation on GitHub or perhaps e.g.&nbsp;RPubs.</li>
+<li>You must present via the in-room “teaching machine” computer, not your own physical device, to ensure that you are comfortable distributing your findings.</li>
+</ul>
+</section>
+<section id="link-up" class="slide level2">
+<h2>Link up?</h2>
+<ul>
+<li>After lecture</li>
+</ul>
+</section></section>
+<section>
+<section id="weigted-penalty" class="title-slide slide level1 center">
+<h1>Weigted Penalty</h1>
+
+</section>
+<section id="libraries-setup" class="slide level2">
+<h2>Libraries Setup</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>sh <span class="ot">&lt;-</span> suppressPackageStartupMessages</span>
+<span id="cb1-2"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb1-3"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(caret))</span>
+<span id="cb1-4"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(tidytext))</span>
+<span id="cb1-5"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(SnowballC))</span>
+<span id="cb1-6"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(rpart)) <span class="co"># New?</span></span>
+<span id="cb1-7"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(randomForest)) <span class="co"># New?</span></span>
+<span id="cb1-8"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(doParallel)) <span class="co"># New?</span></span>
+<span id="cb1-9"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(gbm)) <span class="co"># New?</span></span>
+<span id="cb1-10"><a></a><span class="fu">data</span>(stop_words)</span>
+<span id="cb1-11"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(thematic))</span>
+<span id="cb1-12"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
+<span id="cb1-13"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dataframe" class="slide level2">
+<h2>Dataframe</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>wine <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://cd-public.github.io/D505/dat/pinot.rds"</span>)))</span>
+<span id="cb2-2"><a></a><span class="fu">names</span>(wine)[<span class="fu">names</span>(wine) <span class="sc">==</span> <span class="st">'id'</span>] <span class="ot">=</span> <span class="st">'id'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="wine-words" class="slide level2">
+<h2>Wine Words</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>wine_words <span class="ot">&lt;-</span> <span class="cf">function</span>(df, j, stem){ </span>
+<span id="cb3-2"><a></a>  words <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a></a>    <span class="fu">unnest_tokens</span>(word, description) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a></a>    <span class="fu">anti_join</span>(stop_words) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a></a>    <span class="fu">filter</span>(<span class="sc">!</span>(word <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"wine"</span>,<span class="st">"pinot"</span>,<span class="st">"vineyard"</span>)))</span>
+<span id="cb3-6"><a></a>  </span>
+<span id="cb3-7"><a></a>  <span class="cf">if</span>(stem){</span>
+<span id="cb3-8"><a></a>    words <span class="ot">&lt;-</span> words <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">wordStem</span>(word))</span>
+<span id="cb3-9"><a></a>  }</span>
+<span id="cb3-10"><a></a>  </span>
+<span id="cb3-11"><a></a>  words <span class="sc">%&gt;%</span> <span class="fu">count</span>(id, word) <span class="sc">%&gt;%</span>  <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">exists =</span> (n<span class="sc">&gt;</span><span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a></a>    ungroup <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(word) <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">total =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(total <span class="sc">&gt;</span> j) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-13"><a></a>    <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> id, <span class="at">names_from =</span> word, <span class="at">values_from =</span> exists, <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">exists=</span><span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a></a>    <span class="fu">right_join</span>(<span class="fu">select</span>(df,id,province)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>province, <span class="sc">~</span><span class="fu">replace_na</span>(.x, F)))</span>
+<span id="cb3-15"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="split-it" class="slide level2">
+<h2>Split It</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">1000</span>, T)</span>
+<span id="cb4-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb4-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="quick-training" class="slide level2">
+<h2>Quick Training</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>control <span class="ot">=</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>)</span>
+<span id="cb5-2"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb5-3"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb5-4"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb5-5"><a></a>             <span class="at">method =</span> <span class="st">"multinom"</span>,</span>
+<span id="cb5-6"><a></a>             <span class="at">maxit =</span> <span class="dv">5</span>) <span class="co"># speed it up - default 100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4293.654702 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4298.443311 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4293.659497 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4286.131959 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4290.880467 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4286.136714 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4323.482725 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4328.101450 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9612.789552 
+final  value 4323.487350 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4300.974171 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4305.760565 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4300.978964 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4350.524391 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4355.253533 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 9614.581312 
+final  value 4350.529126 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 12017.330760 
+final  value 5085.731910 
+stopped after 5 iterations</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix" class="slide level2">
+<h2>Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test))</span>
+<span id="cb7-2"><a></a><span class="fu">confusionMatrix</span>(pred,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               181         11                 1           5        2
+  California              38        607                 5          18       11
+  Casablanca_Valley        0          1                 7           0        0
+  Marlborough              0          0                 0           1        0
+  New_York                 0          0                 0           0        0
+  Oregon                  19        172                13          21       13
+                   Reference
+Prediction          Oregon
+  Burgundy              28
+  California            83
+  Casablanca_Valley      1
+  Marlborough            0
+  New_York               0
+  Oregon               435
+
+Overall Statistics
+                                         
+               Accuracy : 0.7358         
+                 95% CI : (0.714, 0.7568)
+    No Information Rate : 0.4728         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.5831         
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.7605            0.7674                 0.269231
+Specificity                   0.9672            0.8243                 0.998786
+Pos Pred Value                0.7939            0.7966                 0.777778
+Neg Pred Value                0.9606            0.7980                 0.988582
+Prevalence                    0.1423            0.4728                 0.015541
+Detection Rate                0.1082            0.3628                 0.004184
+Detection Prevalence          0.1363            0.4555                 0.005380
+Balanced Accuracy             0.8639            0.7958                 0.634008
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                   0.0222222         0.00000        0.7952
+Specificity                   1.0000000         1.00000        0.7886
+Pos Pred Value                1.0000000             NaN        0.6464
+Neg Pred Value                0.9736842         0.98446        0.8880
+Prevalence                    0.0268978         0.01554        0.3270
+Detection Rate                0.0005977         0.00000        0.2600
+Detection Prevalence          0.0005977         0.00000        0.4023
+Balanced Accuracy             0.5111111         0.50000        0.7919</code></pre>
+</div>
+</div>
+</section>
+<section id="create-some-weights" class="slide level2">
+<h2>Create some weights</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>weight_train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a></a>  <span class="fu">mutate</span>(<span class="at">weights=</span><span class="fu">if_else</span>(province<span class="sc">==</span><span class="st">"California"</span>,<span class="dv">1</span>,<span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="add-weight-to-model" class="slide level2">
+<h2>Add weight to model</h2>
+<ul>
+<li>Look closely:
+<ul>
+<li>Train over <code>train</code> dataframe</li>
+<li>Provide weights from <code>weight_train</code> data frame</li>
+<li>That way it won’t train on weights!</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb10-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb10-3"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb10-4"><a></a>             <span class="at">method =</span> <span class="st">"multinom"</span>,</span>
+<span id="cb10-5"><a></a>             <span class="at">maxit =</span> <span class="dv">5</span>,</span>
+<span id="cb10-6"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 48035.564209 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 48040.946734 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 48035.569592 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 46545.313878 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 46550.591504 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105991.531402 
+final  value 46545.319156 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 48068.956223 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 48074.276422 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 48068.961544 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 45944.777964 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 45950.193395 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 105989.739643 
+final  value 45944.783380 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 106025.574832 
+final  value 48603.782942 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 106025.574832 
+final  value 48609.093526 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 106025.574832 
+final  value 48603.788253 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 132497.029230 
+final  value 51901.008448 
+stopped after 5 iterations</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-1" class="slide level2">
+<h2>Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test))</span>
+<span id="cb12-2"><a></a><span class="fu">confusionMatrix</span>(pred,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               221         98                 1           6        6
+  California               0        211                 0           1        2
+  Casablanca_Valley        2         20                18           0        5
+  Marlborough              2        135                 0          23        5
+  New_York                 0         16                 0           1        5
+  Oregon                  13        311                 7          14        3
+                   Reference
+Prediction          Oregon
+  Burgundy              60
+  California             3
+  Casablanca_Valley      3
+  Marlborough           21
+  New_York               2
+  Oregon               458
+
+Overall Statistics
+                                          
+               Accuracy : 0.5595          
+                 95% CI : (0.5353, 0.5834)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : 7.657e-13       
+                                          
+                  Kappa : 0.408           
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.9286            0.2668                  0.69231
+Specificity                   0.8808            0.9932                  0.98179
+Pos Pred Value                0.5638            0.9724                  0.37500
+Neg Pred Value                0.9867            0.6016                  0.99508
+Prevalence                    0.1423            0.4728                  0.01554
+Detection Rate                0.1321            0.1261                  0.01076
+Detection Prevalence          0.2343            0.1297                  0.02869
+Balanced Accuracy             0.9047            0.6300                  0.83705
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                     0.51111        0.192308        0.8373
+Specificity                     0.89988        0.988464        0.6909
+Pos Pred Value                  0.12366        0.208333        0.5682
+Neg Pred Value                  0.98521        0.987265        0.8973
+Prevalence                      0.02690        0.015541        0.3270
+Detection Rate                  0.01375        0.002989        0.2738
+Detection Prevalence            0.11118        0.014345        0.4818
+Balanced Accuracy               0.70549        0.590386        0.7641</code></pre>
+</div>
+</div>
+</section>
+<section id="weighted-models" class="slide level2">
+<h2>Weighted Models</h2>
+<ul>
+<li>Where do these weights come from?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>weight_train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a></a>  <span class="fu">mutate</span>(<span class="at">weights=</span><span class="fu">case_when</span>(</span>
+<span id="cb14-3"><a></a>    province<span class="sc">==</span><span class="st">"Burgundy"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb14-4"><a></a>    province<span class="sc">==</span><span class="st">"California"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb14-5"><a></a>    province<span class="sc">==</span><span class="st">"Casablanca_Valley"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
+<span id="cb14-6"><a></a>    province<span class="sc">==</span><span class="st">"Marlborough"</span> <span class="sc">~</span> <span class="fl">18.5</span>,</span>
+<span id="cb14-7"><a></a>    province<span class="sc">==</span><span class="st">"New_York"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
+<span id="cb14-8"><a></a>    province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">~</span> <span class="fl">1.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="progressive-overload" class="slide level2">
+<h2>Progressive overload</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb15-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb15-3"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb15-4"><a></a>             <span class="at">method =</span> <span class="st">"multinom"</span>,</span>
+<span id="cb15-5"><a></a>             <span class="at">maxit =</span> <span class="dv">5</span>,</span>
+<span id="cb15-6"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 14594.434569 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 14600.444684 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 14594.440582 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29085.273112 
+final  value 15333.346364 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29085.273112 
+final  value 15339.437606 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29085.273112 
+final  value 15333.352458 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 15053.131982 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 15059.407508 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 15053.138261 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 15366.545546 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 15372.704878 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29052.125562 
+final  value 15366.551708 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 14871.524669 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 14877.593414 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 29053.917321 
+final  value 14871.530741 
+stopped after 5 iterations
+# weights:  186 (150 variable)
+initial  value 36324.339720 
+final  value 19122.264208 
+stopped after 5 iterations</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-2" class="slide level2">
+<h2>Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test))</span>
+<span id="cb17-2"><a></a><span class="fu">confusionMatrix</span>(pred,<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               215         82                 1           8        4
+  California               0        378                 0           2        0
+  Casablanca_Valley        2         48                22           1        7
+  Marlborough              0         13                 0          12        0
+  New_York                 6         94                 0           7       12
+  Oregon                  15        176                 3          15        3
+                   Reference
+Prediction          Oregon
+  Burgundy              70
+  California            15
+  Casablanca_Valley      9
+  Marlborough            4
+  New_York              16
+  Oregon               433
+
+Overall Statistics
+                                          
+               Accuracy : 0.6408          
+                 95% CI : (0.6172, 0.6638)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.5062          
+                                          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.9034            0.4779                  0.84615
+Specificity                   0.8850            0.9807                  0.95932
+Pos Pred Value                0.5658            0.9570                  0.24719
+Neg Pred Value                0.9822            0.6768                  0.99747
+Prevalence                    0.1423            0.4728                  0.01554
+Detection Rate                0.1285            0.2259                  0.01315
+Detection Prevalence          0.2271            0.2361                  0.05320
+Balanced Accuracy             0.8942            0.7293                  0.90274
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                    0.266667        0.461538        0.7916
+Specificity                    0.989558        0.925319        0.8117
+Pos Pred Value                 0.413793        0.088889        0.6713
+Neg Pred Value                 0.979927        0.990897        0.8891
+Prevalence                     0.026898        0.015541        0.3270
+Detection Rate                 0.007173        0.007173        0.2588
+Detection Prevalence           0.017334        0.080693        0.3855
+Balanced Accuracy              0.628112        0.693429        0.8017</code></pre>
+</div>
+</div>
+</section>
+<section id="weight-generation" class="slide level2">
+<h2>Weight generation</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Check wines per province.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a>wine <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a></a>  <span class="fu">group_by</span>(province) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  province          count
+  &lt;chr&gt;             &lt;int&gt;
+1 Burgundy           1193
+2 California         3959
+3 Casablanca_Valley   131
+4 Marlborough         229
+5 New_York            131
+6 Oregon             2737</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Recall the weights:</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb21-1"><a></a>...</span>
+<span id="cb21-2"><a></a>"Burgundy"          ~ 3,</span>
+<span id="cb21-3"><a></a>"California"        ~ 1,</span>
+<span id="cb21-4"><a></a>"Casablanca_Valley" ~ 37,</span>
+<span id="cb21-5"><a></a>"Marlborough"       ~ 18.5,</span>
+<span id="cb21-6"><a></a>"New_York"          ~ 37,</span>
+<span id="cb21-7"><a></a>"Oregon"            ~ 1.4</span>
+<span id="cb21-8"><a></a>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<ul>
+<li>Write a function to:
+<ul>
+<li>Find weights, given</li>
+<li>A dataframe, and</li>
+<li>A column name.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="regularization" class="title-slide slide level1 center">
+<h1>Regularization</h1>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/0/02/Regularization.svg" class="r-stretch"></section>
+<section id="penalty" class="slide level2">
+<h2>Penalty</h2>
+<ul>
+<li>Regularization is often also called ‘penalization’ because it adds a <em>penalizing term</em> to the loss function.</li>
+</ul>
+<p><span class="math display">\[
+\min_{f}\sum_{i=1}^{n}V(f(x_{i}),y_{i})+\lambda R(f)
+\]</span></p>
+<ul>
+<li><em>De facto</em> application of Occam’s Razor.
+<ul>
+<li>Assume simple is good.</li>
+<li>Therefore punish coefficients (which complicate things)</li>
+</ul></li>
+</ul>
+</section>
+<section id="penalties" class="slide level2">
+<h2>Penalties</h2>
+<ul>
+<li>The amount of the penalty is fine-tuned using a constant lambda <span class="math inline">\(\lambda\)</span>.</li>
+<li>When <span class="math inline">\(\lambda = 0\)</span>, no penalty is enforced.</li>
+<li>The best lambda can be found by finding a value that minimizes prediction error after cross validating the model with different values.</li>
+</ul>
+</section>
+<section id="lasso-regression" class="slide level2">
+<h2>Lasso Regression</h2>
+<ul>
+<li>Given <span class="math inline">\(p\)</span> features and <span class="math inline">\(N\)</span> observations.</li>
+<li><span class="math inline">\(\beta\)</span>’s are coefficients.</li>
+<li>The <span class="math inline">\(\lambda\)</span> term is evaluated via absolute value <span class="math inline">\(|\beta_j|\)</span></li>
+</ul>
+<p><span class="math display">\[
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} |\beta_j|
+\]</span></p>
+</section>
+<section id="lasso" class="slide level2">
+<h2>LASSO</h2>
+<ul>
+<li>Least Absolute Shrinkage and Selection Operator.</li>
+<li>Shrinks the regression coefficients toward zero.</li>
+<li>Penalizing the regression model with a penalty term called <strong>L1-norm</strong>
+<ul>
+<li>The sum of the absolute coefficients.</li>
+<li>I learned about L1 in a class called “Real Analysis”</li>
+<li>Its the streetmap distance (roads and avenues)</li>
+</ul></li>
+</ul>
+</section>
+<section id="lasso-regression-1" class="slide level2">
+<h2>Lasso Regression</h2>
+<ul>
+<li>Zeroes out some coefficients
+<ul>
+<li>With a minor contribution to the model, can’t “resist” the penalty.</li>
+</ul></li>
+<li>Lasso can be also seen as an alternative to the subset selection methods.
+<ul>
+<li>A form of variable selection.</li>
+</ul></li>
+</ul>
+</section>
+<section id="glmnet" class="slide level2">
+<h2>glmnet</h2>
+<ul>
+<li>“Lasso and Elastic-Net Regularized Generalized Linear Models”
+<ul>
+<li>Elastic-Net on forthcoming slides!</li>
+</ul></li>
+<li>Use via</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>method <span class="ot">=</span> <span class="st">"glmnet"</span>, </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>It accepts an <code>alpha</code> value.
+<ul>
+<li>Set to <code>1</code> for LASSO</li>
+<li>Set to non-one on latter slides!</li>
+</ul></li>
+</ul>
+</section>
+<section id="lasso-1" class="slide level2">
+<h2>LASSO</h2>
+<ul>
+<li><code>tuneGrid</code> is I think, clunky, but we only use it here as a demo.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="co"># we specify lamdba via a "tuneGrid"</span></span>
+<span id="cb23-2"><a></a>lasso <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>, <span class="at">length =</span> <span class="dv">10</span>))</span>
+<span id="cb23-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span>., </span>
+<span id="cb23-4"><a></a>             <span class="at">data =</span> train,</span>
+<span id="cb23-5"><a></a>             <span class="at">method =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb23-6"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb23-7"><a></a>             <span class="at">tuneGrid =</span> lasso)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inspect-lambda" class="slide level2">
+<h2>Inspect <span class="math inline">\(\lambda\)</span></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>fit<span class="sc">$</span>bestTune<span class="sc">$</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test)), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               197          6                 0           3        1
+  California              15        690                 5          17       14
+  Casablanca_Valley        0          2                17           0        1
+  Marlborough              0          4                 0           9        0
+  New_York                 0          2                 0           0        4
+  Oregon                  26         87                 4          16        6
+                   Reference
+Prediction          Oregon
+  Burgundy              24
+  California            88
+  Casablanca_Valley      2
+  Marlborough            2
+  New_York               0
+  Oregon               431
+
+Overall Statistics
+                                         
+               Accuracy : 0.8057         
+                 95% CI : (0.786, 0.8244)
+    No Information Rate : 0.4728         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.6937         
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.8277            0.8723                  0.65385
+Specificity                   0.9763            0.8424                  0.99696
+Pos Pred Value                0.8528            0.8323                  0.77273
+Neg Pred Value                0.9716            0.8803                  0.99455
+Prevalence                    0.1423            0.4728                  0.01554
+Detection Rate                0.1178            0.4124                  0.01016
+Detection Prevalence          0.1381            0.4955                  0.01315
+Balanced Accuracy             0.9020            0.8574                  0.82541
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                    0.200000        0.153846        0.7879
+Specificity                    0.996314        0.998786        0.8766
+Pos Pred Value                 0.600000        0.666667        0.7561
+Neg Pred Value                 0.978287        0.986803        0.8948
+Prevalence                     0.026898        0.015541        0.3270
+Detection Rate                 0.005380        0.002391        0.2576
+Detection Prevalence           0.008966        0.003586        0.3407
+Balanced Accuracy              0.598157        0.576316        0.8322</code></pre>
+</div>
+</div>
+</section>
+<section id="ridge-regression" class="slide level2">
+<h2>Ridge Regression</h2>
+<ul>
+<li>Given <span class="math inline">\(p\)</span> features and <span class="math inline">\(N\)</span> observations.</li>
+<li><span class="math inline">\(\beta\)</span>’s are coefficients.</li>
+<li>The <span class="math inline">\(\lambda\)</span> term is evaluated via square <span class="math inline">\(\beta_j^2\)</span></li>
+</ul>
+<p><span class="math display">\[
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} \beta_j^2
+\]</span></p>
+</section>
+<section id="ridge" class="slide level2">
+<h2>Ridge</h2>
+<ul>
+<li>Also Tikhonov regularization, named for Andrey Tikhonov</li>
+<li>Shrinks the regression coefficients toward zero.</li>
+<li>Penalizing the regression model with a penalty term called <strong>L2-norm</strong>
+<ul>
+<li>The sum of the sqared coefficients.</li>
+<li>I <em>also</em> learned about L2 in “Real Analysis”</li>
+<li>Its the as-birds-fly distance (point-to-point)</li>
+</ul></li>
+</ul>
+</section>
+<section id="ridge-1" class="slide level2">
+<h2>Ridge</h2>
+<ul>
+<li>Set <code>alpha</code> (that is, <span class="math inline">\(\alpha\)</span>) to 0.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a><span class="co"># we specify lamdba via a "tuneGrid"</span></span>
+<span id="cb28-2"><a></a>ridge <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>, <span class="at">length =</span> <span class="dv">10</span>))</span>
+<span id="cb28-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span>., </span>
+<span id="cb28-4"><a></a>             <span class="at">data =</span> train,</span>
+<span id="cb28-5"><a></a>             <span class="at">method =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb28-6"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb28-7"><a></a>             <span class="at">tuneGrid =</span> ridge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inspect-lambda-1" class="slide level2">
+<h2>Inspect <span class="math inline">\(\lambda\)</span></h2>
+<ul>
+<li>Much higher than Lasso (0.012 vs 0.001)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>fit<span class="sc">$</span>bestTune<span class="sc">$</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.012</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-1" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test)), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               192          3                 0           3        1
+  California              16        698                11          21       17
+  Casablanca_Valley        0          0                 8           0        0
+  Marlborough              0          4                 0           3        0
+  New_York                 0          1                 0           0        2
+  Oregon                  30         85                 7          18        6
+                   Reference
+Prediction          Oregon
+  Burgundy              19
+  California            90
+  Casablanca_Valley      1
+  Marlborough            0
+  New_York               0
+  Oregon               437
+
+Overall Statistics
+                                         
+               Accuracy : 0.801          
+                 95% CI : (0.781, 0.8198)
+    No Information Rate : 0.4728         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.6822         
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.8067            0.8824                 0.307692
+Specificity                   0.9819            0.8243                 0.999393
+Pos Pred Value                0.8807            0.8183                 0.888889
+Neg Pred Value                0.9684            0.8866                 0.989183
+Prevalence                    0.1423            0.4728                 0.015541
+Detection Rate                0.1148            0.4172                 0.004782
+Detection Prevalence          0.1303            0.5099                 0.005380
+Balanced Accuracy             0.8943            0.8533                 0.653543
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                    0.066667        0.076923        0.7989
+Specificity                    0.997543        0.999393        0.8703
+Pos Pred Value                 0.428571        0.666667        0.7496
+Neg Pred Value                 0.974790        0.985629        0.8991
+Prevalence                     0.026898        0.015541        0.3270
+Detection Rate                 0.001793        0.001195        0.2612
+Detection Prevalence           0.004184        0.001793        0.3485
+Balanced Accuracy              0.532105        0.538158        0.8346</code></pre>
+</div>
+</div>
+</section>
+<section id="elastic-net" class="slide level2">
+<h2>Elastic Net</h2>
+<ul>
+<li>Given <span class="math inline">\(p\)</span> features and <span class="math inline">\(N\)</span> observations.</li>
+<li><span class="math inline">\(\beta\)</span>’s are coefficients.</li>
+<li>Add both together and weight them comparatively via parameter <span class="math inline">\(\alpha\)</span>
+<ul>
+<li>Lower case alpha.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}  \right) ^ 2 + \alpha\lambda \sum_{j=1}^{p} |\beta_j|+(1-\alpha)\lambda \sum_{j=1}^{p} \beta_j^2
+\]</span></p>
+</section>
+<section id="deciding" class="slide level2">
+<h2>Deciding</h2>
+<ul>
+<li>I only ever hear of LASSO or elastic net, which combines Lasso and Ridge:
+<ul>
+<li>Lasso better in a situation where some of the predictors have large coefficients, and the remaining predictors have very small coefficients.</li>
+<li>Ridge regression better when many predictors with coefficients of roughly equal size.</li>
+<li>Not too costly to just try them or tune along <span class="math inline">\(\alpha\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="elastic-net-1" class="slide level2">
+<h2>Elastic Net</h2>
+<ul>
+<li>This is the fun one.</li>
+<li>Just don’t say anything and you get elastic net.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span>., </span>
+<span id="cb33-2"><a></a>             <span class="at">data =</span> train,</span>
+<span id="cb33-3"><a></a>             <span class="at">method =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb33-4"><a></a>             <span class="at">trControl =</span> control)</span>
+<span id="cb33-5"><a></a>             <span class="co"># tuneGrid = ridge)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="inspect-lambda-and-alpha" class="slide level2">
+<h2>Inspect <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span></h2>
+<ul>
+<li>Much higher than Lasso (0.012 vs 0.001)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>fit<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  alpha      lambda
+2   0.1 0.003770079</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-2" class="slide level2">
+<h2>Confusion Matrix</h2>
+<ul>
+<li>In this case, doesn’t seem better than Lasso by much at all!
+<ul>
+<li>But - it’s automatic.</li>
+<li>Let the computer think hard so you can spend time thinking about, say, features.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test)), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               194          5                 0           3        1
+  California              15        692                 6          17       15
+  Casablanca_Valley        0          2                15           0        1
+  Marlborough              0          4                 0           9        0
+  New_York                 0          3                 0           0        3
+  Oregon                  29         85                 5          16        6
+                   Reference
+Prediction          Oregon
+  Burgundy              23
+  California            90
+  Casablanca_Valley      1
+  Marlborough            1
+  New_York               0
+  Oregon               432
+
+Overall Statistics
+                                          
+               Accuracy : 0.8039          
+                 95% CI : (0.7841, 0.8227)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.69            
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.8151            0.8748                 0.576923
+Specificity                   0.9777            0.8379                 0.997571
+Pos Pred Value                0.8584            0.8287                 0.789474
+Neg Pred Value                0.9696            0.8819                 0.993349
+Prevalence                    0.1423            0.4728                 0.015541
+Detection Rate                0.1160            0.4136                 0.008966
+Detection Prevalence          0.1351            0.4991                 0.011357
+Balanced Accuracy             0.8964            0.8564                 0.787247
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                    0.200000        0.115385        0.7898
+Specificity                    0.996929        0.998179        0.8748
+Pos Pred Value                 0.642857        0.500000        0.7539
+Neg Pred Value                 0.978300        0.986203        0.8955
+Prevalence                     0.026898        0.015541        0.3270
+Detection Rate                 0.005380        0.001793        0.2582
+Detection Prevalence           0.008368        0.003586        0.3425
+Balanced Accuracy              0.598464        0.556782        0.8323</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="bagging-boosting-and-custom-ensembles" class="title-slide slide level1 center">
+<h1>Bagging, Boosting and Custom Ensembles</h1>
+
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p><a href="Understanding the Bias-Variance Tradeoff">Understanding the Bias-Variance Tradeoff by Scott Fortman-Roe</a></p>
+<table class="caption-top" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th"></td>
+<td>Low Variance</td>
+<td>High Variance</td>
+</tr>
+<tr class="even">
+<td class="r90">Low Bias</td>
+<td><div id="bullsEyeLBLV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="95.2417299219265" cy="98.78231506348611" r="2.5"></circle><circle class="arrow" cx="94.98877477792978" cy="98.35369950854978" r="2.5"></circle><circle class="arrow" cx="98.64499086445454" cy="90.1611985381718" r="2.5"></circle><circle class="arrow" cx="98.29842135491629" cy="103.46102989370513" r="2.5"></circle><circle class="arrow" cx="95.79393665077546" cy="100.68784532768193" r="2.5"></circle><circle class="arrow" cx="99.98795100308158" cy="101.81130596018545" r="2.5"></circle><circle class="arrow" cx="89.34113757239132" cy="96.3757227502656" r="2.5"></circle><circle class="arrow" cx="92.93663382940163" cy="93.85728904385391" r="2.5"></circle><circle class="arrow" cx="91.27400877365645" cy="92.74432495644449" r="2.5"></circle><circle class="arrow" cx="98.35171143651966" cy="90.25639751501993" r="2.5"></circle><circle class="arrow" cx="89.84479267773501" cy="89.80271518867866" r="2.5"></circle><circle class="arrow" cx="102.92811906669978" cy="102.31429122988574" r="2.5"></circle><circle class="arrow" cx="98.43292822053172" cy="94.33502755999424" r="2.5"></circle><circle class="arrow" cx="100.03977392090455" cy="88.32650985799843" r="2.5"></circle><circle class="arrow" cx="90.45638062240717" cy="91.38063914598084" r="2.5"></circle><circle class="arrow" cx="91.814500886036" cy="105.83526025811605" r="2.5"></circle><circle class="arrow" cx="93.48689316677351" cy="94.63423346645308" r="2.5"></circle><circle class="arrow" cx="93.2603587976381" cy="98.98875335330786" r="2.5"></circle><circle class="arrow" cx="96.46568926721694" cy="92.17361145704697" r="2.5"></circle><circle class="arrow" cx="91.90571922505733" cy="88.55473443715668" r="2.5"></circle><circle class="arrow" cx="103.20972223139" cy="96.86760959426755" r="2.5"></circle><circle class="arrow" cx="90.45135687581899" cy="102.46241789283684" r="2.5"></circle><circle class="arrow" cx="96.83775784414765" cy="109.14141342737429" r="2.5"></circle><circle class="arrow" cx="88.47009267490499" cy="102.33783592020343" r="2.5"></circle><circle class="arrow" cx="103.08969765418682" cy="99.25599334201341" r="2.5"></circle>
+</svg>
+</div></td>
+<td><div id="bullsEyeLBHV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="135.30208525468566" cy="109.53667975411805" r="2.5"></circle><circle class="arrow" cx="128.43144410223016" cy="73.55338417474053" r="2.5"></circle><circle class="arrow" cx="62.46329544014869" cy="115.09033226489368" r="2.5"></circle><circle class="arrow" cx="126.27343247249648" cy="66.14548779266283" r="2.5"></circle><circle class="arrow" cx="87.5311440807998" cy="96.79804569434428" r="2.5"></circle><circle class="arrow" cx="89.86553587619488" cy="73.31114567408036" r="2.5"></circle><circle class="arrow" cx="72.14224642068129" cy="71.56278538776868" r="2.5"></circle><circle class="arrow" cx="133.67943947732815" cy="99.4197165637036" r="2.5"></circle><circle class="arrow" cx="95.39079143636448" cy="118.7690125167322" r="2.5"></circle><circle class="arrow" cx="94.97114920044513" cy="89.90155532250407" r="2.5"></circle><circle class="arrow" cx="97.76397547830885" cy="104.44717591002323" r="2.5"></circle><circle class="arrow" cx="89.30844911697717" cy="85.24513430882038" r="2.5"></circle><circle class="arrow" cx="84.9656556483016" cy="110.46435847056802" r="2.5"></circle><circle class="arrow" cx="94.47025121828862" cy="111.22511714783076" r="2.5"></circle><circle class="arrow" cx="81.19000260405745" cy="87.45496868419164" r="2.5"></circle><circle class="arrow" cx="52.31412324140461" cy="109.70597207613788" r="2.5"></circle><circle class="arrow" cx="84.07493934147824" cy="121.38043888867571" r="2.5"></circle><circle class="arrow" cx="79.96730411760538" cy="96.32433545651551" r="2.5"></circle><circle class="arrow" cx="97.5698900562818" cy="104.32403135668825" r="2.5"></circle><circle class="arrow" cx="64.83727832847151" cy="102.24003307409187" r="2.5"></circle><circle class="arrow" cx="96.43564661227427" cy="111.54952202719106" r="2.5"></circle><circle class="arrow" cx="113.09578479104827" cy="118.67825786463287" r="2.5"></circle><circle class="arrow" cx="103.04118268265579" cy="107.66971927290987" r="2.5"></circle><circle class="arrow" cx="76.27875910415312" cy="128.31617509558063" r="2.5"></circle><circle class="arrow" cx="129.12754678814048" cy="95.5293181876095" r="2.5"></circle>
+</svg>
+</div></td>
+</tr>
+<tr class="odd">
+<td class="r90">High Bias</td>
+<td><div id="bullsEyeHBLV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="93.27374996049726" cy="42.328637258595556" r="2.5"></circle><circle class="arrow" cx="105.52581398889991" cy="44.93556686811315" r="2.5"></circle><circle class="arrow" cx="95.26101246647794" cy="46.7755302240622" r="2.5"></circle><circle class="arrow" cx="112.05060873387474" cy="52.86933183374843" r="2.5"></circle><circle class="arrow" cx="110.17742629325286" cy="57.67330743618805" r="2.5"></circle><circle class="arrow" cx="102.62633835599787" cy="47.63329341720682" r="2.5"></circle><circle class="arrow" cx="104.97396150323235" cy="53.86880949845978" r="2.5"></circle><circle class="arrow" cx="103.76256282114713" cy="48.3116835441338" r="2.5"></circle><circle class="arrow" cx="97.84406081280112" cy="48.05373982750756" r="2.5"></circle><circle class="arrow" cx="105.47413674536088" cy="60.8819662990806" r="2.5"></circle><circle class="arrow" cx="101.32433258243718" cy="50.42653499700785" r="2.5"></circle><circle class="arrow" cx="107.75895816267607" cy="53.5123837318865" r="2.5"></circle><circle class="arrow" cx="102.34151233023265" cy="43.22134477028904" r="2.5"></circle><circle class="arrow" cx="102.74836927714325" cy="48.99085752653546" r="2.5"></circle><circle class="arrow" cx="103.5514955929248" cy="50.700765047971295" r="2.5"></circle><circle class="arrow" cx="99.66489163788832" cy="52.960882058099266" r="2.5"></circle><circle class="arrow" cx="104.03334679960989" cy="50.56365067938392" r="2.5"></circle><circle class="arrow" cx="112.40294162147084" cy="51.05603578517508" r="2.5"></circle><circle class="arrow" cx="103.77185736249525" cy="48.69041724555987" r="2.5"></circle><circle class="arrow" cx="105.75923213844915" cy="52.16305294199713" r="2.5"></circle><circle class="arrow" cx="100.02620538056256" cy="45.76240834088125" r="2.5"></circle><circle class="arrow" cx="92.6900668670068" cy="49.1548990106344" r="2.5"></circle><circle class="arrow" cx="102.52276709795272" cy="54.66889873214721" r="2.5"></circle><circle class="arrow" cx="92.63240239912123" cy="54.816287121818064" r="2.5"></circle><circle class="arrow" cx="93.67433387840616" cy="44.1308081872826" r="2.5"></circle>
+</svg>
+</div></td>
+<td><div id="bullsEyeHBHV">
+<svg width="200" height="200" style="border: medium;">
+<circle class="ring" cx="100" cy="100" r="90.9090909090909" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="62.5" style="fill: rgb(118, 179, 216);"></circle><circle class="ring" cx="100" cy="100" r="36.36363636363637" style="fill: white;"></circle><circle class="ring" cx="100" cy="100" r="13.333333333333334" style="fill: rgb(193, 47, 62);"></circle><circle class="arrow" cx="103.71226190486529" cy="35.245951954634805" r="2.5"></circle><circle class="arrow" cx="85.66758527040301" cy="67.2447331281883" r="2.5"></circle><circle class="arrow" cx="62.28568550397415" cy="32.140931024292215" r="2.5"></circle><circle class="arrow" cx="44.453050499204494" cy="27.594136705300244" r="2.5"></circle><circle class="arrow" cx="65.5267486415562" cy="34.97572973546029" r="2.5"></circle><circle class="arrow" cx="52.31696098385054" cy="63.901284157820186" r="2.5"></circle><circle class="arrow" cx="48.16744830325244" cy="18.83190221128146" r="2.5"></circle><circle class="arrow" cx="74.76574746979051" cy="45.429332524802895" r="2.5"></circle><circle class="arrow" cx="93.43125456438462" cy="10.626913149263643" r="2.5"></circle><circle class="arrow" cx="68.5906869780192" cy="46.07543950204163" r="2.5"></circle><circle class="arrow" cx="76.78805778650607" cy="37.09650785588681" r="2.5"></circle><circle class="arrow" cx="72.76655176927713" cy="50.971128326292146" r="2.5"></circle><circle class="arrow" cx="42.724353763919886" cy="61.927273912222816" r="2.5"></circle><circle class="arrow" cx="112.20625419743854" cy="39.15213297199204" r="2.5"></circle><circle class="arrow" cx="88.36900320964696" cy="38.854779509806455" r="2.5"></circle><circle class="arrow" cx="63.66053914630819" cy="56.46641986123598" r="2.5"></circle><circle class="arrow" cx="68.96191500872605" cy="43.16404842444755" r="2.5"></circle><circle class="arrow" cx="35.635519046608465" cy="28.74648178852344" r="2.5"></circle><circle class="arrow" cx="68.60182810836173" cy="59.740609767146466" r="2.5"></circle><circle class="arrow" cx="95.5153403974868" cy="25.547080430710736" r="2.5"></circle><circle class="arrow" cx="46.37075852226722" cy="19.62606830684345" r="2.5"></circle><circle class="arrow" cx="89.9950666768221" cy="50.71556277512999" r="2.5"></circle><circle class="arrow" cx="64.45958584171213" cy="42.52949470919935" r="2.5"></circle><circle class="arrow" cx="95.57718864645554" cy="4.197361489016814" r="2.5"></circle><circle class="arrow" cx="70.63354751617322" cy="32.127872854044625" r="2.5"></circle>
+</svg>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<p>The goal is to decrease the variance (bagging) or bias (boosting) in our models.</p>
+<ul>
+<li>Step 1: producing a distribution of simple ML models on subsets of the original data.</li>
+<li>Step 2: combine the distribution into one “aggregated” model.</li>
+</ul>
+</section>
+<section id="framework" class="slide level2">
+<h2>Framework</h2>
+<p><strong>Note:</strong> Subtle difference between Bagging/Boosting and resampling.</p>
+<ul>
+<li>Re-sampling –&gt; average coefficients from different subsamples to create one model</li>
+<li>Bagging/Boosting –&gt; average the predictions from different models</li>
+</ul>
+</section>
+<section id="bagging-subsets-of-data" class="slide level2">
+<h2>Bagging (subsets of data)</h2>
+<ul>
+<li>“Bootstrap aggregating”</li>
+<li>Builds multiple models with bootstrap samples (combinations with repetitions) using a single algorithm.</li>
+<li>The models’ predictions are combined with voting (for classification) or averaging (for numeric prediction).</li>
+<li>Voting means the bagging model’s prediction is based on the majority of learners’ prediction for a class.</li>
+</ul>
+</section>
+<section id="bagging" class="slide level2">
+<h2>Bagging</h2>
+
+<img data-src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Ensemble_Bagging.svg" class="r-stretch"></section>
+<section id="treebag" class="slide level2">
+<h2>Treebag</h2>
+<ul>
+<li>Treebag, or, generate trees and combine trees, taking different weights.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb38-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb38-3"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb38-4"><a></a>             <span class="at">method =</span> <span class="st">"treebag"</span>,</span>
+<span id="cb38-5"><a></a>             <span class="at">maxit =</span> <span class="dv">5</span>) <span class="co"># speed it up - default 100</span></span>
+<span id="cb38-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bagged CART 
+
+6707 samples
+  29 predictor
+   6 classes: 'Burgundy', 'California', 'Casablanca_Valley', 'Marlborough', 'New_York', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 5365, 5365, 5367, 5365, 5366 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.7835129  0.6621207</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-3" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb40-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               182         11                 0           2        1
+  California              16        674                 7          13       14
+  Casablanca_Valley        1          3                15           0        2
+  Marlborough              1          7                 0          19        2
+  New_York                 1          4                 0           0        4
+  Oregon                  37         92                 4          11        3
+                   Reference
+Prediction          Oregon
+  Burgundy              28
+  California            93
+  Casablanca_Valley      2
+  Marlborough            3
+  New_York               1
+  Oregon               420
+
+Overall Statistics
+                                         
+               Accuracy : 0.7854         
+                 95% CI : (0.765, 0.8049)
+    No Information Rate : 0.4728         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.6639         
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.7647            0.8521                 0.576923
+Specificity                   0.9707            0.8379                 0.995143
+Pos Pred Value                0.8125            0.8250                 0.652174
+Neg Pred Value                0.9614            0.8633                 0.993333
+Prevalence                    0.1423            0.4728                 0.015541
+Detection Rate                0.1088            0.4029                 0.008966
+Detection Prevalence          0.1339            0.4883                 0.013748
+Balanced Accuracy             0.8677            0.8450                 0.786033
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                     0.42222        0.153846        0.7678
+Specificity                     0.99201        0.996357        0.8694
+Pos Pred Value                  0.59375        0.400000        0.7407
+Neg Pred Value                  0.98416        0.986771        0.8852
+Prevalence                      0.02690        0.015541        0.3270
+Detection Rate                  0.01136        0.002391        0.2510
+Detection Prevalence            0.01913        0.005977        0.3389
+Balanced Accuracy               0.70712        0.575102        0.8186</code></pre>
+</div>
+</div>
+</section>
+<section id="boosting" class="slide level2 smaller">
+<h2>Boosting</h2>
+<blockquote>
+<p>A horse-racing gambler, hoping to maximize his winnings, decides to create a computer program that will accurately predict the winner of a horse race based on the usual information (number of races recently won by each horse, betting odds for each horse, etc.). To create such a program, he asks a highly successful expert gambler to explain his betting strategy. Not surprisingly, the expert is unable to articulate a grand set of rules for selecting a horse. On the other hand, when presented with the data for a specific set of races, the expert has no trouble coming up with a “rule of thumb” for that set of races (such as, “Bet on the horse that has recently won the most races” or “Bet on the horse with the most favored odds”). Although such a rule of thumb, by itself, is obviously very rough and inaccurate, it is not unreasonable to expect it to provide predictions that are at least a little bit better than random guessing. Furthermore, by repeatedly asking the expert’s opinion on different collections of races, the gambler is able to extract many rules of thumb.</p>
+</blockquote>
+</section>
+<section id="boosting-1" class="slide level2 smaller">
+<h2>Boosting</h2>
+<blockquote>
+<p>In order to use these rules of thumb to maximum advantage, there are two problems faced by the gambler:</p>
+</blockquote>
+<blockquote>
+<p>First, how should he choose the collections of races presented to the expert so as to extract rules of thumb from the expert that will be the most useful?</p>
+</blockquote>
+<blockquote>
+<p>Second, once he has collected many rules of thumb, how can they be combined into a single, highly accurate prediction rule?</p>
+</blockquote>
+<blockquote>
+<p>Boosting refers to a general and provably effective method of producing a very accurate prediction rule by combining rough and moderately inaccurate rules of thumb in a manner similar to that suggested above</p>
+</blockquote>
+<p><a href="https://cseweb.ucsd.edu/~yfreund/papers/IntroToBoosting.pdf">Read more</a></p>
+</section>
+<section id="boosting-2" class="slide level2">
+<h2>Boosting</h2>
+
+<img data-src="https://bradleyboehmke.github.io/HOML/images/boosted-trees-process.png" class="r-stretch"><p><a href="https://bradleyboehmke.github.io/HOML/gbm.html">Credit</a></p>
+</section>
+<section id="boosting-3" class="slide level2">
+<h2>Boosting</h2>
+
+<img data-src="https://bradleyboehmke.github.io/HOML/images/boosted-trees-process.png" class="r-stretch"><p><a href="https://bradleyboehmke.github.io/HOML/gbm.html">Credit</a></p>
+</section>
+<section id="gbm" class="slide level2">
+<h2>GBM</h2>
+<ul>
+<li>Generalized Boost Models are Caret compatible
+<ul>
+<li>XGBoost is more common but requires learning XGB</li>
+<li>It uses different performance acceleration.</li>
+</ul></li>
+<li>This thing is <em>slow</em> so we modify the defaults:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>gbm_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">interaction.depth =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), </span>
+<span id="cb42-2"><a></a>                        <span class="at">n.trees =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>), </span>
+<span id="cb42-3"><a></a>                        <span class="at">shrinkage =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.1</span>), </span>
+<span id="cb42-4"><a></a>                        <span class="at">n.minobsinnode =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="boost-city" class="slide level2">
+<h2>Boost City</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., </span>
+<span id="cb43-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb43-3"><a></a>             <span class="at">method=</span><span class="st">"gbm"</span>,</span>
+<span id="cb43-4"><a></a>             <span class="at">trControl=</span>control,</span>
+<span id="cb43-5"><a></a>             <span class="at">tuneGrid =</span> gbm_grid,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0337
+     2        1.7734             nan     0.0100    0.0323
+     3        1.7555             nan     0.0100    0.0310
+     4        1.7384             nan     0.0100    0.0305
+     5        1.7219             nan     0.0100    0.0292
+     6        1.7059             nan     0.0100    0.0282
+     7        1.6905             nan     0.0100    0.0277
+     8        1.6753             nan     0.0100    0.0269
+     9        1.6607             nan     0.0100    0.0263
+    10        1.6464             nan     0.0100    0.0257
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0447
+     2        1.7665             nan     0.0100    0.0429
+     3        1.7424             nan     0.0100    0.0408
+     4        1.7192             nan     0.0100    0.0395
+     5        1.6968             nan     0.0100    0.0384
+     6        1.6752             nan     0.0100    0.0366
+     7        1.6545             nan     0.0100    0.0351
+     8        1.6348             nan     0.0100    0.0340
+     9        1.6153             nan     0.0100    0.0331
+    10        1.5965             nan     0.0100    0.0321
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3040
+     2        1.6166             nan     0.1000    0.2231
+     3        1.4855             nan     0.1000    0.1611
+     4        1.3902             nan     0.1000    0.1356
+     5        1.3107             nan     0.1000    0.1072
+     6        1.2487             nan     0.1000    0.0885
+     7        1.1952             nan     0.1000    0.0753
+     8        1.1495             nan     0.1000    0.0631
+     9        1.1116             nan     0.1000    0.0514
+    10        1.0806             nan     0.1000    0.0519
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3868
+     2        1.5589             nan     0.1000    0.2768
+     3        1.3945             nan     0.1000    0.2037
+     4        1.2728             nan     0.1000    0.1553
+     5        1.1791             nan     0.1000    0.1307
+     6        1.1005             nan     0.1000    0.1040
+     7        1.0380             nan     0.1000    0.0885
+     8        0.9844             nan     0.1000    0.0739
+     9        0.9390             nan     0.1000    0.0633
+    10        0.8998             nan     0.1000    0.0543
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0344
+     2        1.7731             nan     0.0100    0.0331
+     3        1.7549             nan     0.0100    0.0314
+     4        1.7377             nan     0.0100    0.0311
+     5        1.7210             nan     0.0100    0.0293
+     6        1.7051             nan     0.0100    0.0279
+     7        1.6896             nan     0.0100    0.0273
+     8        1.6747             nan     0.0100    0.0271
+     9        1.6596             nan     0.0100    0.0261
+    10        1.6452             nan     0.0100    0.0257
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0459
+     2        1.7663             nan     0.0100    0.0433
+     3        1.7420             nan     0.0100    0.0399
+     4        1.7193             nan     0.0100    0.0405
+     5        1.6966             nan     0.0100    0.0379
+     6        1.6750             nan     0.0100    0.0372
+     7        1.6542             nan     0.0100    0.0362
+     8        1.6338             nan     0.0100    0.0348
+     9        1.6142             nan     0.0100    0.0342
+    10        1.5952             nan     0.0100    0.0331
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3023
+     2        1.6162             nan     0.1000    0.2169
+     3        1.4892             nan     0.1000    0.1744
+     4        1.3879             nan     0.1000    0.1386
+     5        1.3074             nan     0.1000    0.1108
+     6        1.2418             nan     0.1000    0.0914
+     7        1.1891             nan     0.1000    0.0784
+     8        1.1436             nan     0.1000    0.0675
+     9        1.1039             nan     0.1000    0.0556
+    10        1.0704             nan     0.1000    0.0491
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3831
+     2        1.5624             nan     0.1000    0.2729
+     3        1.3957             nan     0.1000    0.2122
+     4        1.2695             nan     0.1000    0.1646
+     5        1.1713             nan     0.1000    0.1271
+     6        1.0942             nan     0.1000    0.1038
+     7        1.0317             nan     0.1000    0.0892
+     8        0.9761             nan     0.1000    0.0759
+     9        0.9298             nan     0.1000    0.0632
+    10        0.8906             nan     0.1000    0.0576
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0334
+     2        1.7731             nan     0.0100    0.0325
+     3        1.7552             nan     0.0100    0.0313
+     4        1.7381             nan     0.0100    0.0299
+     5        1.7215             nan     0.0100    0.0292
+     6        1.7050             nan     0.0100    0.0284
+     7        1.6895             nan     0.0100    0.0274
+     8        1.6743             nan     0.0100    0.0267
+     9        1.6596             nan     0.0100    0.0262
+    10        1.6453             nan     0.0100    0.0250
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0440
+     2        1.7670             nan     0.0100    0.0430
+     3        1.7429             nan     0.0100    0.0407
+     4        1.7200             nan     0.0100    0.0385
+     5        1.6979             nan     0.0100    0.0373
+     6        1.6768             nan     0.0100    0.0358
+     7        1.6572             nan     0.0100    0.0363
+     8        1.6368             nan     0.0100    0.0342
+     9        1.6172             nan     0.0100    0.0333
+    10        1.5983             nan     0.0100    0.0325
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3001
+     2        1.6164             nan     0.1000    0.2077
+     3        1.4951             nan     0.1000    0.1758
+     4        1.3931             nan     0.1000    0.1369
+     5        1.3132             nan     0.1000    0.1086
+     6        1.2499             nan     0.1000    0.0922
+     7        1.1959             nan     0.1000    0.0750
+     8        1.1516             nan     0.1000    0.0646
+     9        1.1129             nan     0.1000    0.0553
+    10        1.0807             nan     0.1000    0.0508
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3862
+     2        1.5593             nan     0.1000    0.2630
+     3        1.4028             nan     0.1000    0.2091
+     4        1.2780             nan     0.1000    0.1585
+     5        1.1818             nan     0.1000    0.1313
+     6        1.1027             nan     0.1000    0.1057
+     7        1.0379             nan     0.1000    0.0908
+     8        0.9831             nan     0.1000    0.0754
+     9        0.9374             nan     0.1000    0.0657
+    10        0.8982             nan     0.1000    0.0563
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0344
+     2        1.7735             nan     0.0100    0.0322
+     3        1.7557             nan     0.0100    0.0314
+     4        1.7384             nan     0.0100    0.0298
+     5        1.7220             nan     0.0100    0.0292
+     6        1.7059             nan     0.0100    0.0287
+     7        1.6901             nan     0.0100    0.0279
+     8        1.6748             nan     0.0100    0.0266
+     9        1.6602             nan     0.0100    0.0269
+    10        1.6456             nan     0.0100    0.0253
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0431
+     2        1.7675             nan     0.0100    0.0414
+     3        1.7444             nan     0.0100    0.0402
+     4        1.7216             nan     0.0100    0.0403
+     5        1.6991             nan     0.0100    0.0383
+     6        1.6775             nan     0.0100    0.0365
+     7        1.6571             nan     0.0100    0.0368
+     8        1.6366             nan     0.0100    0.0355
+     9        1.6166             nan     0.0100    0.0336
+    10        1.5978             nan     0.0100    0.0330
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.2969
+     2        1.6168             nan     0.1000    0.2240
+     3        1.4859             nan     0.1000    0.1598
+     4        1.3911             nan     0.1000    0.1300
+     5        1.3126             nan     0.1000    0.1076
+     6        1.2487             nan     0.1000    0.0973
+     7        1.1919             nan     0.1000    0.0805
+     8        1.1451             nan     0.1000    0.0672
+     9        1.1060             nan     0.1000    0.0567
+    10        1.0731             nan     0.1000    0.0478
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3829
+     2        1.5645             nan     0.1000    0.2694
+     3        1.4019             nan     0.1000    0.2116
+     4        1.2746             nan     0.1000    0.1632
+     5        1.1779             nan     0.1000    0.1329
+     6        1.0969             nan     0.1000    0.1032
+     7        1.0349             nan     0.1000    0.0856
+     8        0.9835             nan     0.1000    0.0755
+     9        0.9362             nan     0.1000    0.0686
+    10        0.8948             nan     0.1000    0.0546
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0345
+     2        1.7733             nan     0.0100    0.0321
+     3        1.7556             nan     0.0100    0.0312
+     4        1.7386             nan     0.0100    0.0304
+     5        1.7221             nan     0.0100    0.0287
+     6        1.7061             nan     0.0100    0.0285
+     7        1.6905             nan     0.0100    0.0271
+     8        1.6756             nan     0.0100    0.0265
+     9        1.6610             nan     0.0100    0.0255
+    10        1.6468             nan     0.0100    0.0257
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.0100    0.0448
+     2        1.7663             nan     0.0100    0.0420
+     3        1.7426             nan     0.0100    0.0414
+     4        1.7198             nan     0.0100    0.0392
+     5        1.6981             nan     0.0100    0.0374
+     6        1.6772             nan     0.0100    0.0369
+     7        1.6564             nan     0.0100    0.0348
+     8        1.6367             nan     0.0100    0.0330
+     9        1.6179             nan     0.0100    0.0335
+    10        1.5991             nan     0.0100    0.0327
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3022
+     2        1.6181             nan     0.1000    0.2193
+     3        1.4904             nan     0.1000    0.1651
+     4        1.3958             nan     0.1000    0.1349
+     5        1.3156             nan     0.1000    0.1121
+     6        1.2516             nan     0.1000    0.0950
+     7        1.1965             nan     0.1000    0.0721
+     8        1.1542             nan     0.1000    0.0686
+     9        1.1126             nan     0.1000    0.0580
+    10        1.0789             nan     0.1000    0.0502
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.4031
+     2        1.5548             nan     0.1000    0.2621
+     3        1.3979             nan     0.1000    0.2038
+     4        1.2766             nan     0.1000    0.1591
+     5        1.1817             nan     0.1000    0.1300
+     6        1.1024             nan     0.1000    0.1048
+     7        1.0390             nan     0.1000    0.0882
+     8        0.9850             nan     0.1000    0.0759
+     9        0.9389             nan     0.1000    0.0575
+    10        0.9021             nan     0.1000    0.0555
+
+Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.4019
+     2        1.5516             nan     0.1000    0.2671
+     3        1.3915             nan     0.1000    0.2040
+     4        1.2698             nan     0.1000    0.1624
+     5        1.1734             nan     0.1000    0.1273
+     6        1.0979             nan     0.1000    0.1092
+     7        1.0321             nan     0.1000    0.0875
+     8        0.9798             nan     0.1000    0.0749
+     9        0.9335             nan     0.1000    0.0660
+    10        0.8939             nan     0.1000    0.0519</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-4" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb45-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               147          4                 0           2        3
+  California              26        681                23          19       21
+  Casablanca_Valley        0          1                 3           0        0
+  Marlborough              1          2                 0           6        0
+  New_York                 0          0                 0           0        0
+  Oregon                  64        103                 0          18        2
+                   Reference
+Prediction          Oregon
+  Burgundy              14
+  California           114
+  Casablanca_Valley      0
+  Marlborough            2
+  New_York               0
+  Oregon               417
+
+Overall Statistics
+                                          
+               Accuracy : 0.7496          
+                 95% CI : (0.7281, 0.7702)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.5944          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                  0.61765            0.8609                 0.115385
+Specificity                  0.98397            0.7698                 0.999393
+Pos Pred Value               0.86471            0.7704                 0.750000
+Neg Pred Value               0.93945            0.8606                 0.986219
+Prevalence                   0.14226            0.4728                 0.015541
+Detection Rate               0.08787            0.4071                 0.001793
+Detection Prevalence         0.10161            0.5284                 0.002391
+Balanced Accuracy            0.80081            0.8154                 0.557389
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                    0.133333         0.00000        0.7623
+Specificity                    0.996929         1.00000        0.8339
+Pos Pred Value                 0.545455             NaN        0.6904
+Neg Pred Value                 0.976534         0.98446        0.8784
+Prevalence                     0.026898         0.01554        0.3270
+Detection Rate                 0.003586         0.00000        0.2493
+Detection Prevalence           0.006575         0.00000        0.3610
+Balanced Accuracy              0.565131         0.50000        0.7981</code></pre>
+</div>
+</div>
+</section>
+<section id="random-forest" class="slide level2">
+<h2>Random Forest</h2>
+<ul>
+<li>By far the most popular to my mind is random forest.</li>
+<li>Bagged tree with random feature selection.</li>
+<li><em>It just works.</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb47-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb47-3"><a></a>             <span class="at">trControl =</span> control,</span>
+<span id="cb47-4"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb47-5"><a></a>             <span class="at">maxit =</span> <span class="dv">5</span>) <span class="co"># speed it up - default 100</span></span>
+<span id="cb47-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest 
+
+6707 samples
+  29 predictor
+   6 classes: 'Burgundy', 'California', 'Casablanca_Valley', 'Marlborough', 'New_York', 'Oregon' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 5365, 5366, 5365, 5367, 5365 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+   2    0.8045275  0.6836790
+  15    0.7952852  0.6786598
+  29    0.7803768  0.6564252
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix-5" class="slide level2">
+<h2>Confusion Matrix</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb49-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+                   Reference
+Prediction          Burgundy California Casablanca_Valley Marlborough New_York
+  Burgundy               186          3                 0           2        1
+  California              15        715                21          24       22
+  Casablanca_Valley        0          0                 1           0        0
+  Marlborough              0          0                 0           1        0
+  New_York                 0          0                 0           0        0
+  Oregon                  37         73                 4          18        3
+                   Reference
+Prediction          Oregon
+  Burgundy              14
+  California           102
+  Casablanca_Valley      0
+  Marlborough            0
+  New_York               0
+  Oregon               431
+
+Overall Statistics
+                                          
+               Accuracy : 0.7974          
+                 95% CI : (0.7773, 0.8164)
+    No Information Rate : 0.4728          
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+                                          
+                  Kappa : 0.672           
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Burgundy Class: California Class: Casablanca_Valley
+Sensitivity                   0.7815            0.9039                0.0384615
+Specificity                   0.9861            0.7914                1.0000000
+Pos Pred Value                0.9029            0.7953                1.0000000
+Neg Pred Value                0.9646            0.9018                0.9850478
+Prevalence                    0.1423            0.4728                0.0155409
+Detection Rate                0.1112            0.4274                0.0005977
+Detection Prevalence          0.1231            0.5374                0.0005977
+Balanced Accuracy             0.8838            0.8477                0.5192308
+                     Class: Marlborough Class: New_York Class: Oregon
+Sensitivity                   0.0222222         0.00000        0.7879
+Specificity                   1.0000000         1.00000        0.8801
+Pos Pred Value                1.0000000             NaN        0.7615
+Neg Pred Value                0.9736842         0.98446        0.8952
+Prevalence                    0.0268978         0.01554        0.3270
+Detection Rate                0.0005977         0.00000        0.2576
+Detection Prevalence          0.0005977         0.00000        0.3383
+Balanced Accuracy             0.5111111         0.50000        0.8340</code></pre>
+</div>
+</div>
+</section>
+<section id="model-comparison" class="slide level2">
+<h2>Model Comparison</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a><span class="co"># "doParallel"</span></span>
+<span id="cb51-2"><a></a>cl <span class="ot">&lt;-</span> <span class="fu">makePSOCKcluster</span>(<span class="dv">3</span>)</span>
+<span id="cb51-3"><a></a><span class="fu">registerDoParallel</span>(cl)</span>
+<span id="cb51-4"><a></a><span class="fu">system.time</span>({</span>
+<span id="cb51-5"><a></a>  tb_fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"treebag"</span>, <span class="at">trControl=</span>control,<span class="at">maxit =</span> <span class="dv">5</span>);</span>
+<span id="cb51-6"><a></a>  bg_fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"gbm"</span>,<span class="at">trControl=</span>control, <span class="at">tuneGrid =</span> gbm_grid)</span>
+<span id="cb51-7"><a></a>  rf_fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"rf"</span>, <span class="at">trControl=</span>control,<span class="at">maxit =</span> <span class="dv">5</span>);</span>
+<span id="cb51-8"><a></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Iter   TrainDeviance   ValidDeviance   StepSize   Improve
+     1        1.7918             nan     0.1000    0.3881
+     2        1.5580             nan     0.1000    0.2784
+     3        1.3949             nan     0.1000    0.2072
+     4        1.2726             nan     0.1000    0.1588
+     5        1.1777             nan     0.1000    0.1238
+     6        1.1022             nan     0.1000    0.1066
+     7        1.0374             nan     0.1000    0.0878
+     8        0.9832             nan     0.1000    0.0763
+     9        0.9376             nan     0.1000    0.0657
+    10        0.8978             nan     0.1000    0.0563</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+   8.14    0.52   52.60 </code></pre>
+</div>
+</div>
+</section>
+<section id="doparallel" class="slide level2">
+<h2>doParallel</h2>
+<ul>
+<li>I’d read more on doParallel</li>
+<li><a href="https://cran.r-project.org/web/packages/doParallel/vignettes/gettingstartedParallel.pdf">Here’s the paper</a></li>
+<li>I didn’t dig into it too much but seems to run via docker.</li>
+<li>See if it’s actually running on mulitple cores as follows:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a><span class="fu">getDoParWorkers</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+<ul>
+<li>(You see why <code>rf</code> is popular - it works)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a></a><span class="fu">stopCluster</span>(cl) <span class="co"># close multi-core cluster</span></span>
+<span id="cb56-2"><a></a><span class="fu">rm</span>(cl)</span>
+<span id="cb56-3"><a></a></span>
+<span id="cb56-4"><a></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">Bagging=</span>tb_fit, <span class="at">Boost=</span>bg_fit, <span class="at">RForest=</span>rf_fit))</span>
+<span id="cb56-5"><a></a><span class="fu">summary</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+summary.resamples(object = results)
+
+Models: Bagging, Boost, RForest 
+Number of resamples: 5 
+
+Accuracy 
+             Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+Bagging 0.7591350 0.7777778 0.7815063 0.7797792 0.7846498 0.7958271    0
+Boost   0.7375093 0.7427293 0.7473920 0.7478744 0.7548435 0.7568978    0
+RForest 0.7837435 0.8017884 0.8025335 0.8015497 0.8074627 0.8122206    0
+
+Kappa 
+             Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+Bagging 0.6253176 0.6535974 0.6584708 0.6560686 0.6646091 0.6783481    0
+Boost   0.5684650 0.5816658 0.5896036 0.5899247 0.6041965 0.6056928    0
+RForest 0.6479515 0.6796035 0.6821789 0.6788070 0.6882993 0.6960018    0</code></pre>
+</div>
+</div>
+</section>
+<section id="takeaways" class="slide level2">
+<h2>Takeaways</h2>
+<ul>
+<li>Think critically, but often:
+<ul>
+<li>Use weights</li>
+<li>Use LASSO or elastic net</li>
+<li>Use random forest</li>
+</ul></li>
+</ul>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p><a href="../index.html">Home</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

@@ -58,7 +58,7 @@
         "\n",
         "-   Here is a 'clean' way to do so from within the Python\n"
       ],
-      "id": "1fbb2c01"
+      "id": "f85535ba"
     },
     {
       "cell_type": "code",
@@ -72,7 +72,7 @@
         "                                                  'install', \n",
         "                                                  package])"
       ],
-      "id": "0368de43",
+      "id": "b9dc4a40",
       "execution_count": null,
       "outputs": []
     },
@@ -85,7 +85,7 @@
         "-   I'll build a list of packages then install them via a loop.\n",
         "    -   Some (numpy, matplotlib) required for Quarto.\n"
       ],
-      "id": "da47c531"
+      "id": "7b107fe6"
     },
     {
       "cell_type": "code",
@@ -97,7 +97,7 @@
         "\n",
         "_ = [install(package) for package in packages]"
       ],
-      "id": "c0d7d71d",
+      "id": "72a88c70",
       "execution_count": null,
       "outputs": []
     },
@@ -113,7 +113,7 @@
         "-   Python packages use `import` rather than `library()`\n",
         "-   Python base data stack"
       ],
-      "id": "ff9e8ee1"
+      "id": "d88fb792"
     },
     {
       "cell_type": "code",
@@ -124,7 +124,7 @@
         "import matplotlib.pyplot as plt\n",
         "import seaborn as sns"
       ],
-      "id": "08e7edd3",
+      "id": "a88b8868",
       "execution_count": null,
       "outputs": []
     },
@@ -134,7 +134,7 @@
       "source": [
         "-   R & statistics"
       ],
-      "id": "5e442f8a"
+      "id": "79f2228e"
     },
     {
       "cell_type": "code",
@@ -144,7 +144,7 @@
         "import statsmodels.api as sm\n",
         "import statsmodels.formula.api as smf"
       ],
-      "id": "f9d6f268",
+      "id": "d74e2825",
       "execution_count": null,
       "outputs": []
     },
@@ -159,7 +159,7 @@
         "    -   Tensorflow, deep learning\n",
         "    -   PySpark MLlib, MLOps"
       ],
-      "id": "4da04108"
+      "id": "1cc9208f"
     },
     {
       "cell_type": "code",
@@ -170,7 +170,7 @@
         "from sklearn.model_selection import train_test_split\n",
         "from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay"
       ],
-      "id": "85930f52",
+      "id": "3f4b76a8",
       "execution_count": null,
       "outputs": []
     },
@@ -196,7 +196,7 @@
         "-   We will use `pyreadr` to read in an R dataset.\n",
         "    -   This is atypical but not difficult.\n"
       ],
-      "id": "fcc18a47"
+      "id": "31bd6e71"
     },
     {
       "cell_type": "code",
@@ -209,7 +209,7 @@
         "wine.dropna(subset=['points','price'])\n",
         "str(wine.info()) # string for slide formatting"
       ],
-      "id": "be863192",
+      "id": "ac68b92b",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +223,7 @@
         "\n",
         "-   Pick the poshest province.\n"
       ],
-      "id": "5f70678a"
+      "id": "d1795dee"
     },
     {
       "cell_type": "code",
@@ -232,7 +232,7 @@
         "wine['bordeaux'] = wine['province'] == 'Bordeaux'\n",
         "wine.head(2)"
       ],
-      "id": "b68435bb",
+      "id": "5a59be10",
       "execution_count": null,
       "outputs": []
     },
@@ -244,7 +244,7 @@
         "\n",
         "-   Take a quick regression model over the wine.\n"
       ],
-      "id": "8a90449f"
+      "id": "5f66bd71"
     },
     {
       "cell_type": "code",
@@ -253,7 +253,7 @@
         "m1 = sm.OLS(wine['points'], wine['price']).fit()\n",
         "m1.summary()"
       ],
-      "id": "d636661f",
+      "id": "05b5026e",
       "execution_count": null,
       "outputs": []
     },
@@ -265,7 +265,7 @@
         "\n",
         "-   I'm much fonder of `sklearn` for this sort of thing.\n"
       ],
-      "id": "736cb08b"
+      "id": "5734ec73"
     },
     {
       "cell_type": "code",
@@ -274,7 +274,7 @@
         "s1 = LinearRegression().fit(wine[['points']],wine['price'])\n",
         "f'Intercept: {s1.intercept_}, Coefficients: {s1.coef_}'"
       ],
-      "id": "5713a7b9",
+      "id": "cb4589e3",
       "execution_count": null,
       "outputs": []
     },
@@ -295,7 +295,7 @@
         "\n",
         "::: {.column width='50%'}"
       ],
-      "id": "fea40b56"
+      "id": "9052f0b3"
     },
     {
       "cell_type": "code",
@@ -305,7 +305,7 @@
         "           data=wine, scatter=True, \n",
         "           x_bins=range(80,101))"
       ],
-      "id": "7ab9616a",
+      "id": "e723ef5a",
       "execution_count": null,
       "outputs": []
     },
@@ -323,7 +323,7 @@
         "-   I am unaccustomed to doing multiple regressions without interaction.\n",
         "    -   Moving on.\n"
       ],
-      "id": "6f8d3b78"
+      "id": "9341b523"
     },
     {
       "cell_type": "code",
@@ -332,7 +332,7 @@
         "m2 = smf.ols('price ~ points + bordeaux', data=wine).fit()\n",
         "m2.summary()"
       ],
-      "id": "db9d58ae",
+      "id": "1ab1dfa2",
       "execution_count": null,
       "outputs": []
     },
@@ -342,7 +342,7 @@
       "source": [
         "## How about with an interaction?\n"
       ],
-      "id": "38793633"
+      "id": "322b583d"
     },
     {
       "cell_type": "code",
@@ -351,7 +351,7 @@
         "m3 = smf.ols('price ~ points * bordeaux', data=wine).fit()\n",
         "m3.summary()"
       ],
-      "id": "3f9cc54f",
+      "id": "c0b87653",
       "execution_count": null,
       "outputs": []
     },
@@ -363,7 +363,7 @@
         "\n",
         "-   `sklearn` defaults to multiple regression.\n"
       ],
-      "id": "ff005980"
+      "id": "55c23d32"
     },
     {
       "cell_type": "code",
@@ -375,7 +375,7 @@
         "                            wine['price'])\n",
         "f'Intercept: {s3.intercept_}, Coefficients: {s3.coef_}'"
       ],
-      "id": "9b9db210",
+      "id": "4a7e4063",
       "execution_count": null,
       "outputs": []
     },
@@ -385,7 +385,7 @@
       "source": [
         "## Let's draw it\n"
       ],
-      "id": "7272eb87"
+      "id": "6e7365ff"
     },
     {
       "cell_type": "code",
@@ -395,7 +395,7 @@
         "           data=wine, scatter=True, \n",
         "           x_bins=range(80,101), hue='bordeaux')"
       ],
-      "id": "fb78f961",
+      "id": "bff58ba9",
       "execution_count": null,
       "outputs": []
     },
@@ -410,7 +410,7 @@
         "-   There are a few main libraries, `Sklearn` the first and most popular\n",
         "-   So modelling and partitioning are all in `sklearn`, vs `stats` and `caret`\n"
       ],
-      "id": "82c68c8e"
+      "id": "1cac8ae2"
     },
     {
       "cell_type": "code",
@@ -420,7 +420,7 @@
         "train, test = train_test_split(wine, random_state=random_seed)\n",
         "print(test.head())"
       ],
-      "id": "ceb9c122",
+      "id": "b82c1608",
       "execution_count": null,
       "outputs": []
     },
@@ -432,7 +432,7 @@
         "\n",
         "-   Retrain the models on the training set only\n"
       ],
-      "id": "c92b6b7d"
+      "id": "d0c0e3bc"
     },
     {
       "cell_type": "code",
@@ -443,7 +443,7 @@
         "            'price ~ points * bordeaux']\n",
         "ms = [smf.ols(f, data=train).fit() for f in formulas]"
       ],
-      "id": "c782d1b4",
+      "id": "8a56975f",
       "execution_count": null,
       "outputs": []
     },
@@ -453,7 +453,7 @@
       "source": [
         "-   Test them all under the same conditions.\n"
       ],
-      "id": "416aa155"
+      "id": "d13570e7"
     },
     {
       "cell_type": "code",
@@ -466,7 +466,7 @@
         "\n",
         "[rmse(m) for m in ms]"
       ],
-      "id": "2dc102d2",
+      "id": "209bf4c8",
       "execution_count": null,
       "outputs": []
     },
@@ -483,7 +483,7 @@
         "    -   Then use Pythonic `in` with a list of names\n",
         "-   `apply` is like `mutate`, in a way.\n"
       ],
-      "id": "a5753653"
+      "id": "9551b63c"
     },
     {
       "cell_type": "code",
@@ -492,7 +492,7 @@
         "is_reserve = lambda x: str(x).lower() in ['reserve','reserva','riserva']\n",
         "wine['reserve'] = wine['designation'].apply(is_reserve)"
       ],
-      "id": "f4fed636",
+      "id": "74686eb9",
       "execution_count": null,
       "outputs": []
     },
@@ -502,7 +502,7 @@
       "source": [
         "## via Seaborn\n"
       ],
-      "id": "0e7816c6"
+      "id": "407ee275"
     },
     {
       "cell_type": "code",
@@ -511,7 +511,7 @@
         "sns.lmplot(wine, x='points', y='price', x_bins=range(80,101), hue='reserve',\n",
         "           x_estimator=np.mean, order=2) # polynomail regression, why not"
       ],
-      "id": "6399004e",
+      "id": "55d946ac",
       "execution_count": null,
       "outputs": []
     },
@@ -534,7 +534,7 @@
         "    -   [https://github.com/rafalab/dslabs/blob/master/data/heights.rda](https://github.com/rafalab/dslabs/blob/master/data/heights.rda){style=\"font-size:smaller\"}\n",
         "    -   Change `blob` to `raw` to [download directly](https://github.com/rafalab/dslabs/raw/master/data/heights.rda).\n"
       ],
-      "id": "e5e00143"
+      "id": "8bc4af1f"
     },
     {
       "cell_type": "code",
@@ -547,7 +547,7 @@
         "random_seed = 505\n",
         "train, test = train_test_split(heights, random_state=random_seed)"
       ],
-      "id": "b839fca2",
+      "id": "eb037ad0",
       "execution_count": null,
       "outputs": []
     },
@@ -560,7 +560,7 @@
         "## Guessing\n",
         "-   Let’s start by developing the simplest possible machine algorithm: guessing the outcome."
       ],
-      "id": "38445cf7"
+      "id": "527dc3d6"
     },
     {
       "cell_type": "code",
@@ -568,7 +568,7 @@
       "source": [
         "y_hat = np.random.choice(['Male', 'Female'], len(test))"
       ],
-      "id": "3d299a57",
+      "id": "da138615",
       "execution_count": null,
       "outputs": []
     },
@@ -583,7 +583,7 @@
         "## Accuracy\n",
         "-   The overall accuracy is simply defined as the overall proportion that is predicted correctly:"
       ],
-      "id": "b407e84a"
+      "id": "2151850d"
     },
     {
       "cell_type": "code",
@@ -591,7 +591,7 @@
       "source": [
         "np.mean(y_hat == test['sex'])"
       ],
-      "id": "45f24292",
+      "id": "4796754b",
       "execution_count": null,
       "outputs": []
     },
@@ -604,7 +604,7 @@
         "\n",
         "## Let's do better...\n"
       ],
-      "id": "c87edb5e"
+      "id": "ed231e61"
     },
     {
       "cell_type": "code",
@@ -613,7 +613,7 @@
         "hs = heights.groupby('sex')['height']\n",
         "hs.std(), hs.mean()"
       ],
-      "id": "f933de46",
+      "id": "5b47e040",
       "execution_count": null,
       "outputs": []
     },
@@ -625,7 +625,7 @@
         "\n",
         "-   Idea: Predict `'Male'` if observation is within 2 standard deviations\n"
       ],
-      "id": "47858a72"
+      "id": "4b82c7ab"
     },
     {
       "cell_type": "code",
@@ -637,7 +637,7 @@
         "\n",
         "print(male_mean_less_2sd, np.mean(heights['sex'] == y_hat))"
       ],
-      "id": "8d541c99",
+      "id": "72b79159",
       "execution_count": null,
       "outputs": []
     },
@@ -649,7 +649,7 @@
         "\n",
         "## Let's optimize\n"
       ],
-      "id": "60f0ad97"
+      "id": "9a7c9bd1"
     },
     {
       "cell_type": "code",
@@ -666,7 +666,7 @@
         "\n",
         "accuracy"
       ],
-      "id": "34719fa8",
+      "id": "5791b2a9",
       "execution_count": null,
       "outputs": []
     },
@@ -676,7 +676,7 @@
       "source": [
         "## Optimal Cutoff\n"
       ],
-      "id": "3c38f108"
+      "id": "2098abd4"
     },
     {
       "cell_type": "code",
@@ -685,7 +685,7 @@
         "best_cutoff = cutoff[np.argmax(accuracy)]\n",
         "_ = plt.plot(cutoff, accuracy), print('Optimal cutoff is', best_cutoff)"
       ],
-      "id": "ad6573b1",
+      "id": "848915c4",
       "execution_count": null,
       "outputs": []
     },
@@ -697,7 +697,7 @@
         "\n",
         "## Apply & Evaluate\n"
       ],
-      "id": "1de2cff1"
+      "id": "fee4ab5e"
     },
     {
       "cell_type": "code",
@@ -706,7 +706,7 @@
         "test['y_hat'] = test['height'].apply(lambda x : 'Male' if x > best_cutoff else 'Female')\n",
         "print('Accuracy is', np.mean(test['sex'] == test['y_hat']))"
       ],
-      "id": "86e6b2e1",
+      "id": "b36a29f4",
       "execution_count": null,
       "outputs": []
     },
@@ -716,7 +716,7 @@
       "source": [
         "## Confusion matrix"
       ],
-      "id": "09ccbe61"
+      "id": "68b0a60d"
     },
     {
       "cell_type": "code",
@@ -724,7 +724,7 @@
       "source": [
         "ConfusionMatrixDisplay.from_predictions(test['sex'], test['y_hat'])"
       ],
-      "id": "06a40e8f",
+      "id": "57631746",
       "execution_count": null,
       "outputs": []
     },
@@ -736,7 +736,7 @@
         "\n",
         "## Accuracy by sex\n"
       ],
-      "id": "1492af16"
+      "id": "7aff9f92"
     },
     {
       "cell_type": "code",
@@ -745,7 +745,7 @@
         "test['acc'] = test['sex'] == test['y_hat']\n",
         "test.groupby('sex')['acc'].mean()"
       ],
-      "id": "f739b434",
+      "id": "c7c7d35c",
       "execution_count": null,
       "outputs": []
     },
@@ -762,7 +762,7 @@
         "\n",
         "::: {.column width=\"50%\"}"
       ],
-      "id": "a09c8bdd"
+      "id": "e08ad6f4"
     },
     {
       "cell_type": "code",
@@ -770,7 +770,7 @@
       "source": [
         "_ = sns.boxplot(heights, x='sex',y='height')"
       ],
-      "id": "4b8c9dc3",
+      "id": "9d1fc720",
       "execution_count": null,
       "outputs": []
     },
@@ -782,7 +782,7 @@
         "\n",
         "::: {.column width=\"50%\"}"
       ],
-      "id": "dbb041d8"
+      "id": "9fbe20d5"
     },
     {
       "cell_type": "code",
@@ -790,7 +790,7 @@
       "source": [
         "_ = plt.pie(heights['sex'].value_counts(), labels=['♀','♂'])"
       ],
-      "id": "33169c57",
+      "id": "ef7f9a63",
       "execution_count": null,
       "outputs": []
     },
@@ -804,7 +804,7 @@
         "\n",
         "# Machine Learning in Python"
       ],
-      "id": "2daf04de"
+      "id": "7433490e"
     }
   ],
   "metadata": {

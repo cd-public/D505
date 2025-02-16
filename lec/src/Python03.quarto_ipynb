@@ -54,7 +54,7 @@
         "\n",
         "-   Python base data stack"
       ],
-      "id": "888c32c0"
+      "id": "abe62dfc"
     },
     {
       "cell_type": "code",
@@ -65,7 +65,7 @@
         "import matplotlib.pyplot as plt\n",
         "import seaborn as sns"
       ],
-      "id": "c1ad2491",
+      "id": "a900bb77",
       "execution_count": null,
       "outputs": []
     },
@@ -75,7 +75,7 @@
       "source": [
         "## ML Library"
       ],
-      "id": "c754a1a1"
+      "id": "055b4f3e"
     },
     {
       "cell_type": "code",
@@ -88,7 +88,7 @@
         "from sklearn.metrics import confusion_matrix, make_scorer, cohen_kappa_score\n",
         "import re"
       ],
-      "id": "5d364dec",
+      "id": "0ea2e2d6",
       "execution_count": null,
       "outputs": []
     },
@@ -100,7 +100,7 @@
         "\n",
         "-   `pyreadr` to read in an R dataset.\n"
       ],
-      "id": "ff9fffb0"
+      "id": "4e2c5973"
     },
     {
       "cell_type": "code",
@@ -111,7 +111,7 @@
         "wine = pd.read_pickle(\"../../dat/wine.pickle\")     \n",
         "wine['lprice'] = np.log(wine['price'])"
       ],
-      "id": "1cabc358",
+      "id": "f0d3e8b8",
       "execution_count": null,
       "outputs": []
     },
@@ -131,7 +131,7 @@
         "\n",
         "## Calculating correlation\n"
       ],
-      "id": "6641eef1"
+      "id": "4fb85d93"
     },
     {
       "cell_type": "code",
@@ -139,7 +139,7 @@
       "source": [
         "wine['price'].corr(wine['points']), wine['lprice'].corr(wine['points'])"
       ],
-      "id": "49c596d9",
+      "id": "1ce8432f",
       "execution_count": null,
       "outputs": []
     },
@@ -158,7 +158,7 @@
         "\n",
         "- Make a function...\n"
       ],
-      "id": "eeb18af9"
+      "id": "3fe53f81"
     },
     {
       "cell_type": "code",
@@ -169,7 +169,7 @@
         "            (wine['variety']  == var)]\n",
         "  return df['lprice'].corr(df['points'])"
       ],
-      "id": "38bbbf50",
+      "id": "d9ad933d",
       "execution_count": null,
       "outputs": []
     },
@@ -179,7 +179,7 @@
       "source": [
         "## Eval\n"
       ],
-      "id": "89dec691"
+      "id": "7608bf76"
     },
     {
       "cell_type": "code",
@@ -188,7 +188,7 @@
         "vs = (\"Chardonnay\", \"Pinot Noir\", \"Pinot Gris\")\n",
         "_ = [print(v, var_cor(wine, v)) for v in vs]"
       ],
-      "id": "3874fb9a",
+      "id": "84ba3883",
       "execution_count": null,
       "outputs": []
     },
@@ -198,7 +198,7 @@
       "source": [
         "## Visualizing these different correlations\n"
       ],
-      "id": "ccac511c"
+      "id": "f33f2c9e"
     },
     {
       "cell_type": "code",
@@ -209,7 +209,7 @@
         "g = sns.FacetGrid(wine, col=\"variety\", hue=\"variety\")\n",
         "g.map_dataframe(sns.regplot, x=\"points\", y=\"lprice\")"
       ],
-      "id": "3cb9a8b2",
+      "id": "2c5778cc",
       "execution_count": null,
       "outputs": []
     },
@@ -219,7 +219,7 @@
       "source": [
         "## Graphing residuals (bad)\n"
       ],
-      "id": "ac4caaf5"
+      "id": "f1d47b19"
     },
     {
       "cell_type": "code",
@@ -229,7 +229,7 @@
         "wine['residual'] = y - LinearRegression().fit(X, y).predict(X)\n",
         "sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)"
       ],
-      "id": "adddd1e9",
+      "id": "e3b5238c",
       "execution_count": null,
       "outputs": []
     },
@@ -241,7 +241,7 @@
         "\n",
         "- Clearly should've made a function here."
       ],
-      "id": "73f334e0"
+      "id": "63bbdd1d"
     },
     {
       "cell_type": "code",
@@ -252,7 +252,7 @@
         "  wine['residual'] = y - LinearRegression().fit(X, y).predict(X)\n",
         "  return sns.scatterplot(x='points', y='residual', data=wine, alpha=0.3)"
       ],
-      "id": "d12bf202",
+      "id": "286b9d39",
       "execution_count": null,
       "outputs": []
     },
@@ -262,7 +262,7 @@
       "source": [
         "## Try it\n"
       ],
-      "id": "f06b9bb6"
+      "id": "b61be49f"
     },
     {
       "cell_type": "code",
@@ -270,7 +270,7 @@
       "source": [
         "resid_plot(wine, \"points\", \"lprice\")"
       ],
-      "id": "3b25ba27",
+      "id": "db1c136c",
       "execution_count": null,
       "outputs": []
     },
@@ -280,7 +280,7 @@
       "source": [
         "## Try it on year\n"
       ],
-      "id": "92ef6d71"
+      "id": "5626055e"
     },
     {
       "cell_type": "code",
@@ -288,7 +288,7 @@
       "source": [
         "resid_plot(wine, \"year\", \"lprice\")"
       ],
-      "id": "65f3b3ad",
+      "id": "b02d6e38",
       "execution_count": null,
       "outputs": []
     },
@@ -300,7 +300,7 @@
         "\n",
         "- Before examining many coefficients, a helper.\n"
       ],
-      "id": "ebf42487"
+      "id": "c4baec7c"
     },
     {
       "cell_type": "code",
@@ -310,7 +310,7 @@
         "  X,y  = df[[x]], df[y]\n",
         "  return (LinearRegression().fit(X,y)).coef_[0]"
       ],
-      "id": "af0f7db3",
+      "id": "26554c34",
       "execution_count": null,
       "outputs": []
     },
@@ -320,7 +320,7 @@
       "source": [
         "## % Change\n"
       ],
-      "id": "5a6fe83c"
+      "id": "8e1dd049"
     },
     {
       "cell_type": "code",
@@ -331,7 +331,7 @@
         "coef = get_coef(wine, \"points\", \"lprice\")\n",
         "coef, get_pct(coef) "
       ],
-      "id": "48672e2e",
+      "id": "b3fd607b",
       "execution_count": null,
       "outputs": []
     },
@@ -346,7 +346,7 @@
         "\n",
         "## Interpreting the coefficients\n"
       ],
-      "id": "671f39b1"
+      "id": "b8d80a58"
     },
     {
       "cell_type": "code",
@@ -355,7 +355,7 @@
         "coef = get_coef(wine, \"year\", \"lprice\")\n",
         "coef, get_pct(coef)"
       ],
-      "id": "b884bdb3",
+      "id": "3c493aaf",
       "execution_count": null,
       "outputs": []
     },
@@ -371,7 +371,7 @@
         "\n",
         ":::{.column width=50%}\n"
       ],
-      "id": "feb9db90"
+      "id": "ad547f34"
     },
     {
       "cell_type": "code",
@@ -379,7 +379,7 @@
       "source": [
         "_ = [print(x/10, get_pct(x/10)) for x in range(10)]"
       ],
-      "id": "5694334a",
+      "id": "216d168f",
       "execution_count": null,
       "outputs": []
     },
@@ -392,7 +392,7 @@
         "\n",
         ":::{.column width=50%}\n"
       ],
-      "id": "21d4cac2"
+      "id": "20554a5b"
     },
     {
       "cell_type": "code",
@@ -400,7 +400,7 @@
       "source": [
         "_ = [print(x/100, get_pct(x/100)) for x in range(10)]"
       ],
-      "id": "1a1112c9",
+      "id": "e2c7a5c0",
       "execution_count": null,
       "outputs": []
     },
@@ -414,7 +414,7 @@
         "\n",
         "## $\\log$ feature\n"
       ],
-      "id": "94abb7d3"
+      "id": "28d13b64"
     },
     {
       "cell_type": "code",
@@ -424,7 +424,7 @@
         "coef = get_coef(wine, \"lpoints\", \"price\")\n",
         "coef, get_pct(coef) "
       ],
-      "id": "3b8bc21d",
+      "id": "a393ae07",
       "execution_count": null,
       "outputs": []
     },
@@ -437,7 +437,7 @@
         "\n",
         "## LogLog (also elasticity)\n"
       ],
-      "id": "2681d6be"
+      "id": "0754d7ec"
     },
     {
       "cell_type": "code",
@@ -446,7 +446,7 @@
         "coef = get_coef(wine, \"lpoints\", \"lprice\")\n",
         "coef"
       ],
-      "id": "40eafed4",
+      "id": "9b8ba194",
       "execution_count": null,
       "outputs": []
     },
@@ -477,7 +477,7 @@
         "  - Our dependent variable increases by about 9.2%.\n",
         "- A $30 bottle of wine scoring 90 would be worth $32.75 as a 91."
       ],
-      "id": "62c470be"
+      "id": "5a13d227"
     },
     {
       "cell_type": "code",
@@ -485,7 +485,7 @@
       "source": [
         "30 * (1 + 9.2/100)"
       ],
-      "id": "292cbd93",
+      "id": "ce17f9fc",
       "execution_count": null,
       "outputs": []
     },
@@ -495,7 +495,7 @@
       "source": [
         "## Graphing points by variety"
       ],
-      "id": "19a95729"
+      "id": "ad8feed8"
     },
     {
       "cell_type": "code",
@@ -503,7 +503,7 @@
       "source": [
         "sns.boxplot(x='variety', y='points', data=wine)"
       ],
-      "id": "d59b76bf",
+      "id": "563da578",
       "execution_count": null,
       "outputs": []
     },
@@ -513,7 +513,7 @@
       "source": [
         "## Summary"
       ],
-      "id": "293265cb"
+      "id": "87af3f7d"
     },
     {
       "cell_type": "code",
@@ -521,7 +521,7 @@
       "source": [
         "wine.groupby('variety')['points'].mean()"
       ],
-      "id": "8903555d",
+      "id": "9b3ce083",
       "execution_count": null,
       "outputs": []
     },
@@ -557,7 +557,7 @@
         "\n",
         "## Normality"
       ],
-      "id": "90252e5c"
+      "id": "a21d6f12"
     },
     {
       "cell_type": "code",
@@ -566,7 +566,7 @@
         "X = wine[[\"points\"]]\n",
         "sns.histplot(y - LinearRegression().fit(X, wine[\"lprice\"]).predict(X))"
       ],
-      "id": "45429c45",
+      "id": "dcbd1f0a",
       "execution_count": null,
       "outputs": []
     },
@@ -587,7 +587,7 @@
         "- Pivot to pinot.\n",
         "  - Say \"$\\pi^0$\"\n"
       ],
-      "id": "0376aeb3"
+      "id": "e6af7f0a"
     },
     {
       "cell_type": "code",
@@ -595,7 +595,7 @@
       "source": [
         "wine = pd.read_pickle(\"../../dat/pinot_orig.pickle\") "
       ],
-      "id": "4446f18e",
+      "id": "d475cf78",
       "execution_count": null,
       "outputs": []
     },
@@ -623,7 +623,7 @@
         "\n",
         "- Py"
       ],
-      "id": "a58a9b12"
+      "id": "1ddf7ceb"
     },
     {
       "cell_type": "code",
@@ -631,7 +631,7 @@
       "source": [
         "y = lambda l : lambda x : (x ** l - 1) / l"
       ],
-      "id": "8585652e",
+      "id": "9dd68521",
       "execution_count": null,
       "outputs": []
     },
@@ -672,7 +672,7 @@
         "\n",
         "## $\\lambda = 0$\n"
       ],
-      "id": "b89c6af3"
+      "id": "886c1389"
     },
     {
       "cell_type": "code",
@@ -680,7 +680,7 @@
       "source": [
         "[y(10**-l)(4) - np.log(4) for l in range(5)]"
       ],
-      "id": "d68cfb3f",
+      "id": "db17ef78",
       "execution_count": null,
       "outputs": []
     },
@@ -719,7 +719,7 @@
         "\n",
         "- Use `PowerTransformer`"
       ],
-      "id": "61a58416"
+      "id": "63490f1e"
     },
     {
       "cell_type": "code",
@@ -735,7 +735,7 @@
         "print(\"Transformed data:\", boxcox_result.flatten())\n",
         "print(\"Lambda value:\", pt.lambdas_)"
       ],
-      "id": "0dc0edbd",
+      "id": "5826021d",
       "execution_count": null,
       "outputs": []
     },
@@ -745,7 +745,7 @@
       "source": [
         "## On Points\n"
       ],
-      "id": "25e0a19f"
+      "id": "9b13fd1d"
     },
     {
       "cell_type": "code",
@@ -755,7 +755,7 @@
         "print(\"Transformed data:\", boxcox_result.flatten())\n",
         "print(\"Lambda value:\", pt.lambdas_)"
       ],
-      "id": "e16c755c",
+      "id": "80144caa",
       "execution_count": null,
       "outputs": []
     },
@@ -817,7 +817,7 @@
         "\n",
         "- Tasters, years, notes\n"
       ],
-      "id": "33c49e1f"
+      "id": "a654c75d"
     },
     {
       "cell_type": "code",
@@ -831,7 +831,7 @@
         "\n",
         "wine = wine.drop('description', axis=1)"
       ],
-      "id": "e5dcde56",
+      "id": "c62798ca",
       "execution_count": null,
       "outputs": []
     },
@@ -841,7 +841,7 @@
       "source": [
         "## Split\n"
       ],
-      "id": "bf1fdc80"
+      "id": "766e9d5a"
     },
     {
       "cell_type": "code",
@@ -849,7 +849,7 @@
       "source": [
         "train, test = train_test_split(wine, test_size=0.2, stratify=wine['province'], random_state=505)"
       ],
-      "id": "5f43dff3",
+      "id": "cf5a15bc",
       "execution_count": null,
       "outputs": []
     },
@@ -861,7 +861,7 @@
         "\n",
         "- Let's look at misses\n"
       ],
-      "id": "8bb78d9a"
+      "id": "81c78e7d"
     },
     {
       "cell_type": "code",
@@ -876,7 +876,7 @@
         "conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)\n",
         "sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')"
       ],
-      "id": "cb9b73d6",
+      "id": "4ce80937",
       "execution_count": null,
       "outputs": []
     },
@@ -886,7 +886,7 @@
       "source": [
         "## Determine what dominates\n"
       ],
-      "id": "a560e513"
+      "id": "dde2847b"
     },
     {
       "cell_type": "code",
@@ -903,7 +903,7 @@
         "  conf_matrix_df = pd.DataFrame(confusion_matrix(test['province'], y_pred, labels=knn.classes_), index=knn.classes_, columns=knn.classes_)\n",
         "  return sns.heatmap(conf_matrix_df, annot=True, fmt='d', cmap='Blues')"
       ],
-      "id": "1f9c523d",
+      "id": "89cfc40a",
       "execution_count": null,
       "outputs": []
     },
@@ -917,7 +917,7 @@
         "\n",
         ":::{.column width=33%}\n"
       ],
-      "id": "d778f53b"
+      "id": "9c84fd2b"
     },
     {
       "cell_type": "code",
@@ -925,7 +925,7 @@
       "source": [
         "omit('year')"
       ],
-      "id": "123d101e",
+      "id": "5ac9bbfb",
       "execution_count": null,
       "outputs": []
     },
@@ -937,7 +937,7 @@
         "\n",
         ":::{.column width=33%}\n"
       ],
-      "id": "5fde1687"
+      "id": "f719b90c"
     },
     {
       "cell_type": "code",
@@ -945,7 +945,7 @@
       "source": [
         "omit('note')"
       ],
-      "id": "be033bf4",
+      "id": "95384596",
       "execution_count": null,
       "outputs": []
     },
@@ -957,7 +957,7 @@
         "\n",
         ":::{.column width=33%}\n"
       ],
-      "id": "c159ad0f"
+      "id": "ecf3e403"
     },
     {
       "cell_type": "code",
@@ -965,7 +965,7 @@
       "source": [
         "omit('taster')"
       ],
-      "id": "6db18a91",
+      "id": "6bfb0b0c",
       "execution_count": null,
       "outputs": []
     },
@@ -979,7 +979,7 @@
         "\n",
         "## Drop it\n"
       ],
-      "id": "49e9e13b"
+      "id": "8b4b1507"
     },
     {
       "cell_type": "code",
@@ -991,7 +991,7 @@
         "\n",
         "test = test.drop(columns=columns_to_drop)"
       ],
-      "id": "8613ac49",
+      "id": "e8e34175",
       "execution_count": null,
       "outputs": []
     },
@@ -1001,7 +1001,7 @@
       "source": [
         "## Tuning and subsampling\n"
       ],
-      "id": "50b93fea"
+      "id": "15902f60"
     },
     {
       "cell_type": "code",
@@ -1015,7 +1015,7 @@
         "grid_search.fit(X_train, train['province'])\n",
         "cohen_kappa_score(test['province'], grid_search.best_estimator_.predict(X_test))"
       ],
-      "id": "7356cf64",
+      "id": "a145b5e4",
       "execution_count": null,
       "outputs": []
     },
@@ -1029,7 +1029,7 @@
         "* Create some new features and...\n",
         "* See if you can achieve a Kappa >= 0.5!"
       ],
-      "id": "60bf81be"
+      "id": "ca91c990"
     }
   ],
   "metadata": {

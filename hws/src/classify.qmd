@@ -48,6 +48,7 @@ Why do we call it Logistic Regression even though we are using the technique for
 # 3. Modeling
 
 We train a logistic regression algorithm to classify a whether a wine comes from Marlborough using:
+
 1. An 80-20 train-test split.
 2. Three features engineered from the description
 3. 5-fold cross validation.

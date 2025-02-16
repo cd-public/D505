@@ -1,0 +1,265 @@
+---
+title: "Characterizing Colleges"
+author: "Solutions"
+date: "03/10/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme:
+        light: flatly
+        dark: darkly
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+# Setup
+
+- Setup
+
+```{r libs}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(caret))
+sh(library(class))
+sh(library(ISLR)) # for the "College" dataframe
+```
+
+# Dataframe
+
+- We use the `College` dataframe.
+
+```{r df}
+head(College)
+```
+
+- States the ISLR textbook:
+
+|Name|Description|
+|-|-|
+| `Private` | Public/private indicator |
+| `Apps` | Number of applications received |
+| `Accept` | Number of applicants accepted |
+| `Enroll` | Number of new students enrolled |
+| `Top10perc` | New students from top 10 % of high school class |
+| `Top25perc` | New students from top 25 % of high school class |
+| `F.Undergrad` | Number of full-time undergraduates |
+| `P.Undergrad` | Number of part-time undergraduates |
+| `Outstate` | Out-of-state tuition |
+| `Room.Board` | Room and board costs |
+| `Books` | Estimated book costs |
+| `Personal` | Estimated personal spending |
+| `PhD` | Percent of faculty with Ph.D.’s |
+| `Terminal` | Percent of faculty with terminal degree |
+| `S.F.Ratio` | Student/faculty ratio |
+| `perc.alumni` | Percent of alumni who donate |
+| `Expend` | Instructional expenditure per student |
+| `Grad.Rate` | Graduation rate |
+
+# Multiple Regression
+
+- Run a linear regression model with `Grad.Rate` as the dependent variable and `PhD` and `Expend` as features (variables).
+    - Regard `PhD` and `Expend` as two forms of investment in education - in training for instructors, and in resources for students.
+- Compute and comment on the RMSE.
+
+```{r regression}   
+m1 = lm(Grad.Rate ~ PhD, College)
+m2 = lm(Grad.Rate ~ Expend, College)
+m3 = lm(Grad.Rate ~ PhD + Expend, College)
+m4 = lm(Grad.Rate ~ PhD * Expend, College)
+m5 = lm(Grad.Rate ~ ., College)
+
+get_rmse <- function(m) {
+    pred <- predict(m, newdata = College)
+    sqrt(mean((College$Grad.Rate - pred)^2))
+}
+
+unlist(lapply(list(m1, m2, m3, m4, m5), get_rmse))
+```
+
+> While neither PhD attainment of teaching faculty nor the institutional expenditure per student are extraordinarily accurate - an error of ~16 with regards to a percentage intuitively feels high - nothing in the data set necessarily naively predicts graduation rate so well, and the interaction of these features predicts better than either feature individually or even both features without an interaction term. So, I expect both educational attainment of faculty and expenditure per student are important parts of delivering a high quality education, and each improves the other's value, though I would need to separately ensure the coefficients are positive to validate this claim:
+
+```{r}
+m4
+```
+
+# Feature Engineering
+
+- Create 10 total features. Consider:
+    - Attributes of the student body.
+        - For example, an acceptance rate, or a percentages of students in other categories vs. accepted/enrolled.
+    - Costs of the university.
+    - Some other category, such as related to success, alumni, or faculty.
+- Remove all rows with a missing value.
+- Ensure only `Grad.Rate` and the engineered features remain.
+- Compute and comment on the RMSE.
+
+```{r features}
+df_all <- College %>%
+            mutate(AcceptRate=Accept/Apps) %>%
+            mutate(EnrollRate=Enroll/Accept) %>%
+            mutate(Top10Rate=Top10perc/Enroll) %>%
+            mutate(Top10Rate=Top25perc/Enroll) %>%
+            mutate(Cost=Outstate+Room.Board+Books+Personal) %>%
+            mutate(MS=Terminal-PhD) %>% 
+            mutate(AppToAlum = AcceptRate * EnrollRate * perc.alumni)
+        
+df_feat <- df_all %>%
+             select(-Private,-Apps,-Accept,-Enroll,-Top10perc,-Top25perc,-F.Undergrad,-P.Undergrad,-Outstate,-Room.Board) %>%
+             select(-Books,-Personal,-PhD,-Terminal,-S.F.Ratio,-perc.alumni,-Expend)
+```
+
+```{r feature rmse}
+sqrt(mean((df_all$Grad.Rate - predict(lm(formula = Grad.Rate ~ ., data = df_all), newdata = df_all))^2))
+sqrt(mean((df_feat$Grad.Rate - predict(lm(formula = Grad.Rate ~ ., data = df_feat), newdata = df_feat))^2))
+```
+
+> Adding my novel features did marginally improve predictive power, but removing the initial, provided features, worsened performances versus just using the original data set. I should be more intentional and systematic about:
+(1) including all elements of the original data frame which may be relevant in my engineered features, and (2) ensuring independence between retained features to ensure that the assumptions of linear models are satisfied.
+
+# Classification Methods
+
+- Use either of $K$-NN or Naive Bayes to predict whether a college is `Private`.
+- Explain your choice of technique.
+- Report on your Kappa value.
+
+```{r classification}
+control = trainControl(method = "cv", number = 5)
+
+```
+
+- We try a $K$-NN over a few features.
+
+```{r knn}
+df_knn = df_all %>% 
+           select(Private, AcceptRate, PhD, Cost, Top10perc)
+
+split <- createDataPartition(df_knn$Private, p = 0.8, list = FALSE)
+train_knn <- df_knn[split, ]
+test_knn <- df_knn[-split, ]
+
+fit_knn = train(Private ~ .,
+                data = train_knn, 
+                method = "knn",
+                tuneLength = 15,
+                metric = "Kappa",
+                trControl = control)
+
+confusionMatrix(predict(fit_knn, test_knn),factor(test_knn$Private))
+```
+
+- We bin a few features and try Naive.
+
+```{r}
+df_nb = df_knn %>% 
+          mutate(HighAccept=AcceptRate > mean(df_knn$AcceptRate)) %>%
+          mutate(HighPhD=PhD > mean(df_knn$PhD)) %>%
+          mutate(HighCost=Cost > mean(df_knn$Cost)) %>%
+          mutate(HighTop10=Top10perc > mean(df_knn$Top10perc)) %>%
+          select(-AcceptRate, -PhD, -Cost, -Top10perc)
+
+split <- createDataPartition(df_nb$Private, p = 0.8, list = FALSE)
+train_nb <- df_nb[split, ]
+test_nb <- df_nb[-split, ]
+
+fit_nb = train(Private ~ .,
+               data = train_nb, 
+               method = "naive_bayes",
+               tuneLength = 15,
+               metric = "Kappa",
+               trControl = control)
+
+confusionMatrix(predict(fit_nb, test_nb),factor(test_nb$Private))
+```
+
+> I expect public schools, due to the forms of regulatory oversight, they experience, to be clustered fairly neatly around certain admission, instruction preparation, and acceptance metrics, with of course a few exceptions for e.g. the "Public Ivies" like UC Berkley and UT Austin. This is reflected in drastically more accurate Kappa values for Naive Bayes, which are reflective, to me, of public universities as a rule being on the same side of the means across various metrics as other public universities.
+
+# Classification Techniques
+
+- Predict whether a college is `Private`.
+- Use model weights.
+- Display and comment on an ROC curve.
+
+```{r binary classification}
+counts <- table(df_knn$Private)
+count_y <- counts["Yes"]
+count_n <- counts["No"]
+weigh_y <- max(count_y,count_n)/count_y
+weigh_n <- max(count_y,count_n)/count_n
+
+c(count_y,count_n,weigh_y,weigh_n)
+```
+
+```{r weighted classification}
+train_knn <- train_knn %>% 
+               mutate(weight=ifelse(Private=="Yes", weigh_y, weigh_n))
+
+fit_weights = train(Private ~ .,
+                    data = train_knn %>% select(-weight), 
+                    method = "naive_bayes",
+                    tuneLength = 15,
+                    metric = "Kappa",
+                    trControl = control,
+                    weights = train_knn$weight)
+
+confusionMatrix(predict(fit_weights, test_knn),factor(test_knn$Private))
+```
+
+> In this case, where we had relatively high predictive power to find both private and non-private colleges or universities without weights, adding weights actually disrupted this process and reduced our Kappa. Using weights is not effective in all cases - there are many private colleges and universities, and maybe many different kinds of colleges and universities we find through nearest neighbors or naive bayes, and it is unhelpful to apply weights to public colleges and universities which we already identified relatively effective. It may be worthwhile, however, to add something like a "college or university" feature or something of this nature to further differentiate types of institutions.
+
+# Ethics
+
+- Based on your analysis, comment on the for-profit privatization of education, perhaps through the framework advanced by this article:
+
+> [In mid-May 2018, The New York Times reported that under DeVos, the size of the team investigating abuses and fraud by for-profit colleges was reduced from about twelve members under the Obama administration to three, with their task also being scaled back to "processing student loan forgiveness applications and looking at smaller compliance cases".](https://en.wikipedia.org/wiki/Betsy_DeVos#Staffing)
+
+- Discuss the civic reposibilities of data scientists for:
+    - Big Data and Human-Centered Computing
+    - Democratic Institutions
+    - Education and Educational Policy
+- Provide at least one statistical measure for each, such as a RMSE, Kappa value, or ROC curve.
+
+### Big Data and Human-Centered Computing
+
+> We note that private institutions make up 73% of institutions while educating 43% of students. From our earlier work, we note that private/public predicts graduation rate, and these institutions may be weakly differentiated with regards to measures like acceptance rate, instuctor educational attainment, and cost. A data driven approach to policy may want to investigate closely whether private schools, which enjoy non-profit status and federal loan assistance, are serving students better, or worse, given their lower level of regulatory oversight.
+
+```{r big data}
+list(
+    sum(filter(College, Private == "Yes")$Enroll)/sum(College$Enroll),
+    count(filter(College, Private == "Yes"))/count(College)
+)
+```
+
+> We note that public institutions have dramatically lower cost, including for out-of-state students, in aggregate, possible due to their obligation to serve the broader public through the democratic process. A strong claim, which is partially but not fully supported here, is that democratic pressures dramatically expand access and cut costs, but this at least appears true for the specific niche of higher education.
+
+### Democratic Institutions
+
+```{r democracy}
+list(
+    mean(filter(df_knn, Private == "Yes")$Cost),
+    mean(filter(df_knn, Private == "No")$Cost)
+)
+```
+
+### Education and Educational Policy
+
+> We note that private universities achieve dramatically lower student-to-faculty ratios, roughly in line with their higher costs...
+
+```{r edu}
+list(
+    mean(filter(College, Private == "Yes")$S.F.Ratio),
+    mean(filter(College, Private == "No")$S.F.Ratio)
+)
+```
+
+> Yet we do not see lower student-to-faculty ratios necessarily corresponding to a higher graduation rate.
+
+```{r ratio_grad_rate}
+lm(Grad.Rate ~ S.F.Ratio, College)
+```
+
+### Closing Thoughts
+
+> As data scientists with a private school affiliation, we should advocate strongly for democratic process within our institution and our region.

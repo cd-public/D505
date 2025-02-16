@@ -402,9 +402,19 @@ Jameson &gt; Hendrik &gt; Calvin
 </div>
 
 </section>
+<section id="agenda" class="title-slide slide level1 center">
+<h1>Agenda</h1>
+<ol start="0" type="1">
+<li>Course Announcements</li>
+<li>Decision-trees</li>
+<li>Random forests</li>
+<li>Group work</li>
+</ol>
+</section>
+
 <section>
-<section id="midterm-33" class="title-slide slide level1 center">
-<h1>Midterm 3/3</h1>
+<section id="midterm-317" class="title-slide slide level1 center">
+<h1>Midterm 3/17</h1>
 
 </section>
 <section id="brief-recap-of-course-so-far" class="slide level2 smaller">
@@ -418,16 +428,24 @@ Jameson &gt; Hendrik &gt; Calvin
 <li>Feature selection (correlation, linear / logistic coefficients, frequent words, frequent words by class, etc.).</li>
 </ul>
 </section>
-<section id="modality-discussion" class="slide level2">
-<h2>Modality Discussion</h2>
+<section id="practice" class="slide level2">
+<h2>Practice</h2>
 <ul>
-<li>I would release an assignment electronically a 6 PM</li>
-<li>We can do in person or otherwise.</li>
-<li>It will be “cheat proof”
+<li>I am working to develop a practice midterm.</li>
+<li>I will circulate it by 3 Mar.</li>
+<li>You will go over it on 10 Mar.</li>
+<li>It is based on the 5 homeworks.</li>
+<li>It is based on the prior slide.
 <ul>
-<li>I will ask you nothing for which it matters how you determine the answer.</li>
-<li>If e.g.&nbsp;ChatGPT can be mind controlled into doing high quality feature engineering, you get points for mind controlling ChatGPT.</li>
+<li>Little to no computatational linguistics</li>
+<li>I’m regarding <code>tidytext</code> as extension, not core, content.</li>
 </ul></li>
+</ul>
+</section>
+<section id="modality-update" class="slide level2">
+<h2>Modality Update</h2>
+<ul>
+<li>Reminder for me if we haven’t set modality.</li>
 </ul>
 </section></section>
 <section>
@@ -479,21 +497,21 @@ Jameson &gt; Hendrik &gt; Calvin
 <li>Talk about your homework <em>with</em> your group.</li>
 </ul>
 </section></section>
-<section id="agenda" class="title-slide slide level1 center">
-<h1>Agenda</h1>
-<ol type="1">
-<li>Decision-trees</li>
-<li>Weighted models (revisited)</li>
-<li>Random forests</li>
-<li>Bagged models</li>
-<li>Group work</li>
-</ol>
-</section>
-
 <section>
 <section id="decision-trees" class="title-slide slide level1 center">
 <h1>Decision trees</h1>
 
+</section>
+<section id="meme" class="slide level2">
+<h2>Meme</h2>
+<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:iq6aw4tscf5n5oplggiyjfyl/app.bsky.feed.post/3lant63bots2t" data-bluesky-cid="bafyreigysehdd4fdsi5hrgzjc5sakdplkahdzudytybid7zeo77pi6hvre">
+<p lang="en">
+</p><p>This flow chart is also canonical</p>
+(sincere apologies but I do not think I can alt-text this)<br><br><a href="https://bsky.app/profile/did:plc:iq6aw4tscf5n5oplggiyjfyl/post/3lant63bots2t?ref_src=embed">[image or embed]</a>
+<p></p>
+— lastpositivist.bsky.social (<a href="https://bsky.app/profile/did:plc:iq6aw4tscf5n5oplggiyjfyl?ref_src=embed"><span class="citation" data-cites="lastpositivist.bsky.social">@lastpositivist.bsky.social</span></a>) <a href="https://bsky.app/profile/did:plc:iq6aw4tscf5n5oplggiyjfyl/post/3lant63bots2t?ref_src=embed">November 10, 2024 at 11:45 PM</a>
+</blockquote>
+<script async="" src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
 </section>
 <section id="libraries-setup" class="slide level2">
 <h2>Libraries Setup</h2>
@@ -505,11 +523,10 @@ Jameson &gt; Hendrik &gt; Calvin
 <span id="cb1-5"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(SnowballC))</span>
 <span id="cb1-6"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(rpart)) <span class="co"># New?</span></span>
 <span id="cb1-7"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(randomForest)) <span class="co"># New?</span></span>
-<span id="cb1-8"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(doParallel)) <span class="co"># New?</span></span>
-<span id="cb1-9"><a></a><span class="fu">data</span>(stop_words)</span>
-<span id="cb1-10"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(thematic))</span>
-<span id="cb1-11"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
-<span id="cb1-12"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a></a><span class="fu">data</span>(stop_words)</span>
+<span id="cb1-9"><a></a><span class="fu">sh</span>(<span class="fu">library</span>(thematic))</span>
+<span id="cb1-10"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_dark</span>())</span>
+<span id="cb1-11"><a></a><span class="fu">thematic_rmd</span>(<span class="at">bg =</span> <span class="st">"#111"</span>, <span class="at">fg =</span> <span class="st">"#eee"</span>, <span class="at">accent =</span> <span class="st">"#eee"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="dataframe" class="slide level2">
@@ -578,7 +595,7 @@ Jameson &gt; Hendrik &gt; Calvin
 <section id="visualize" class="slide level2">
 <h2>Visualize</h2>
 
-<img data-src="https://upload.wikimedia.org/wikipedia/commons/8/87/Beachdecisiontree.png" class="r-stretch"></section>
+<img style="filter:invert(.925)" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Beachdecisiontree.png" class="r-stretch"></section>
 <section id="in-practice" class="slide level2">
 <h2>In practice</h2>
 <ul>
@@ -770,12 +787,12 @@ node), split, n, loss, yval, (yprob)
       * denotes terminal node
 
  1) root 5358 2190 California (0.5912654 0.4087346)  
-   2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
-   3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
-     6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983) *
-     7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
-      14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864) *
-      15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134) *</code></pre>
+   2) palateTRUE&gt;=0.5 1488  209 California (0.8595430 0.1404570) *
+   3) palateTRUE&lt; 0.5 3870 1889 Oregon (0.4881137 0.5118863)  
+     6) fruitTRUE&lt; 0.5 2013  728 California (0.6383507 0.3616493) *
+     7) fruitTRUE&gt;=0.5 1857  604 Oregon (0.3252558 0.6747442)  
+      14) redTRUE&gt;=0.5 279  109 California (0.6093190 0.3906810) *
+      15) redTRUE&lt; 0.5 1578  434 Oregon (0.2750317 0.7249683) *</code></pre>
 </div>
 </div>
 </section>
@@ -789,26 +806,26 @@ node), split, n, loss, yval, (yprob)
 
             Reference
 Prediction   California Oregon
-  California        705    271
-  Oregon             86    276
+  California        698    234
+  Oregon             93    313
                                           
-               Accuracy : 0.7332          
-                 95% CI : (0.7086, 0.7567)
+               Accuracy : 0.7556          
+                 95% CI : (0.7317, 0.7784)
     No Information Rate : 0.5912          
     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
                                           
-                  Kappa : 0.4176          
+                  Kappa : 0.4735          
                                           
- Mcnemar's Test P-Value : &lt; 2.2e-16       
+ Mcnemar's Test P-Value : 9.785e-15       
                                           
-            Sensitivity : 0.8913          
-            Specificity : 0.5046          
-         Pos Pred Value : 0.7223          
-         Neg Pred Value : 0.7624          
+            Sensitivity : 0.8824          
+            Specificity : 0.5722          
+         Pos Pred Value : 0.7489          
+         Neg Pred Value : 0.7709          
              Prevalence : 0.5912          
-         Detection Rate : 0.5269          
-   Detection Prevalence : 0.7294          
-      Balanced Accuracy : 0.6979          
+         Detection Rate : 0.5217          
+   Detection Prevalence : 0.6966          
+      Balanced Accuracy : 0.7273          
                                           
        'Positive' Class : California      
                                           </code></pre>
@@ -834,35 +851,49 @@ Prediction   California Oregon
 node), split, n, loss, yval, (yprob)
       * denotes terminal node
 
-  1) root 5358 2190 California (0.5912654 0.4087346)  
-    2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
-    3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
-      6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983)  
-       12) cherryTRUE&gt;=0.5 930  226 California (0.7569892 0.2430108) *
-       13) cherryTRUE&lt; 0.5 1085  473 California (0.5640553 0.4359447)  
-         26) blackTRUE&gt;=0.5 190   33 California (0.8263158 0.1736842) *
-         27) blackTRUE&lt; 0.5 895  440 California (0.5083799 0.4916201)  
-           54) flavorsTRUE&lt; 0.5 571  241 California (0.5779335 0.4220665)  
-            108) redTRUE&lt; 0.5 485  187 California (0.6144330 0.3855670)  
-              216) tanninsTRUE&lt; 0.5 419  149 California (0.6443914 0.3556086) *
-              217) tanninsTRUE&gt;=0.5 66   28 Oregon (0.4242424 0.5757576) *
-            109) redTRUE&gt;=0.5 86   32 Oregon (0.3720930 0.6279070) *
-           55) flavorsTRUE&gt;=0.5 324  125 Oregon (0.3858025 0.6141975) *
-      7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
-       14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864)  
-         28) cherryTRUE&gt;=0.5 109   30 California (0.7247706 0.2752294) *
-         29) cherryTRUE&lt; 0.5 170   85 California (0.5000000 0.5000000)  
-           58) blackTRUE&gt;=0.5 18    3 California (0.8333333 0.1666667) *
-           59) blackTRUE&lt; 0.5 152   70 Oregon (0.4605263 0.5394737) *
-       15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134)  
-         30) blackTRUE&gt;=0.5 319  143 Oregon (0.4482759 0.5517241)  
-           60) cherryTRUE&lt; 0.5 91   28 California (0.6923077 0.3076923) *
-           61) cherryTRUE&gt;=0.5 228   80 Oregon (0.3508772 0.6491228)  
-            122) flavorsTRUE&gt;=0.5 88   35 Oregon (0.3977273 0.6022727)  
-              244) tanninsTRUE&gt;=0.5 22    9 California (0.5909091 0.4090909) *
-              245) tanninsTRUE&lt; 0.5 66   22 Oregon (0.3333333 0.6666667) *
-            123) flavorsTRUE&lt; 0.5 140   45 Oregon (0.3214286 0.6785714) *
-         31) blackTRUE&lt; 0.5 1303  298 Oregon (0.2287030 0.7712970) *</code></pre>
+  1) root 5358 2190 California (0.59126540 0.40873460)  
+    2) palateTRUE&gt;=0.5 1488  209 California (0.85954301 0.14045699)  
+      4) blackTRUE&gt;=0.5 524   26 California (0.95038168 0.04961832) *
+      5) blackTRUE&lt; 0.5 964  183 California (0.81016598 0.18983402)  
+       10) redTRUE&gt;=0.5 269   21 California (0.92193309 0.07806691) *
+       11) redTRUE&lt; 0.5 695  162 California (0.76690647 0.23309353)  
+         22) fruitTRUE&lt; 0.5 460   74 California (0.83913043 0.16086957) *
+         23) fruitTRUE&gt;=0.5 235   88 California (0.62553191 0.37446809)  
+           46) cherryTRUE&lt; 0.5 156   54 California (0.65384615 0.34615385) *
+           47) cherryTRUE&gt;=0.5 79   34 California (0.56962025 0.43037975)  
+             94) flavorsTRUE&gt;=0.5 22    5 California (0.77272727 0.22727273) *
+             95) flavorsTRUE&lt; 0.5 57   28 Oregon (0.49122807 0.50877193) *
+    3) palateTRUE&lt; 0.5 3870 1889 Oregon (0.48811370 0.51188630)  
+      6) fruitTRUE&lt; 0.5 2013  728 California (0.63835072 0.36164928)  
+       12) cherryTRUE&gt;=0.5 920  227 California (0.75326087 0.24673913) *
+       13) cherryTRUE&lt; 0.5 1093  501 California (0.54162855 0.45837145)  
+         26) blackTRUE&gt;=0.5 172   32 California (0.81395349 0.18604651) *
+         27) blackTRUE&lt; 0.5 921  452 Oregon (0.49077090 0.50922910)  
+           54) flavorsTRUE&lt; 0.5 595  259 California (0.56470588 0.43529412)  
+            108) redTRUE&lt; 0.5 502  199 California (0.60358566 0.39641434)  
+              216) tanninsTRUE&lt; 0.5 432  162 California (0.62500000 0.37500000) *
+              217) tanninsTRUE&gt;=0.5 70   33 Oregon (0.47142857 0.52857143) *
+            109) redTRUE&gt;=0.5 93   33 Oregon (0.35483871 0.64516129) *
+           55) flavorsTRUE&gt;=0.5 326  116 Oregon (0.35582822 0.64417178) *
+      7) fruitTRUE&gt;=0.5 1857  604 Oregon (0.32525579 0.67474421)  
+       14) redTRUE&gt;=0.5 279  109 California (0.60931900 0.39068100)  
+         28) cherryTRUE&gt;=0.5 102   24 California (0.76470588 0.23529412) *
+         29) cherryTRUE&lt; 0.5 177   85 California (0.51977401 0.48022599)  
+           58) blackTRUE&gt;=0.5 18    3 California (0.83333333 0.16666667) *
+           59) blackTRUE&lt; 0.5 159   77 Oregon (0.48427673 0.51572327)  
+            118) tanninsTRUE&lt; 0.5 135   65 California (0.51851852 0.48148148)  
+              236) flavorsTRUE&lt; 0.5 81   35 California (0.56790123 0.43209877) *
+              237) flavorsTRUE&gt;=0.5 54   24 Oregon (0.44444444 0.55555556) *
+            119) tanninsTRUE&gt;=0.5 24    7 Oregon (0.29166667 0.70833333) *
+       15) redTRUE&lt; 0.5 1578  434 Oregon (0.27503169 0.72496831)  
+         30) blackTRUE&gt;=0.5 310  134 Oregon (0.43225806 0.56774194)  
+           60) cherryTRUE&lt; 0.5 85   27 California (0.68235294 0.31764706) *
+           61) cherryTRUE&gt;=0.5 225   76 Oregon (0.33777778 0.66222222)  
+            122) tanninsTRUE&gt;=0.5 54   21 Oregon (0.38888889 0.61111111)  
+              244) flavorsTRUE&gt;=0.5 21    9 California (0.57142857 0.42857143) *
+              245) flavorsTRUE&lt; 0.5 33    9 Oregon (0.27272727 0.72727273) *
+            123) tanninsTRUE&lt; 0.5 171   55 Oregon (0.32163743 0.67836257) *
+         31) blackTRUE&lt; 0.5 1268  300 Oregon (0.23659306 0.76340694) *</code></pre>
 </div>
 </div>
 </section>
@@ -876,26 +907,26 @@ node), split, n, loss, yval, (yprob)
 
             Reference
 Prediction   California Oregon
-  California        640    174
-  Oregon            151    373
+  California        638    163
+  Oregon            153    384
                                           
-               Accuracy : 0.7571          
-                 95% CI : (0.7332, 0.7799)
+               Accuracy : 0.7638          
+                 95% CI : (0.7401, 0.7864)
     No Information Rate : 0.5912          
     P-Value [Acc &gt; NIR] : &lt;2e-16          
                                           
-                  Kappa : 0.4942          
+                  Kappa : 0.51            
                                           
- Mcnemar's Test P-Value : 0.2223          
+ Mcnemar's Test P-Value : 0.6127          
                                           
-            Sensitivity : 0.8091          
-            Specificity : 0.6819          
-         Pos Pred Value : 0.7862          
-         Neg Pred Value : 0.7118          
+            Sensitivity : 0.8066          
+            Specificity : 0.7020          
+         Pos Pred Value : 0.7965          
+         Neg Pred Value : 0.7151          
              Prevalence : 0.5912          
-         Detection Rate : 0.4783          
-   Detection Prevalence : 0.6084          
-      Balanced Accuracy : 0.7455          
+         Detection Rate : 0.4768          
+   Detection Prevalence : 0.5987          
+      Balanced Accuracy : 0.7543          
                                           
        'Positive' Class : California      
                                           </code></pre>
@@ -918,10 +949,10 @@ Prediction   California Oregon
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>fit<span class="sc">$</span>finalModel<span class="sc">$</span>variable.importance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> palateTRUE   fruitTRUE   blackTRUE  cherryTRUE     redTRUE flavorsTRUE 
-  295.18088   219.35139    72.24610    59.15589    56.38056    16.92861 
+<pre><code> palateTRUE   fruitTRUE   blackTRUE     redTRUE  cherryTRUE flavorsTRUE 
+ 296.547003  203.569581   74.341434   72.018739   67.904546   24.170980 
 tanninsTRUE 
-   14.87028 </code></pre>
+   9.593074 </code></pre>
 </div>
 </div>
 </section>
@@ -937,147 +968,36 @@ tanninsTRUE
 </ul></li>
 </ul>
 </section>
-<section id="weighted-models" class="slide level2">
-<h2>Weighted Models</h2>
-<ul>
-<li>Remember weights?
-<ul>
-<li>California is TOO BIG</li>
-<li>Repeal Prop 13</li>
-</ul></li>
-<li>Where do these weights come from?</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>weight_train <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a></a>  <span class="fu">mutate</span>(<span class="at">weights=</span><span class="fu">case_when</span>(</span>
-<span id="cb22-3"><a></a>    province<span class="sc">==</span><span class="st">"Burgundy"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
-<span id="cb22-4"><a></a>    province<span class="sc">==</span><span class="st">"California"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb22-5"><a></a>    province<span class="sc">==</span><span class="st">"Casablanca_Valley"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
-<span id="cb22-6"><a></a>    province<span class="sc">==</span><span class="st">"Marlborough"</span> <span class="sc">~</span> <span class="fl">18.5</span>,</span>
-<span id="cb22-7"><a></a>    province<span class="sc">==</span><span class="st">"New_York"</span> <span class="sc">~</span> <span class="dv">37</span>,</span>
-<span id="cb22-8"><a></a>    province<span class="sc">==</span><span class="st">"Oregon"</span> <span class="sc">~</span> <span class="fl">1.4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="progressive-overload" class="slide level2">
-<h2>Progressive overload</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb23-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb23-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb23-4"><a></a>             <span class="at">tuneLength =</span> <span class="dv">10</span>,</span>
-<span id="cb23-5"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights,</span>
-<span id="cb23-6"><a></a>             <span class="at">trControl =</span> ctrl)</span>
-<span id="cb23-7"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>n= 5358 
-
-node), split, n, loss, yval, (yprob)
-      * denotes terminal node
-
-  1) root 5358 3066.0 California (0.50818094 0.49181906)  
-    2) palateTRUE&gt;=0.5 1442  273.0 California (0.82039474 0.17960526)  
-      4) blackTRUE&gt;=0.5 519   37.8 California (0.92865232 0.07134768) *
-      5) blackTRUE&lt; 0.5 923  235.2 California (0.76247223 0.23752777)  
-       10) redTRUE&gt;=0.5 239   25.2 California (0.89764419 0.10235581) *
-       11) redTRUE&lt; 0.5 684  210.0 California (0.71774194 0.28225806)  
-         22) fruitTRUE&lt; 0.5 446   98.0 California (0.79324895 0.20675105)  
-           44) flavorsTRUE&lt; 0.5 302   57.4 California (0.81972362 0.18027638) *
-           45) flavorsTRUE&gt;=0.5 144   40.6 California (0.73907455 0.26092545) *
-         23) fruitTRUE&gt;=0.5 238  112.0 California (0.58518519 0.41481481)  
-           46) cherryTRUE&lt; 0.5 153   61.6 California (0.63892145 0.36107855)  
-             92) flavorsTRUE&lt; 0.5 110   36.4 California (0.69767442 0.30232558) *
-             93) flavorsTRUE&gt;=0.5 43   25.0 Oregon (0.49800797 0.50199203) *
-           47) cherryTRUE&gt;=0.5 85   49.0 Oregon (0.49295775 0.50704225)  
-             94) flavorsTRUE&gt;=0.5 25   12.6 California (0.55944056 0.44055944) *
-             95) flavorsTRUE&lt; 0.5 60   33.0 Oregon (0.46610169 0.53389831) *
-    3) palateTRUE&lt; 0.5 3916 1921.0 Oregon (0.40750955 0.59249045)  
-      6) fruitTRUE&lt; 0.5 2015  978.6 California (0.57352044 0.42647956)  
-       12) cherryTRUE&gt;=0.5 930  316.4 California (0.68992552 0.31007448)  
-         24) flavorsTRUE&lt; 0.5 550  119.0 California (0.79623288 0.20376712)  
-           48) redTRUE&gt;=0.5 93   11.2 California (0.88357588 0.11642412)  
-             96) tanninsTRUE&gt;=0.5 9    0.0 California (1.00000000 0.00000000) *
-             97) tanninsTRUE&lt; 0.5 84   11.2 California (0.87155963 0.12844037)  
-              194) blackTRUE&gt;=0.5 16    1.4 California (0.91463415 0.08536585) *
-              195) blackTRUE&lt; 0.5 68    9.8 California (0.86158192 0.13841808) *
-           49) redTRUE&lt; 0.5 457  107.8 California (0.77900779 0.22099221)  
-             98) blackTRUE&lt; 0.5 276   61.6 California (0.79019074 0.20980926) *
-             99) blackTRUE&gt;=0.5 181   46.2 California (0.76210093 0.23789907) *
-         25) flavorsTRUE&gt;=0.5 380  197.4 California (0.54766269 0.45233731)  
-           50) redTRUE&gt;=0.5 70   16.8 California (0.77540107 0.22459893) *
-           51) redTRUE&lt; 0.5 310  180.6 California (0.50055310 0.49944690)  
-            102) blackTRUE&gt;=0.5 115   57.4 California (0.56316591 0.43683409) *
-            103) blackTRUE&lt; 0.5 195  107.0 Oregon (0.46481321 0.53518679)  
-              206) tanninsTRUE&gt;=0.5 28   14.0 California (0.56250000 0.43750000) *
-              207) tanninsTRUE&lt; 0.5 167   89.0 Oregon (0.44904137 0.55095863) *
-       13) cherryTRUE&lt; 0.5 1085  612.0 Oregon (0.48030137 0.51969863)  
-         26) blackTRUE&gt;=0.5 190   46.2 California (0.77263780 0.22736220) *
-         27) blackTRUE&lt; 0.5 895  455.0 Oregon (0.42483660 0.57516340)  
-           54) flavorsTRUE&lt; 0.5 571  330.0 Oregon (0.49445610 0.50554390)  
-            108) redTRUE&lt; 0.5 485  261.8 California (0.53233298 0.46766702)  
-              216) tanninsTRUE&lt; 0.5 419  208.6 California (0.56414542 0.43585458) *
-              217) tanninsTRUE&gt;=0.5 66   28.0 Oregon (0.34482759 0.65517241) *
-            109) redTRUE&gt;=0.5 86   32.0 Oregon (0.29739777 0.70260223) *
-           55) flavorsTRUE&gt;=0.5 324  125.0 Oregon (0.30971259 0.69028741) *
-      7) fruitTRUE&gt;=0.5 1901  605.0 Oregon (0.25006200 0.74993800)  
-       14) redTRUE&gt;=0.5 279  161.0 California (0.50461538 0.49538462)  
-         28) cherryTRUE&gt;=0.5 109   42.0 California (0.65289256 0.34710744)  
-           56) flavorsTRUE&gt;=0.5 44   11.2 California (0.76271186 0.23728814)  
-            112) tanninsTRUE&gt;=0.5 17    1.4 California (0.91954023 0.08045977) *
-            113) tanninsTRUE&lt; 0.5 27    9.8 California (0.67114094 0.32885906) *
-           57) flavorsTRUE&lt; 0.5 65   30.8 California (0.58265583 0.41734417)  
-            114) tanninsTRUE&lt; 0.5 57   25.2 California (0.60747664 0.39252336) *
-            115) tanninsTRUE&gt;=0.5 8    4.0 Oregon (0.41666667 0.58333333) *
-         29) cherryTRUE&lt; 0.5 170   85.0 Oregon (0.41666667 0.58333333)  
-           58) blackTRUE&gt;=0.5 18    4.2 California (0.78125000 0.21875000) *
-           59) blackTRUE&lt; 0.5 152   70.0 Oregon (0.37878788 0.62121212) *
-       15) redTRUE&lt; 0.5 1622  441.0 Oregon (0.21056150 0.78943850)  
-         30) blackTRUE&gt;=0.5 319  143.0 Oregon (0.36723164 0.63276836)  
-           60) cherryTRUE&lt; 0.5 91   39.2 California (0.61643836 0.38356164)  
-            120) flavorsTRUE&lt; 0.5 57   18.2 California (0.70739550 0.29260450) *
-            121) flavorsTRUE&gt;=0.5 34   19.0 Oregon (0.47500000 0.52500000)  
-              242) tanninsTRUE&gt;=0.5 10    5.6 California (0.51724138 0.48275862) *
-              243) tanninsTRUE&lt; 0.5 24   13.0 Oregon (0.45774648 0.54225352) *
-           61) cherryTRUE&gt;=0.5 228   80.0 Oregon (0.27855153 0.72144847)  
-            122) flavorsTRUE&gt;=0.5 88   35.0 Oregon (0.32051282 0.67948718)  
-              244) tanninsTRUE&gt;=0.5 22   12.6 California (0.50781250 0.49218750) *
-              245) tanninsTRUE&lt; 0.5 66   22.0 Oregon (0.26315789 0.73684211) *
-            123) flavorsTRUE&lt; 0.5 140   45.0 Oregon (0.25280899 0.74719101)  
-              246) tanninsTRUE&lt; 0.5 104   36.0 Oregon (0.27439024 0.72560976) *
-              247) tanninsTRUE&gt;=0.5 36    9.0 Oregon (0.19230769 0.80769231) *
-         31) blackTRUE&lt; 0.5 1303  298.0 Oregon (0.17478006 0.82521994) *</code></pre>
-</div>
-</div>
-</section>
 <section id="confusion-matrix-2" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb25-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb22-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
             Reference
 Prediction   California Oregon
-  California        606    143
-  Oregon            185    404
+  California        638    163
+  Oregon            153    384
                                           
-               Accuracy : 0.7549          
-                 95% CI : (0.7309, 0.7777)
+               Accuracy : 0.7638          
+                 95% CI : (0.7401, 0.7864)
     No Information Rate : 0.5912          
-    P-Value [Acc &gt; NIR] : &lt; 2e-16         
+    P-Value [Acc &gt; NIR] : &lt;2e-16          
                                           
-                  Kappa : 0.4988          
+                  Kappa : 0.51            
                                           
- Mcnemar's Test P-Value : 0.02358         
+ Mcnemar's Test P-Value : 0.6127          
                                           
-            Sensitivity : 0.7661          
-            Specificity : 0.7386          
-         Pos Pred Value : 0.8091          
-         Neg Pred Value : 0.6859          
+            Sensitivity : 0.8066          
+            Specificity : 0.7020          
+         Pos Pred Value : 0.7965          
+         Neg Pred Value : 0.7151          
              Prevalence : 0.5912          
-         Detection Rate : 0.4529          
-   Detection Prevalence : 0.5598          
-      Balanced Accuracy : 0.7523          
+         Detection Rate : 0.4768          
+   Detection Prevalence : 0.5987          
+      Balanced Accuracy : 0.7543          
                                           
        'Positive' Class : California      
                                           </code></pre>
@@ -1087,83 +1007,97 @@ Prediction   California Oregon
 <section id="tune-grids" class="slide level2">
 <h2>Tune grids</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a>hyperparam_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">cp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>))</span>
-<span id="cb27-2"><a></a></span>
-<span id="cb27-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb27-4"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb27-5"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb27-6"><a></a>             <span class="at">trControl =</span> ctrl,</span>
-<span id="cb27-7"><a></a>             <span class="at">tuneGrid =</span> hyperparam_grid,</span>
-<span id="cb27-8"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>)</span>
-<span id="cb27-9"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>hyperparam_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">cp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>))</span>
+<span id="cb24-2"><a></a></span>
+<span id="cb24-3"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb24-4"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb24-5"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb24-6"><a></a>             <span class="at">trControl =</span> ctrl,</span>
+<span id="cb24-7"><a></a>             <span class="at">tuneGrid =</span> hyperparam_grid,</span>
+<span id="cb24-8"><a></a>             <span class="at">metric =</span> <span class="st">"Kappa"</span>)</span>
+<span id="cb24-9"><a></a>fit<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>n= 5358 
 
 node), split, n, loss, yval, (yprob)
       * denotes terminal node
 
-  1) root 5358 2190 California (0.5912654 0.4087346)  
-    2) palateTRUE&gt;=0.5 1442  195 California (0.8647712 0.1352288) *
-    3) palateTRUE&lt; 0.5 3916 1921 Oregon (0.4905516 0.5094484)  
-      6) fruitTRUE&lt; 0.5 2015  699 California (0.6531017 0.3468983)  
-       12) cherryTRUE&gt;=0.5 930  226 California (0.7569892 0.2430108) *
-       13) cherryTRUE&lt; 0.5 1085  473 California (0.5640553 0.4359447)  
-         26) blackTRUE&gt;=0.5 190   33 California (0.8263158 0.1736842) *
-         27) blackTRUE&lt; 0.5 895  440 California (0.5083799 0.4916201)  
-           54) flavorsTRUE&lt; 0.5 571  241 California (0.5779335 0.4220665)  
-            108) redTRUE&lt; 0.5 485  187 California (0.6144330 0.3855670)  
-              216) tanninsTRUE&lt; 0.5 419  149 California (0.6443914 0.3556086) *
-              217) tanninsTRUE&gt;=0.5 66   28 Oregon (0.4242424 0.5757576) *
-            109) redTRUE&gt;=0.5 86   32 Oregon (0.3720930 0.6279070) *
-           55) flavorsTRUE&gt;=0.5 324  125 Oregon (0.3858025 0.6141975) *
-      7) fruitTRUE&gt;=0.5 1901  605 Oregon (0.3182536 0.6817464)  
-       14) redTRUE&gt;=0.5 279  115 California (0.5878136 0.4121864)  
-         28) cherryTRUE&gt;=0.5 109   30 California (0.7247706 0.2752294) *
-         29) cherryTRUE&lt; 0.5 170   85 California (0.5000000 0.5000000)  
-           58) blackTRUE&gt;=0.5 18    3 California (0.8333333 0.1666667) *
-           59) blackTRUE&lt; 0.5 152   70 Oregon (0.4605263 0.5394737) *
-       15) redTRUE&lt; 0.5 1622  441 Oregon (0.2718866 0.7281134)  
-         30) blackTRUE&gt;=0.5 319  143 Oregon (0.4482759 0.5517241)  
-           60) cherryTRUE&lt; 0.5 91   28 California (0.6923077 0.3076923) *
-           61) cherryTRUE&gt;=0.5 228   80 Oregon (0.3508772 0.6491228)  
-            122) flavorsTRUE&gt;=0.5 88   35 Oregon (0.3977273 0.6022727)  
-              244) tanninsTRUE&gt;=0.5 22    9 California (0.5909091 0.4090909) *
-              245) tanninsTRUE&lt; 0.5 66   22 Oregon (0.3333333 0.6666667) *
-            123) flavorsTRUE&lt; 0.5 140   45 Oregon (0.3214286 0.6785714) *
-         31) blackTRUE&lt; 0.5 1303  298 Oregon (0.2287030 0.7712970) *</code></pre>
+  1) root 5358 2190 California (0.59126540 0.40873460)  
+    2) palateTRUE&gt;=0.5 1488  209 California (0.85954301 0.14045699)  
+      4) blackTRUE&gt;=0.5 524   26 California (0.95038168 0.04961832) *
+      5) blackTRUE&lt; 0.5 964  183 California (0.81016598 0.18983402)  
+       10) redTRUE&gt;=0.5 269   21 California (0.92193309 0.07806691) *
+       11) redTRUE&lt; 0.5 695  162 California (0.76690647 0.23309353)  
+         22) fruitTRUE&lt; 0.5 460   74 California (0.83913043 0.16086957) *
+         23) fruitTRUE&gt;=0.5 235   88 California (0.62553191 0.37446809)  
+           46) cherryTRUE&lt; 0.5 156   54 California (0.65384615 0.34615385) *
+           47) cherryTRUE&gt;=0.5 79   34 California (0.56962025 0.43037975)  
+             94) flavorsTRUE&gt;=0.5 22    5 California (0.77272727 0.22727273) *
+             95) flavorsTRUE&lt; 0.5 57   28 Oregon (0.49122807 0.50877193) *
+    3) palateTRUE&lt; 0.5 3870 1889 Oregon (0.48811370 0.51188630)  
+      6) fruitTRUE&lt; 0.5 2013  728 California (0.63835072 0.36164928)  
+       12) cherryTRUE&gt;=0.5 920  227 California (0.75326087 0.24673913) *
+       13) cherryTRUE&lt; 0.5 1093  501 California (0.54162855 0.45837145)  
+         26) blackTRUE&gt;=0.5 172   32 California (0.81395349 0.18604651) *
+         27) blackTRUE&lt; 0.5 921  452 Oregon (0.49077090 0.50922910)  
+           54) flavorsTRUE&lt; 0.5 595  259 California (0.56470588 0.43529412)  
+            108) redTRUE&lt; 0.5 502  199 California (0.60358566 0.39641434)  
+              216) tanninsTRUE&lt; 0.5 432  162 California (0.62500000 0.37500000) *
+              217) tanninsTRUE&gt;=0.5 70   33 Oregon (0.47142857 0.52857143) *
+            109) redTRUE&gt;=0.5 93   33 Oregon (0.35483871 0.64516129) *
+           55) flavorsTRUE&gt;=0.5 326  116 Oregon (0.35582822 0.64417178) *
+      7) fruitTRUE&gt;=0.5 1857  604 Oregon (0.32525579 0.67474421)  
+       14) redTRUE&gt;=0.5 279  109 California (0.60931900 0.39068100)  
+         28) cherryTRUE&gt;=0.5 102   24 California (0.76470588 0.23529412) *
+         29) cherryTRUE&lt; 0.5 177   85 California (0.51977401 0.48022599)  
+           58) blackTRUE&gt;=0.5 18    3 California (0.83333333 0.16666667) *
+           59) blackTRUE&lt; 0.5 159   77 Oregon (0.48427673 0.51572327)  
+            118) tanninsTRUE&lt; 0.5 135   65 California (0.51851852 0.48148148)  
+              236) flavorsTRUE&lt; 0.5 81   35 California (0.56790123 0.43209877) *
+              237) flavorsTRUE&gt;=0.5 54   24 Oregon (0.44444444 0.55555556) *
+            119) tanninsTRUE&gt;=0.5 24    7 Oregon (0.29166667 0.70833333) *
+       15) redTRUE&lt; 0.5 1578  434 Oregon (0.27503169 0.72496831)  
+         30) blackTRUE&gt;=0.5 310  134 Oregon (0.43225806 0.56774194)  
+           60) cherryTRUE&lt; 0.5 85   27 California (0.68235294 0.31764706) *
+           61) cherryTRUE&gt;=0.5 225   76 Oregon (0.33777778 0.66222222)  
+            122) tanninsTRUE&gt;=0.5 54   21 Oregon (0.38888889 0.61111111)  
+              244) flavorsTRUE&gt;=0.5 21    9 California (0.57142857 0.42857143) *
+              245) flavorsTRUE&lt; 0.5 33    9 Oregon (0.27272727 0.72727273) *
+            123) tanninsTRUE&lt; 0.5 171   55 Oregon (0.32163743 0.67836257) *
+         31) blackTRUE&lt; 0.5 1268  300 Oregon (0.23659306 0.76340694) *</code></pre>
 </div>
 </div>
 </section>
 <section id="confusion-matrix-3" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb29-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb26-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
             Reference
 Prediction   California Oregon
-  California        640    174
-  Oregon            151    373
+  California        638    163
+  Oregon            153    384
                                           
-               Accuracy : 0.7571          
-                 95% CI : (0.7332, 0.7799)
+               Accuracy : 0.7638          
+                 95% CI : (0.7401, 0.7864)
     No Information Rate : 0.5912          
     P-Value [Acc &gt; NIR] : &lt;2e-16          
                                           
-                  Kappa : 0.4942          
+                  Kappa : 0.51            
                                           
- Mcnemar's Test P-Value : 0.2223          
+ Mcnemar's Test P-Value : 0.6127          
                                           
-            Sensitivity : 0.8091          
-            Specificity : 0.6819          
-         Pos Pred Value : 0.7862          
-         Neg Pred Value : 0.7118          
+            Sensitivity : 0.8066          
+            Specificity : 0.7020          
+         Pos Pred Value : 0.7965          
+         Neg Pred Value : 0.7151          
              Prevalence : 0.5912          
-         Detection Rate : 0.4783          
-   Detection Prevalence : 0.6084          
-      Balanced Accuracy : 0.7455          
+         Detection Rate : 0.4768          
+   Detection Prevalence : 0.5987          
+      Balanced Accuracy : 0.7543          
                                           
        'Positive' Class : California      
                                           </code></pre>
@@ -1186,12 +1120,12 @@ Prediction   California Oregon
 <section id="solution" class="slide level2">
 <h2>Solution</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb31-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb31-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb31-4"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method=</span><span class="st">"none"</span>),</span>
-<span id="cb31-5"><a></a>             <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">cp =</span> <span class="dv">0</span>))</span>
-<span id="cb31-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb28-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb28-3"><a></a>             <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb28-4"><a></a>             <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method=</span><span class="st">"none"</span>),</span>
+<span id="cb28-5"><a></a>             <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">cp =</span> <span class="dv">0</span>))</span>
+<span id="cb28-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CART 
 
@@ -1207,42 +1141,41 @@ Resampling: None </code></pre>
 <section id="confusion-matrix-4" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb33-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb30-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred), <span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
             Reference
 Prediction   California Oregon
-  California        640    174
-  Oregon            151    373
+  California        638    163
+  Oregon            153    384
                                           
-               Accuracy : 0.7571          
-                 95% CI : (0.7332, 0.7799)
+               Accuracy : 0.7638          
+                 95% CI : (0.7401, 0.7864)
     No Information Rate : 0.5912          
     P-Value [Acc &gt; NIR] : &lt;2e-16          
                                           
-                  Kappa : 0.4942          
+                  Kappa : 0.51            
                                           
- Mcnemar's Test P-Value : 0.2223          
+ Mcnemar's Test P-Value : 0.6127          
                                           
-            Sensitivity : 0.8091          
-            Specificity : 0.6819          
-         Pos Pred Value : 0.7862          
-         Neg Pred Value : 0.7118          
+            Sensitivity : 0.8066          
+            Specificity : 0.7020          
+         Pos Pred Value : 0.7965          
+         Neg Pred Value : 0.7151          
              Prevalence : 0.5912          
-         Detection Rate : 0.4783          
-   Detection Prevalence : 0.6084          
-      Balanced Accuracy : 0.7455          
+         Detection Rate : 0.4768          
+   Detection Prevalence : 0.5987          
+      Balanced Accuracy : 0.7543          
                                           
        'Positive' Class : California      
                                           </code></pre>
 </div>
 </div>
-</section></section>
-<section>
-<section id="variance" class="title-slide slide level1 center">
-<h1>Variance</h1>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
 <p><a href="Understanding the Bias-Variance Tradeoff">Understanding the Bias-Variance Tradeoff by Scott Fortman-Roe</a></p>
 <table class="caption-top" data-quarto-postprocess="true">
 <colgroup>
@@ -1285,16 +1218,16 @@ Prediction   California Oregon
 </tbody>
 </table>
 </section>
-<section id="random-forest-subsets-of-features" class="slide level2">
-<h2>Random Forest (subsets of features)</h2>
+<section id="random-forest" class="slide level2">
+<h2>Random Forest</h2>
 
 <img data-src="images/randomForest.jpg" class="r-stretch"><div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb35-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb35-3"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb35-4"><a></a>             <span class="at">trControl =</span> ctrl)</span>
-<span id="cb35-5"><a></a></span>
-<span id="cb35-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
+<span id="cb32-2"><a></a>             <span class="at">data =</span> train, </span>
+<span id="cb32-3"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
+<span id="cb32-4"><a></a>             <span class="at">trControl =</span> ctrl)</span>
+<span id="cb32-5"><a></a></span>
+<span id="cb32-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
 
@@ -1304,237 +1237,52 @@ Prediction   California Oregon
 
 No pre-processing
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4822, 4822, 4823, 4822, 4822, 4823, ... 
+Summary of sample sizes: 4823, 4822, 4822, 4823, 4822, 4822, ... 
 Resampling results across tuning parameters:
 
   mtry  Accuracy   Kappa    
-  2     0.7512094  0.4783983
-  4     0.7506486  0.4805403
-  7     0.7513977  0.4814780
-
-Accuracy was used to select the optimal model using the largest value.
-The final value used for the model was mtry = 7.</code></pre>
-</div>
-</div>
-</section>
-<section id="confusion-matrix-5" class="slide level2">
-<h2>Confusion Matrix</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb37-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Confusion Matrix and Statistics
-
-            Reference
-Prediction   California Oregon
-  California        638    174
-  Oregon            153    373
-                                          
-               Accuracy : 0.7556          
-                 95% CI : (0.7317, 0.7784)
-    No Information Rate : 0.5912          
-    P-Value [Acc &gt; NIR] : &lt;2e-16          
-                                          
-                  Kappa : 0.4914          
-                                          
- Mcnemar's Test P-Value : 0.2687          
-                                          
-            Sensitivity : 0.8066          
-            Specificity : 0.6819          
-         Pos Pred Value : 0.7857          
-         Neg Pred Value : 0.7091          
-             Prevalence : 0.5912          
-         Detection Rate : 0.4768          
-   Detection Prevalence : 0.6069          
-      Balanced Accuracy : 0.7442          
-                                          
-       'Positive' Class : California      
-                                          </code></pre>
-</div>
-</div>
-</section>
-<section id="bagging-subsets-of-data" class="slide level2">
-<h2>Bagging (subsets of data)</h2>
-<ul>
-<li>“Bootstrap aggregating”</li>
-<li>Builds multiple models with bootstrap samples (combinations with repetitions) using a single algorithm.</li>
-<li>The models’ predictions are combined with voting (for classification) or averaging (for numeric prediction).</li>
-<li>Voting means the bagging model’s prediction is based on the majority of learners’ prediction for a class.</li>
-</ul>
-</section>
-<section id="treebag" class="slide level2">
-<h2>Treebag</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb39-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb39-3"><a></a>             <span class="at">trControl =</span> ctrl,</span>
-<span id="cb39-4"><a></a>             <span class="at">method =</span> <span class="st">"treebag"</span>)</span>
-<span id="cb39-5"><a></a></span>
-<span id="cb39-6"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Bagged CART 
-
-5358 samples
-   7 predictor
-   2 classes: 'California', 'Oregon' 
-
-No pre-processing
-Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4822, 4823, 4822, 4822, 4822, 4822, ... 
-Resampling results:
-
-  Accuracy   Kappa    
-  0.7510232  0.4822114</code></pre>
-</div>
-</div>
-</section>
-<section id="confusion-matrix-6" class="slide level2">
-<h2>Confusion Matrix</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb41-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Confusion Matrix and Statistics
-
-            Reference
-Prediction   California Oregon
-  California        636    172
-  Oregon            155    375
-                                          
-               Accuracy : 0.7556          
-                 95% CI : (0.7317, 0.7784)
-    No Information Rate : 0.5912          
-    P-Value [Acc &gt; NIR] : &lt;2e-16          
-                                          
-                  Kappa : 0.492           
-                                          
- Mcnemar's Test P-Value : 0.3763          
-                                          
-            Sensitivity : 0.8040          
-            Specificity : 0.6856          
-         Pos Pred Value : 0.7871          
-         Neg Pred Value : 0.7075          
-             Prevalence : 0.5912          
-         Detection Rate : 0.4753          
-   Detection Prevalence : 0.6039          
-      Balanced Accuracy : 0.7448          
-                                          
-       'Positive' Class : California      
-                                          </code></pre>
-</div>
-</div>
-</section>
-<section id="random-forest-with-class-weights" class="slide level2">
-<h2>Random forest with class weights</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb43-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb43-3"><a></a>             <span class="at">method =</span> <span class="st">"rf"</span>,</span>
-<span id="cb43-4"><a></a>             <span class="at">weights =</span> weight_train<span class="sc">$</span>weights,</span>
-<span id="cb43-5"><a></a>             <span class="at">trControl =</span> ctrl)</span>
-<span id="cb43-6"><a></a></span>
-<span id="cb43-7"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Random Forest 
-
-5358 samples
-   7 predictor
-   2 classes: 'California', 'Oregon' 
-
-No pre-processing
-Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 4822, 4822, 4823, 4822, 4822, 4822, ... 
-Resampling results across tuning parameters:
-
-  mtry  Accuracy   Kappa    
-  2     0.7508390  0.4766032
-  4     0.7525244  0.4845587
-  7     0.7515895  0.4821915
+  2     0.7508422  0.4745113
+  4     0.7521467  0.4804341
+  7     0.7508404  0.4800006
 
 Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was mtry = 4.</code></pre>
 </div>
 </div>
 </section>
-<section id="confusion-matrix-7" class="slide level2">
+<section id="confusion-matrix-5" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
-<span id="cb45-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata=</span>test)</span>
+<span id="cb34-2"><a></a><span class="fu">confusionMatrix</span>(<span class="fu">factor</span>(pred),<span class="fu">factor</span>(test<span class="sc">$</span>province))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
             Reference
 Prediction   California Oregon
-  California        639    172
-  Oregon            152    375
-                                         
-               Accuracy : 0.7578         
-                 95% CI : (0.734, 0.7806)
-    No Information Rate : 0.5912         
-    P-Value [Acc &gt; NIR] : &lt;2e-16         
-                                         
-                  Kappa : 0.4962         
-                                         
- Mcnemar's Test P-Value : 0.2912         
-                                         
-            Sensitivity : 0.8078         
-            Specificity : 0.6856         
-         Pos Pred Value : 0.7879         
-         Neg Pred Value : 0.7116         
-             Prevalence : 0.5912         
-         Detection Rate : 0.4776         
-   Detection Prevalence : 0.6061         
-      Balanced Accuracy : 0.7467         
-                                         
-       'Positive' Class : California     
-                                         </code></pre>
-</div>
-</div>
-</section>
-<section id="model-comparison" class="slide level2">
-<h2>Model Comparison</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>cl <span class="ot">&lt;-</span> <span class="fu">makePSOCKcluster</span>(<span class="dv">3</span>)</span>
-<span id="cb47-2"><a></a><span class="fu">registerDoParallel</span>(cl)</span>
-<span id="cb47-3"><a></a><span class="fu">system.time</span>({</span>
-<span id="cb47-4"><a></a>  rpart.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"rpart"</span>,<span class="at">trControl=</span>ctrl);</span>
-<span id="cb47-5"><a></a>  treebag.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"treebag"</span>, <span class="at">trControl=</span>ctrl);</span>
-<span id="cb47-6"><a></a>  rf.fit <span class="ot">&lt;-</span> <span class="fu">train</span>(province<span class="sc">~</span>., <span class="at">data =</span> train, <span class="at">method=</span><span class="st">"rf"</span>, <span class="at">trControl=</span>ctrl);</span>
-<span id="cb47-7"><a></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   user  system elapsed 
-   1.73    0.22   19.07 </code></pre>
-</div>
-</div>
-</section>
-<section id="results-1" class="slide level2">
-<h2>Results</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a><span class="fu">stopCluster</span>(cl) <span class="co"># close multi-core cluster</span></span>
-<span id="cb49-2"><a></a><span class="fu">rm</span>(cl)</span>
-<span id="cb49-3"><a></a></span>
-<span id="cb49-4"><a></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">DecisionTree=</span>rpart.fit, <span class="at">BaggedTree=</span>treebag.fit, <span class="at">RandomForest=</span>rf.fit))</span>
-<span id="cb49-5"><a></a><span class="fu">summary</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-summary.resamples(object = results)
-
-Models: DecisionTree, BaggedTree, RandomForest 
-Number of resamples: 10 
-
-Accuracy 
-                  Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
-DecisionTree 0.7052239 0.7168843 0.7285448 0.7316142 0.7421790 0.7705224    0
-BaggedTree   0.7252336 0.7318995 0.7537313 0.7515776 0.7639925 0.7835821    0
-RandomForest 0.7220149 0.7420709 0.7500000 0.7549568 0.7692731 0.7943925    0
-
-Kappa 
-                  Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
-DecisionTree 0.3554849 0.3877091 0.4268022 0.4268717 0.4534515 0.5234901    0
-BaggedTree   0.4297905 0.4368892 0.4882581 0.4823907 0.5069644 0.5590417    0
-RandomForest 0.4213099 0.4626138 0.4775361 0.4891242 0.5174596 0.5724019    0</code></pre>
+  California        653    173
+  Oregon            138    374
+                                       
+               Accuracy : 0.7676       
+                 95% CI : (0.744, 0.79)
+    No Information Rate : 0.5912       
+    P-Value [Acc &gt; NIR] : &lt; 2e-16      
+                                       
+                  Kappa : 0.5143       
+                                       
+ Mcnemar's Test P-Value : 0.05386      
+                                       
+            Sensitivity : 0.8255       
+            Specificity : 0.6837       
+         Pos Pred Value : 0.7906       
+         Neg Pred Value : 0.7305       
+             Prevalence : 0.5912       
+         Detection Rate : 0.4880       
+   Detection Prevalence : 0.6173       
+      Balanced Accuracy : 0.7546       
+                                       
+       'Positive' Class : California   
+                                       </code></pre>
 </div>
 </div>
 </section>
@@ -1556,9 +1304,12 @@ RandomForest 0.4213099 0.4626138 0.4775361 0.4891242 0.5174596 0.5724019    0</c
 <li>Need to be careful with parameter tuning.</li>
 <li>Can create biased learned trees if some classes dominate.</li>
 </ul>
-
-
 </section></section>
+<section id="group-work" class="title-slide slide level1 center">
+<h1>Group Work</h1>
+
+
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

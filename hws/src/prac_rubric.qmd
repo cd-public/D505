@@ -1,0 +1,53 @@
+---
+title: "Characterizing Colleges"
+author: "Rubric"
+date: "03/10/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme:
+        light: flatly
+        dark: darkly
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+# Multiple Regression
+
+- The student:
+    - Minimally computes the RMSE of more than one model
+    - Discusses how to RMSE relates to relates to the data set in human readable language
+    - Discusses one claim that may be made about the data based on these multiple RMSEs.
+    - Supports any numerical claims made with code.
+
+# Feature Engineering
+
+- The student:
+    - Minimally adds 6 new features.
+    - Removes all non-engineered features.
+    - Calculates an RMSE and compares it to the earlier RMSEs.
+    - Comments on independence of features or achieves independence through engineering.
+
+# Naive Classification
+
+- The student:
+    - Minimally provides $K$-NN and/or Naive Bayes specialized features.
+    - Reports Kappa values for more than one method.
+    - Provides a narrative for the difference in Kappa values.
+
+# Improved Classification
+
+- The student:
+    - Calculates relative frequencies of some categories.
+    - Derives weights from these categories.
+    - Trains and new model with novel Kappa value.
+    - Provides a narrative for the difference in Kappa values.
+
+# Ethics
+
+- The student:
+    - Writes at a college level.
+    - Does not contradict code samples.

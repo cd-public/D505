@@ -27,7 +27,7 @@
         "\n",
         "-   Python base data stack"
       ],
-      "id": "d1e446f1"
+      "id": "9196edf2"
     },
     {
       "cell_type": "code",
@@ -38,7 +38,7 @@
         "import matplotlib.pyplot as plt\n",
         "import seaborn as sns"
       ],
-      "id": "1c981445",
+      "id": "3606e465",
       "execution_count": null,
       "outputs": []
     },
@@ -48,7 +48,7 @@
       "source": [
         "-   R compatibility"
       ],
-      "id": "30463f17"
+      "id": "cf9ad60a"
     },
     {
       "cell_type": "code",
@@ -56,7 +56,7 @@
       "source": [
         "import pyreadr"
       ],
-      "id": "5772fab3",
+      "id": "ed753ed2",
       "execution_count": null,
       "outputs": []
     },
@@ -66,7 +66,7 @@
       "source": [
         "## ML Library"
       ],
-      "id": "1e479cd8"
+      "id": "8dd441c3"
     },
     {
       "cell_type": "code",
@@ -79,7 +79,7 @@
         "from sklearn.feature_selection import RFE\n",
         "from sklearn.ensemble import RandomForestRegressor"
       ],
-      "id": "ba99b3af",
+      "id": "8430659b",
       "execution_count": null,
       "outputs": []
     },
@@ -91,7 +91,7 @@
         "\n",
         "-   `pyreadr` to read in an R dataset.\n"
       ],
-      "id": "21d7d6f0"
+      "id": "164cca11"
     },
     {
       "cell_type": "code",
@@ -103,7 +103,7 @@
         "wine = pyreadr.read_r(rds)[None]      \n",
         "wine.dropna(subset=['points','price'])"
       ],
-      "id": "f7cadf0f",
+      "id": "bd038a95",
       "execution_count": null,
       "outputs": []
     },
@@ -121,7 +121,7 @@
         "\n",
         "## Categorical Example 1\n"
       ],
-      "id": "af30fec1"
+      "id": "0b100edc"
     },
     {
       "cell_type": "code",
@@ -132,7 +132,7 @@
         "means = wine.groupby(['roger','pinot_gris'])['points'].mean().reset_index()\n",
         "sns.lineplot(means,x='pinot_gris',y='points',hue='roger')"
       ],
-      "id": "2410a450",
+      "id": "431ada9b",
       "execution_count": null,
       "outputs": []
     },
@@ -142,7 +142,7 @@
       "source": [
         "## Categorical Example 2\n"
       ],
-      "id": "520edcd3"
+      "id": "492327cd"
     },
     {
       "cell_type": "code",
@@ -151,7 +151,7 @@
         "filtered = wine[wine['province']=='Oregon']\n",
         "sns.lineplot(filtered.groupby('year')['price'].mean())"
       ],
-      "id": "68b77707",
+      "id": "38c2eca4",
       "execution_count": null,
       "outputs": []
     },
@@ -168,7 +168,7 @@
         "\n",
         "## Year-on-Year Change Example\n"
       ],
-      "id": "e1a5d278"
+      "id": "ef2020f5"
     },
     {
       "cell_type": "code",
@@ -183,7 +183,7 @@
         "wino = wino.dropna(subset=['score_change'])\n",
         "wino.head()"
       ],
-      "id": "c7b9a137",
+      "id": "3c7b0530",
       "execution_count": null,
       "outputs": []
     },
@@ -220,7 +220,7 @@
         "\n",
         "## Few Dummies\n"
       ],
-      "id": "4e8c75dc"
+      "id": "4b0aaf0a"
     },
     {
       "cell_type": "code",
@@ -231,7 +231,7 @@
         "wino = wino.iloc[:, :4]\n",
         "wino.head()"
       ],
-      "id": "a6c958fe",
+      "id": "400779dd",
       "execution_count": null,
       "outputs": []
     },
@@ -243,7 +243,7 @@
         "\n",
         "- Can use `siuba` for `fct_lump` or write custom:\n"
       ],
-      "id": "35efdf8d"
+      "id": "1652231b"
     },
     {
       "cell_type": "code",
@@ -253,7 +253,7 @@
         "wino = pd.get_dummies(wino, columns=['variety'])\n",
         "wino.head()"
       ],
-      "id": "a77f5228",
+      "id": "7f2620da",
       "execution_count": null,
       "outputs": []
     },
@@ -270,7 +270,7 @@
         "\n",
         "## What about numerical features?\n"
       ],
-      "id": "434c6667"
+      "id": "e3944b06"
     },
     {
       "cell_type": "code",
@@ -278,7 +278,7 @@
       "source": [
         "sns.histplot(wine['price'], bins=30, kde=False)"
       ],
-      "id": "8d50af7d",
+      "id": "a898962b",
       "execution_count": null,
       "outputs": []
     },
@@ -288,7 +288,7 @@
       "source": [
         "## Take the natural log\n"
       ],
-      "id": "69977046"
+      "id": "2d3a1f64"
     },
     {
       "cell_type": "code",
@@ -297,7 +297,7 @@
         "wine['log_price'] = np.log(wine['price'])\n",
         "sns.histplot(wine['log_price'], bins=30, kde=False)"
       ],
-      "id": "cde15b6f",
+      "id": "dca430b2",
       "execution_count": null,
       "outputs": []
     },
@@ -410,7 +410,7 @@
         "\n",
         "-   Follow [this link](https://topepo.github.io/caret) for the full documentation on caret.\n"
       ],
-      "id": "33dd20a8"
+      "id": "38824b77"
     },
     {
       "cell_type": "code",
@@ -423,7 +423,7 @@
         "wino = wino.dropna(subset=['fr', 'cab'])\n",
         "wino = wino[['lprice', 'points', 'fr', 'cab']]"
       ],
-      "id": "e2275491",
+      "id": "367b7dfe",
       "execution_count": null,
       "outputs": []
     },
@@ -439,7 +439,7 @@
         "\n",
         "- Single line train/test split with sklearn.\n"
       ],
-      "id": "31e6d681"
+      "id": "90800c9f"
     },
     {
       "cell_type": "code",
@@ -447,7 +447,7 @@
       "source": [
         "wino_tr, wino_te = train_test_split(wino)"
       ],
-      "id": "52228845",
+      "id": "36a450c7",
       "execution_count": null,
       "outputs": []
     },
@@ -459,7 +459,7 @@
         "\n",
         "-   Configure `train` to cross validate\n"
       ],
-      "id": "514f07da"
+      "id": "d097170c"
     },
     {
       "cell_type": "code",
@@ -474,7 +474,7 @@
         "                         scoring='neg_mean_squared_error')\n",
         "model.fit(wino_tr.drop(columns=['lprice']),wino_tr['lprice'])"
       ],
-      "id": "66b3e207",
+      "id": "4fb4ffa5",
       "execution_count": null,
       "outputs": []
     },
@@ -488,7 +488,7 @@
         "\n",
         "::: {.column width=\"50%\"}\n"
       ],
-      "id": "34ed3ef7"
+      "id": "402e8afb"
     },
     {
       "cell_type": "code",
@@ -497,7 +497,7 @@
         "y_pred = model.predict(wino_tr.drop(columns=['lprice']))\n",
         "mean_squared_error(wino_tr['lprice'], y_pred) ** .5"
       ],
-      "id": "437a70d1",
+      "id": "396f1b5f",
       "execution_count": null,
       "outputs": []
     },
@@ -509,7 +509,7 @@
         "\n",
         "::: {.column width=\"50%\"}\n"
       ],
-      "id": "104802ba"
+      "id": "f4db1dde"
     },
     {
       "cell_type": "code",
@@ -518,7 +518,7 @@
         "y_pred = model.predict(wino_te.drop(columns=['lprice']))\n",
         "mean_squared_error(wino_te['lprice'], y_pred) ** .5"
       ],
-      "id": "1720b711",
+      "id": "5df6fba7",
       "execution_count": null,
       "outputs": []
     },
@@ -548,7 +548,7 @@
         "\n",
         "## Engineer 9 features\n"
       ],
-      "id": "7374e37e"
+      "id": "9dc899f9"
     },
     {
       "cell_type": "code",
@@ -564,7 +564,7 @@
         "\n",
         "wino = pd.get_dummies(wino, columns=['country', 'variety'], drop_first=True)"
       ],
-      "id": "cc68d344",
+      "id": "dfed2c12",
       "execution_count": null,
       "outputs": []
     },
@@ -575,7 +575,7 @@
         "## Add Dummy Columns\n",
         "- Careful - a destructive update to `wino`!"
       ],
-      "id": "9cfe9d04"
+      "id": "736b0dff"
     },
     {
       "cell_type": "code",
@@ -583,7 +583,7 @@
       "source": [
         "wino = wino.loc[:, ~wino.columns.str.contains('Other')]"
       ],
-      "id": "054a3716",
+      "id": "8cd48c19",
       "execution_count": null,
       "outputs": []
     },
@@ -593,7 +593,7 @@
       "source": [
         "## Factor"
       ],
-      "id": "6af9c594"
+      "id": "32310ea7"
     },
     {
       "cell_type": "code",
@@ -613,7 +613,7 @@
         "    te = mean_squared_error(wino_te['lprice'], model.predict(df_te.drop(columns=['lprice']))) ** .5\n",
         "    return model, tr, te"
       ],
-      "id": "4ba8f4bd",
+      "id": "d447bc3b",
       "execution_count": null,
       "outputs": []
     },
@@ -623,7 +623,7 @@
       "source": [
         "## Basic Model\n"
       ],
-      "id": "b252da93"
+      "id": "40500fd5"
     },
     {
       "cell_type": "code",
@@ -632,7 +632,7 @@
         "model, tr, te = do_model(wino, 'lprice')\n",
         "tr, te"
       ],
-      "id": "85c3e66c",
+      "id": "4ef197ec",
       "execution_count": null,
       "outputs": []
     },
@@ -643,7 +643,7 @@
         "## Variable Importance\n",
         "-   Importance depends on model used...\n"
       ],
-      "id": "eafb5d5e"
+      "id": "9340b7c3"
     },
     {
       "cell_type": "code",
@@ -652,7 +652,7 @@
         "plt.bar(wino.columns.drop('lprice'), model.coef_)\n",
         "_ = plt.xticks(rotation=90)"
       ],
-      "id": "e5a68a7e",
+      "id": "ea6bf17f",
       "execution_count": null,
       "outputs": []
     },
@@ -699,7 +699,7 @@
         "## Partition Again\n",
         "-   Partition"
       ],
-      "id": "3b966263"
+      "id": "46a9a9c4"
     },
     {
       "cell_type": "code",
@@ -707,7 +707,7 @@
       "source": [
         "wino_tr, wino_te = train_test_split(wino)"
       ],
-      "id": "fd1f8393",
+      "id": "14b25d6e",
       "execution_count": null,
       "outputs": []
     },
@@ -717,7 +717,7 @@
       "source": [
         "## Caret RFE\n"
       ],
-      "id": "51d6e1ce"
+      "id": "74a8c395"
     },
     {
       "cell_type": "code",
@@ -728,7 +728,7 @@
         "rfe.fit(wino_tr.drop(columns=['lprice']), wino_tr['lprice'])\n",
         "wino_tr.drop(columns=['lprice']).columns, rfe.ranking_"
       ],
-      "id": "09412a12",
+      "id": "7ff52a39",
       "execution_count": null,
       "outputs": []
     },
@@ -786,7 +786,7 @@
         "\n",
         ":::::"
       ],
-      "id": "acf7e2fc"
+      "id": "a86dee38"
     }
   ],
   "metadata": {

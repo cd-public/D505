@@ -122,7 +122,7 @@
         "3. Following the Quarto tutorial, make `hello.qmd`\n",
         "4. Click \"Run Cell\" in `hello.qmd` on this cell:"
       ],
-      "id": "61b6e8e6"
+      "id": "09e44f3a"
     },
     {
       "cell_type": "code",
@@ -183,7 +183,7 @@
         "    - In the VS Code integrated terminal, or\n",
         "    - At the command line, e.g. Windows Key+\"terminal\""
       ],
-      "id": "a9a37e13"
+      "id": "eaf192ca"
     }
   ],
   "metadata": {

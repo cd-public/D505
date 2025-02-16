@@ -13,12 +13,41 @@ execute:
 
 ## Agenda
 
-0. Model Announcement
+0. Course Announcements
 1. Mathematics of logistic regression
 2. Implementation with Caret
 4. ROC Curves
-5. Model Weights
-6. Regularization (penalized logit)
+5. Group work
+
+
+# Midterm 3/17
+
+## Brief recap of course so far {.smaller}
+
+- Linear regression (e.g. `lprice ~ .`), assumptions of model, interpretation.
+- $K$-NN (e.g., `province ~ .`), multi-class supervised classification. Hyperparameter $k$.
+- Naive Bayes (e.g., `province ~ .`), multi-class supervised classification.
+- Logistic regression (e.g., `province=="Oregon" ~ .`), binary supervised classification. Elastic net. 
+- Feature engineering (logarithms, center/scaling, Box Cox, tidytext, etc.).
+- Feature selection (correlation, linear / logistic coefficients, frequent words, frequent words by class, etc.).
+
+## Practice
+
+- I am working to develop a practice midterm.
+- I will circulate it by 3 Mar.
+- You will go over it on 10 Mar.
+- It is based on the 5 homeworks.
+- It is based on the prior slide.
+  - Little to no computatational linguistics
+  - I'm regarding `tidytext` as extension, not core, content.
+
+## Modality Discussion
+
+- I would release an assignment electronically at 6 PM
+- We can do in person or otherwise.
+- It will be "cheat proof"
+  - I will ask you nothing for which it matters how you determine the answer.
+  - If e.g. ChatGPT can be mind controlled into doing high quality feature engineering, you get points for mind controlling ChatGPT.
 
 # First Model Due 3/10
 
@@ -644,162 +673,6 @@ auc(myRoc)
 2. Choose a Pinot province other than Oregon or California
 3. Use logistic regression to find the words/terms that increase the odds of choosing that province the most
 
-# Weigted Penalty
-
-```{r}
-wino <- wine_words(wine, 1000, T)
-wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
-train <- wino[ wine_index, ]
-test <- wino[-wine_index, ]
-
-fit <- get_fit(train)
-```
-
-## Matrix
-
-```{r}
-get_matrix(fit,test)
-```
-
-## Create some weights
-
-```{r weight_train}
-weight_train <- train %>% 
-  mutate(weights=if_else(province=="California",1,20))
-
-```
-
-## Add weight to model
-
-- Look closely:
-  - Train over `train` dataframe
-  - Provide weights from `weight_train` data frame
-  - That way it won't train on weights!
-
-```{r model weight}
-fit <- train(province ~ .,
-             data = train, 
-             trControl = control,
-             method = "multinom",
-             maxit = 5, # speed it up - default 100
-             weights = weight_train$weights)
-```
-
-## Matrix
-
-```{r weightrix}
-get_matrix(fit,test)
-```
-## Top features
-
-```{r}
-get_odds(fit)
-```
-
-# Regularization
-
-![](https://upload.wikimedia.org/wikipedia/commons/0/02/Regularization.svg)
-
-## Penalty
-
-- Often also called 'penalized' because it adds a penalizing term to the loss function.
-
-$\min_{f}\sum_{i=1}^{n}V(f(x_{i}),y_{i})+\lambda R(f)$
-
-- *De facto* application of Occam's Razor.
-
-## Penalties
-
-- The amount of the penalty is fine-tuned using a constant lambda $\lambda$. 
-- When $\lambda = 0$, no penalty is enforced. 
-- The best lambda can be found by finding a value that minimizes prediction error after cross validating the model with different values.
-
-## Included earlier...
-
-```{.r}
-library(glmnet)
-```
-
-## Lasso Regression
-
-- Given $p$ features and $N$ observations. 
-- $\beta$'s are coefficients.
-- The $\lambda$ term is evaluated via absolute value $|\beta_j|$
-
-$$
-\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} |\beta_j|
-$$
-
-## LASSO
-
-- Least Absolute Shrinkage and Selection Operator. 
-- Shrinks the regression coefficients toward zero.
-- Penalizing the regression model with a penalty term called **L1-norm**
-  - The sum of the absolute coefficients.
-  - I learned about L1 in a class called "Real Analysis"
-  - Its the streetmap distance (roads and avenues)
-
-## Lasso Regression
-
-- Zeroes out some coefficients
-  - With a minor contribution to the model, can't "resist" the penalty. 
-- Lasso can be also seen as an alternative to the subset selection methods.
-  - A form of variable selection.
-
-## Ridge Regression
-
-- Given $p$ features and $N$ observations. 
-- $\beta$'s are coefficients.
-- The $\lambda$ term is evaluated via square $\beta_j^2$
-
-
-$$
-\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}    \right) ^ 2 + \lambda \sum_{j=1}^{p} \beta_j^2
-$$
-
-## Ridge
-
-- Also Tikhonov regularization, named for Andrey Tikhonov
-- Shrinks the regression coefficients toward zero.
-- Penalizing the regression model with a penalty term called **L2-norm**
-  - The sum of the sqared coefficients.
-  - I *also* learned about L2 in  "Real Analysis"
-  - Its the as-birds-fly distance (point-to-point)
-
-
-## Elastic Net
-
-- Given $p$ features and $N$ observations. 
-- $\beta$'s are coefficients.
-- Add both together and weight them comparatively via parameter $\alpha$
-  - Lower case alpha.
-
-$$
-\sum_{i=1}^{n} \left( y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}  \right) ^ 2 + \alpha\lambda \sum_{j=1}^{p} |\beta_j|+(1-\alpha)\lambda \sum_{j=1}^{p} \beta_j^2
-$$
-
-## Deciding
-
-- Lasso better in a situation where some of the predictors have large coefficients, and the remaining predictors have very small coefficients.
-- Ridge regression better when many predictors with coefficients of roughly equal size.
-
-## Example
-
-```{r net}
-# This took forever to run
-fit <- train(
-  province ~., 
-  data = train,
-  method = "glmnet",
-  trControl = control,
-  tuneLength = 10
-)
-
-# Best tuning parameter
-fit$bestTune
-# to specify the best lambda
-c(fit$finalModel, fit$bestTune$lambda)
-```
 
 # Vocabulary
 
