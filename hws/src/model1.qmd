@@ -1,0 +1,145 @@
+---
+title: "Model 1"
+author: "Team $i$"
+date: "03/10/2025"
+
+format: 
+  html:  # You will quite likely want to change all but the last one, to taste
+    theme:
+        light: flatly
+        dark: darkly
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+    embed-resources: true
+
+---
+
+# Setup
+
+- Setup
+
+```{r libs}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+```
+
+# Dataframe
+
+- We use the `College` dataframe.
+
+```{r df}
+wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/model.rds")))
+```
+
+- States the ISLR textbook:
+
+|Name|Description|
+|-|-|
+| `Private` | Public/private indicator |
+| `Apps` | Number of applications received |
+| `Accept` | Number of applicants accepted |
+| `Enroll` | Number of new students enrolled |
+| `Top10perc` | New students from top 10 % of high school class |
+| `Top25perc` | New students from top 25 % of high school class |
+| `F.Undergrad` | Number of full-time undergraduates |
+| `P.Undergrad` | Number of part-time undergraduates |
+| `Outstate` | Out-of-state tuition |
+| `Room.Board` | Room and board costs |
+| `Books` | Estimated book costs |
+| `Personal` | Estimated personal spending |
+| `PhD` | Percent of faculty with Ph.D.’s |
+| `Terminal` | Percent of faculty with terminal degree |
+| `S.F.Ratio` | Student/faculty ratio |
+| `perc.alumni` | Percent of alumni who donate |
+| `Expend` | Instructional expenditure per student |
+| `Grad.Rate` | Graduation rate |
+
+# Multiple Regression
+
+- Run a linear regression model with `Grad.Rate` as the dependent variable and `PhD` and `Expend` as features (variables).
+    - Regard `PhD` and `Expend` as two forms of investment in education - in training for instructors, and in resources for students.
+- Compute and comment on the RMSE.
+
+```{r regression}   
+# Your code here
+```
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+
+# Feature Engineering
+
+- Create 6+ total features. Consider:
+    - Attributes of the student body.
+        - For example, an acceptance rate, or a percentages of students in other categories vs. accepted/enrolled.
+    - Costs of the university.
+    - Some other category, such as related to success, alumni, or faculty.
+- Remove all rows with a missing value.
+- Ensure only `Grad.Rate` and the engineered features remain.
+- Compute and comment on the RMSE.
+
+```{r features}
+# Your code here
+```
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+
+# Naive Classification
+
+- Use either of $K$-NN or Naive Bayes to predict whether a college is `Private`.
+- Explain your choice of technique.
+- Report on your Kappa value.
+
+```{r classification}
+# Your code here
+```
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+
+# Improved Classification
+
+- Predict whether a college is `Private`.
+- Use model weights.
+- Display and comment on an ROC curve.
+
+```{r binary classification}
+# Your code here
+```
+
+> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+
+# Ethics
+
+- Based on your analysis, comment on the for-profit privatization of education, perhaps through the framework advanced by this article:
+
+> [In mid-May 2018, The New York Times reported that under DeVos, the size of the team investigating abuses and fraud by for-profit colleges was reduced from about twelve members under the Obama administration to three, with their task also being scaled back to "processing student loan forgiveness applications and looking at smaller compliance cases".](https://en.wikipedia.org/wiki/Betsy_DeVos#Staffing)
+
+- Discuss the civic reposibilities of data scientists for:
+    - Big Data and Human-Centered Computing
+    - Democratic Institutions
+    - Education and Educational Policy
+- Provide at least one statistical measure for each, such as a RMSE, Kappa value, or ROC curve.
+
+### Big Data and Human-Centered Computing
+
+> <span style="color:red;font-weight:bold">TODO</span>: Big Data and Human-Centered Computing
+
+```{r big data}
+# Your code here
+```
+
+### Democratic Institutions
+
+> <span style="color:red;font-weight:bold">TODO</span>: Democratic Institutions
+
+```{r democracy}
+# Your code here
+```
+
+### Education and Educational Policy
+
+> <span style="color:red;font-weight:bold">TODO</span>: Education and Educational Policy
+
+```{r climate}
+# Your code here
+```
