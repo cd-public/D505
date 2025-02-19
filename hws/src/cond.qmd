@@ -3,13 +3,6 @@ title: "Conditional Probability"
 author: "Your name here!"
 date: "02/17/2025"
 
-format: 
-  html:  # You will quite likely want to change all but the last one, to taste
-    theme: superhero  
-    mainfont: monospace
-    highlight-style: github
-    title-block-banner: true
-    embed-resources: true
 ---
 
 **Abstract:**

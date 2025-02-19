@@ -8,3 +8,9 @@ format:
     mainfont: monospace
     highlight-style: github
     title-block-banner: true
+    footer: "[Home](../index.html)"
+
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render

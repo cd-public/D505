@@ -3,14 +3,6 @@ title: $K$NN
 author: "Calvin Deutschbein"
 date: "02/10/2025"
 
-format: 
-  html:  # You will quite likely want to change all but the last one, to taste
-    theme: superhero  
-    mainfont: monospace
-    highlight-style: github
-    title-block-banner: true
-    embed-resources: true
-
 ---
 
 **Abstract:**

@@ -2,17 +2,6 @@
 title: "Characterizing Colleges"
 author: "Solutions"
 date: "03/10/2025"
-
-format: 
-  html:  # You will quite likely want to change all but the last one, to taste
-    theme:
-        light: flatly
-        dark: darkly
-    mainfont: monospace
-    highlight-style: github
-    title-block-banner: true
-    embed-resources: true
-
 ---
 
 # Setup

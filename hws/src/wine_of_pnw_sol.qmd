@@ -3,13 +3,6 @@ title: "Wines of the PNW"
 author: Calvin Deutschbein
 date: "01/27/2025"
 
-format: 
-  html:  # You will quite likely want to change all but the last one, to taste
-    theme: superhero  
-    mainfont: monospace
-    highlight-style: github
-    title-block-banner: true
-    embed-resources: true
 
 ---
 

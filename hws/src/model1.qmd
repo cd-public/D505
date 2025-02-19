@@ -2,144 +2,144 @@
 title: "Model 1"
 author: "Team $i$"
 date: "03/10/2025"
-
-format: 
-  html:  # You will quite likely want to change all but the last one, to taste
-    theme:
-        light: flatly
-        dark: darkly
-    mainfont: monospace
-    highlight-style: github
-    title-block-banner: true
-    embed-resources: true
-
 ---
 
 # Setup
 
-- Setup
+- You may use any libraries, but as a feature engineering assignment `tidyverse`/`pandas` are likely sufficient.
+    - The next most likely are dummy column and textual libraries.
+    - Pandas has a built-in `get_dummies` and the Pythonic text library is [NLTK](https://www.nltk.org/)
 
-```{r libs}
-sh <- suppressPackageStartupMessages
-sh(library(tidyverse))
+`.r`
+
+```{.r}
+library(tidyverse)
 ```
+
+`.py`
+
+```{.py}
+import numpy as np
+import pandas as pd
+```
+
 
 # Dataframe
 
-- We use the `College` dataframe.
+- We use the `model` dataframe.
 
-```{r df}
+`.r`
+
+```{.r}
 wine <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/master/dat/model.rds")))
 ```
 
-- States the ISLR textbook:
+`.py`
 
-|Name|Description|
-|-|-|
-| `Private` | Public/private indicator |
-| `Apps` | Number of applications received |
-| `Accept` | Number of applicants accepted |
-| `Enroll` | Number of new students enrolled |
-| `Top10perc` | New students from top 10 % of high school class |
-| `Top25perc` | New students from top 25 % of high school class |
-| `F.Undergrad` | Number of full-time undergraduates |
-| `P.Undergrad` | Number of part-time undergraduates |
-| `Outstate` | Out-of-state tuition |
-| `Room.Board` | Room and board costs |
-| `Books` | Estimated book costs |
-| `Personal` | Estimated personal spending |
-| `PhD` | Percent of faculty with Ph.D.’s |
-| `Terminal` | Percent of faculty with terminal degree |
-| `S.F.Ratio` | Student/faculty ratio |
-| `perc.alumni` | Percent of alumni who donate |
-| `Expend` | Instructional expenditure per student |
-| `Grad.Rate` | Graduation rate |
-
-# Multiple Regression
-
-- Run a linear regression model with `Grad.Rate` as the dependent variable and `PhD` and `Expend` as features (variables).
-    - Regard `PhD` and `Expend` as two forms of investment in education - in training for instructors, and in resources for students.
-- Compute and comment on the RMSE.
-
-```{r regression}   
-# Your code here
+```{.py}
+wine = pd.read_pickle("https://github.com/cd-public/D505/raw/master/dat/model.pickle")
 ```
 
-> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
 
-# Feature Engineering
+# Engineer Features
 
-- Create 6+ total features. Consider:
-    - Attributes of the student body.
-        - For example, an acceptance rate, or a percentages of students in other categories vs. accepted/enrolled.
-    - Costs of the university.
-    - Some other category, such as related to success, alumni, or faculty.
-- Remove all rows with a missing value.
-- Ensure only `Grad.Rate` and the engineered features remain.
-- Compute and comment on the RMSE.
+- This is [the reference](https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_r.html) I use, for both languages actually.
+- I am actually a [contributor](https://github.com/pandas-dev/pandas/pull/60177) to this document - and so could you be!
 
-```{r features}
-# Your code here
+`.r`
+
+```{.r}
+wine <- wine %>% mutate(points_per_price = points/price)
 ```
 
-> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+`.py`
 
-# Naive Classification
-
-- Use either of $K$-NN or Naive Bayes to predict whether a college is `Private`.
-- Explain your choice of technique.
-- Report on your Kappa value.
-
-```{r classification}
-# Your code here
+```{.py}
+wine.assign(point_per_price = wine['points']/wine['price'])
 ```
 
-> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+# Save the dataframe
 
-# Improved Classification
+- In addition to a document like this, you will also need to submit your dataframe.
+    - `.rds` for R
+    - `.pickle` for Python
+- Specify if you optimized for $K$-NN or Naive Bayes
 
-- Predict whether a college is `Private`.
-- Use model weights.
-- Display and comment on an ROC curve.
+`.r`
 
-```{r binary classification}
-# Your code here
+```{.r}
+write_rds(wine, file="group_n_knn.rds")
 ```
 
-> <span style="color:red;font-weight:bold">TODO</span>: *Explain*
+`.py`
 
-# Ethics
-
-- Based on your analysis, comment on the for-profit privatization of education, perhaps through the framework advanced by this article:
-
-> [In mid-May 2018, The New York Times reported that under DeVos, the size of the team investigating abuses and fraud by for-profit colleges was reduced from about twelve members under the Obama administration to three, with their task also being scaled back to "processing student loan forgiveness applications and looking at smaller compliance cases".](https://en.wikipedia.org/wiki/Betsy_DeVos#Staffing)
-
-- Discuss the civic reposibilities of data scientists for:
-    - Big Data and Human-Centered Computing
-    - Democratic Institutions
-    - Education and Educational Policy
-- Provide at least one statistical measure for each, such as a RMSE, Kappa value, or ROC curve.
-
-### Big Data and Human-Centered Computing
-
-> <span style="color:red;font-weight:bold">TODO</span>: Big Data and Human-Centered Computing
-
-```{r big data}
-# Your code here
+```{.py}
+wine.to_pickle("group_m_naive.pickle")
 ```
 
-### Democratic Institutions
+# Submission
 
-> <span style="color:red;font-weight:bold">TODO</span>: Democratic Institutions
+- Reply to the email titled "Group $n$" with a link to a GitHub repository containing
+    - A `.rmd` or `.qmd` file.
+    - A `.rds` or `.pickle` file.
+- You may update this submission as many times as you like until class starts on 10 Mar.
 
-```{r democracy}
-# Your code here
+# Assessment
+
+- `.rds` assessments will be evaluated as follows:
+    - With either `method = "knn"` or `method = "naive_bayes"`
+
+```{.r}
+wine <- readRDS("group_n_method.rds")
+split <- createDataPartition(wine$province, p = 0.8, list = FALSE)
+train <- wine[split, ]
+test <- wine[-split, ]
+fit <- train(province ~ .,
+             data = train, 
+             method = "knn",
+             tuneLength = 15,
+             metric = "Kappa",
+             trControl = trainControl(method = "cv", number = 5))
+confusionMatrix(predict(fit, test),factor(test$province))$overall['Kappa']
 ```
 
-### Education and Educational Policy
+- `.rds` submissions will be evaluated as follows:
+    - With either `method = "knn"` or `method = "naive_bayes"`
 
-> <span style="color:red;font-weight:bold">TODO</span>: Education and Educational Policy
 
-```{r climate}
-# Your code here
+
+- `.pickle` submissions will be evaluated as follows:
+    - With either `KNeighborsClassifier` or `GaussianNB`
+
+```{.py}
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.neighbors import KNeighborsClassifier, GaussianNB
+from sklearn.metrics import cohen_kappa_score
+
+wine = pd.read_pickle("group_m_method.pickle")
+train, test = train_test_split(wine, test_size=0.2, stratify=wine['province'])
+
+# Separate features and target variable
+X_train, X_test = train.drop(columns=['province']), test.drop(columns=['province'])
+y_train, y_test = train['province'], test['province']
+
+knn = KNeighborsClassifier() # or GaussianNB
+knn.fit(X_train, y_train)
+
+kappa = cohen_kappa_score(y_test, y_pred = knn.predict(X_test))
 ```
+
+# FAQ
+
+- For assignments of this type, I often field questions of form "I wasn't sure what you wanted".
+- I respond as follows:
+    - I regard these instructions as unambigious.
+        - If ambiguities are uncovered, I will issue corrections *without* sharing a full example.
+    - I regard following these instructions absent e.g. an end-to-end example or lengthy prose as a component of the assignment.
+    - I anticipate that outside of this class you will not be provided with markedly less guidance than I provide here.
+    - I note that in this class you have been provided with the maximum possible guidance, including answer keys, on five homeworks.
+    - I fed this into LLMs and it only found ambiguities:
+        - Related to the `wine` dataframe and models being underspecified, which I consider addressed by prior coursework.
+        - Related to the `.r` and `.py` differences, which I regard as optional extensions.
+
+
