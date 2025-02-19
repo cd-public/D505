@@ -435,6 +435,9 @@ wine_words <- function(df, j, stem) {
 }
 ```
 
+
+
+
 ## Look at the data
 
 ```{r w100}
@@ -442,16 +445,30 @@ wino <- wine_words(wine, 1000, F)
 
 wino %>% 
   head(10) %>% 
-  select(1:5,province)
+  select(1:5, province)
+```
+
+## Logistic Regression
+
+- We check a true/false outcome.
+
+```{r w101}
+wino <- wino %>% 
+  mutate(oregon = factor(province=="Oregon")) %>%
+  select(-province)
+
+wino %>% 
+  head(10) %>% 
+  select(1:5, oregon)
 ```
 
 ## Split the data 
 
 ```{r tt100}
-wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
+wine_index <- createDataPartition(wino$oregon, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
-table(train$province)
+table(train$oregon)
 ```
 
 ## A basic model
@@ -459,10 +476,11 @@ table(train$province)
 ```{r getfit}
 control = trainControl(method = "cv", number = 5)
 get_fit <- function(df) {
-  train(province ~ .,
+  train(oregon ~ .,
         data = df, 
         trControl = control,
-        method = "multinom",
+        method = "glm",
+        family = "binomial",
         maxit = 5) # speed it up - default 100
 }
 fit <- get_fit(train)
@@ -494,7 +512,7 @@ get_odds(fit)
 ```{r getmatrix}
 get_matrix <- function(fit, df) {
   pred <- factor(predict(fit, newdata = df))
-  confusionMatrix(pred,factor(df$province))
+  confusionMatrix(pred,factor(df$oregon))
 }
 get_matrix(fit,test)
 ```
@@ -504,8 +522,10 @@ Not bad. But what if we decrease threshold for a word to be included?
 ## Using more words
 
 ```{r w500}
-wino <- wine_words(wine, 500, F)
-wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
+wino <- wine_words(wine, 500, F) %>% 
+  mutate(oregon = factor(province=="Oregon")) %>%
+  select(-province)
+wine_index <- createDataPartition(wino$oregon, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
 
@@ -533,8 +553,10 @@ get_matrix(fit,test)
 ## Using stems
 
 ```{r stem}
-wino <- wine_words(wine, 1000, T)
-wine_index <- createDataPartition(wino$province, p = 0.80, list = FALSE)
+wino <- wine_words(wine, 1000, T) %>% 
+  mutate(oregon = factor(province=="Oregon")) %>%
+  select(-province)
+wine_index <- createDataPartition(wino$oregon, p = 0.80, list = FALSE)
 train <- wino[ wine_index, ]
 test <- wino[-wine_index, ]
 
@@ -638,25 +660,10 @@ $$
 
 ##  ROC Curve evaluation
 
-- Have to use numeric data.
+- Let's look at our most recent fit:
 
 ```{r numeric}
-winor <- wine_words(wine, 1000, T) %>% 
-           mutate(oregon = as.factor(province == "Oregon")) %>%
-           select(-province)
-wine_index <- createDataPartition(winor$oregon, p = 0.80, list = FALSE)
-train <- winor[wine_index, ]
-test <- winor[-wine_index, ]
-```
-
-## Use a numeric legal regression.
-
-```{r legal}
-fit <- train(oregon ~ .,
-             data = train, 
-             trControl = control,
-             method = "glm",
-             family = "binomial")
+fit
 ```
 
 ## See the curve
@@ -667,12 +674,12 @@ myRoc <- roc(test$oregon, prob)
 plot(myRoc)
 auc(myRoc)
 ```
+
 ## Exercise
 
 1. Gather into your prediction teams.
 2. Choose a Pinot province other than Oregon or California
 3. Use logistic regression to find the words/terms that increase the odds of choosing that province the most
-
 
 # Vocabulary
 

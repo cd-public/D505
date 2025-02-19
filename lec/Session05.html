@@ -444,6 +444,18 @@ Jameson &gt; Calvin
 <li>I’m regarding <code>tidytext</code> as extension, not core, content.</li>
 </ul></li>
 </ul>
+</section>
+<section id="modality-discussion" class="slide level2">
+<h2>Modality Discussion</h2>
+<ul>
+<li>I would release an assignment electronically at 6 PM</li>
+<li>We can do in person or otherwise.</li>
+<li>It will be “cheat proof”
+<ul>
+<li>I will ask you nothing for which it matters how you determine the answer.</li>
+<li>If e.g.&nbsp;ChatGPT can be mind controlled into doing high quality feature engineering, you get points for mind controlling ChatGPT.</li>
+</ul></li>
+</ul>
 </section></section>
 <section>
 <section id="first-model-due-310" class="title-slide slide level1 center">
@@ -974,7 +986,7 @@ p = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2)}}
 <span id="cb22-2"><a></a></span>
 <span id="cb22-3"><a></a>wino <span class="sc">%&gt;%</span> </span>
 <span id="cb22-4"><a></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-5"><a></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-5"><a></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 6
    drink oak   aromas bodied raspberry province  
@@ -992,106 +1004,69 @@ p = \frac{1}{1 + e^{-(\beta_0 + \beta_1x_1 + \beta_2x_2)}}
 </div>
 </div>
 </section>
+<section id="logistic-regression-1" class="slide level2">
+<h2>Logistic Regression</h2>
+<ul>
+<li>We check a true/false outcome.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>wino <span class="ot">&lt;-</span> wino <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a></a>  <span class="fu">mutate</span>(<span class="at">oregon =</span> <span class="fu">factor</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>province)</span>
+<span id="cb24-4"><a></a></span>
+<span id="cb24-5"><a></a>wino <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-7"><a></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, oregon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 6
+   drink oak   aromas bodied raspberry oregon
+   &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;     &lt;fct&gt; 
+ 1 TRUE  TRUE  FALSE  FALSE  FALSE     TRUE  
+ 2 FALSE TRUE  TRUE   TRUE   TRUE      FALSE 
+ 3 FALSE FALSE FALSE  FALSE  FALSE     TRUE  
+ 4 FALSE FALSE FALSE  FALSE  FALSE     TRUE  
+ 5 TRUE  FALSE FALSE  FALSE  FALSE     TRUE  
+ 6 FALSE FALSE FALSE  FALSE  TRUE      FALSE 
+ 7 FALSE FALSE FALSE  FALSE  TRUE      FALSE 
+ 8 FALSE TRUE  FALSE  FALSE  TRUE      FALSE 
+ 9 FALSE FALSE FALSE  FALSE  FALSE     TRUE  
+10 FALSE FALSE TRUE   FALSE  FALSE     TRUE  </code></pre>
+</div>
+</div>
+</section>
 <section id="split-the-data" class="slide level2">
 <h2>Split the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb24-2"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
-<span id="cb24-3"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
-<span id="cb24-4"><a></a><span class="fu">table</span>(train<span class="sc">$</span>province)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>oregon, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-2"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb26-3"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb26-4"><a></a><span class="fu">table</span>(train<span class="sc">$</span>oregon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-         Burgundy        California Casablanca_Valley       Marlborough 
-              952              3147               104               180 
-         New_York            Oregon 
-              105              2156 </code></pre>
+FALSE  TRUE 
+ 4487  2156 </code></pre>
 </div>
 </div>
 </section>
 <section id="a-basic-model" class="slide level2">
 <h2>A basic model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a>control <span class="ot">=</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>)</span>
-<span id="cb26-2"><a></a>get_fit <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb26-3"><a></a>  <span class="fu">train</span>(province <span class="sc">~</span> .,</span>
-<span id="cb26-4"><a></a>        <span class="at">data =</span> df, </span>
-<span id="cb26-5"><a></a>        <span class="at">trControl =</span> control,</span>
-<span id="cb26-6"><a></a>        <span class="at">method =</span> <span class="st">"multinom"</span>,</span>
-<span id="cb26-7"><a></a>        <span class="at">maxit =</span> <span class="dv">5</span>) <span class="co"># speed it up - default 100</span></span>
-<span id="cb26-8"><a></a>}</span>
-<span id="cb26-9"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4829.453643 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4833.475064 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4829.457670 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4789.979179 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4794.061785 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4789.983268 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4789.200756 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4793.259259 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4789.204820 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9524.993338 
-final  value 4745.732148 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9524.993338 
-final  value 4749.786399 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9524.993338 
-final  value 4745.736208 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4797.595861 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4801.570632 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 9523.201579 
-final  value 4797.599841 
-stopped after 5 iterations
-# weights:  144 (115 variable)
-initial  value 11904.449914 
-final  value 5610.285333 
-stopped after 5 iterations</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a>control <span class="ot">=</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>)</span>
+<span id="cb28-2"><a></a>get_fit <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb28-3"><a></a>  <span class="fu">train</span>(oregon <span class="sc">~</span> .,</span>
+<span id="cb28-4"><a></a>        <span class="at">data =</span> df, </span>
+<span id="cb28-5"><a></a>        <span class="at">trControl =</span> control,</span>
+<span id="cb28-6"><a></a>        <span class="at">method =</span> <span class="st">"glm"</span>,</span>
+<span id="cb28-7"><a></a>        <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb28-8"><a></a>        <span class="at">maxit =</span> <span class="dv">5</span>) <span class="co"># speed it up - default 100</span></span>
+<span id="cb28-9"><a></a>}</span>
+<span id="cb28-10"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="check-kappa" class="slide level2">
 <h2>Check Kappa</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Penalized Multinomial Regression 
 
@@ -1120,14 +1095,14 @@ The final value used for the model was decay = 0.1.</code></pre>
 <li>See top coefficients</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>get_odds <span class="ot">&lt;-</span> <span class="cf">function</span>(fit) {</span>
-<span id="cb30-2"><a></a>  <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">exp</span>(<span class="fu">coef</span>(fit<span class="sc">$</span>finalModel))))   <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"name"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-4"><a></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>name, <span class="at">names_to =</span> <span class="st">"class"</span>, <span class="at">values_to =</span> <span class="st">"odds"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(odds)) <span class="sc">%&gt;%</span></span>
-<span id="cb30-6"><a></a>  <span class="fu">head</span>()</span>
-<span id="cb30-7"><a></a>}</span>
-<span id="cb30-8"><a></a><span class="fu">get_odds</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>get_odds <span class="ot">&lt;-</span> <span class="cf">function</span>(fit) {</span>
+<span id="cb31-2"><a></a>  <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">exp</span>(<span class="fu">coef</span>(fit<span class="sc">$</span>finalModel))))   <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"name"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>name, <span class="at">names_to =</span> <span class="st">"class"</span>, <span class="at">values_to =</span> <span class="st">"odds"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-5"><a></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(odds)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a></a>  <span class="fu">head</span>()</span>
+<span id="cb31-7"><a></a>}</span>
+<span id="cb31-8"><a></a><span class="fu">get_odds</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   name        class              odds
@@ -1144,62 +1119,39 @@ The final value used for the model was decay = 0.1.</code></pre>
 <section id="confusion-matrix" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a>get_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, df) {</span>
-<span id="cb32-2"><a></a>  pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> df))</span>
-<span id="cb32-3"><a></a>  <span class="fu">confusionMatrix</span>(pred,<span class="fu">factor</span>(df<span class="sc">$</span>province))</span>
-<span id="cb32-4"><a></a>}</span>
-<span id="cb32-5"><a></a><span class="fu">get_matrix</span>(fit,test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>get_matrix <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, df) {</span>
+<span id="cb33-2"><a></a>  pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> df))</span>
+<span id="cb33-3"><a></a>  <span class="fu">confusionMatrix</span>(pred,<span class="fu">factor</span>(df<span class="sc">$</span>oregon))</span>
+<span id="cb33-4"><a></a>}</span>
+<span id="cb33-5"><a></a><span class="fu">get_matrix</span>(fit,test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
-                   Reference
-Prediction          Burgundy California Casablanca_Valley Marlborough New_York
-  Burgundy               187         39                 1          10        7
-  California              28        595                18          20       13
-  Casablanca_Valley        0          5                 6           0        1
-  Marlborough              0          0                 0           0        0
-  New_York                 0          0                 0           0        0
-  Oregon                  23        147                 1          14        5
-                   Reference
-Prediction          Oregon
-  Burgundy              48
-  California            93
-  Casablanca_Valley      1
-  Marlborough            0
-  New_York               0
-  Oregon               396
-
-Overall Statistics
-                                          
-               Accuracy : 0.7141          
-                 95% CI : (0.6917, 0.7358)
-    No Information Rate : 0.4741          
-    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-                                          
-                  Kappa : 0.5537          
-                                          
- Mcnemar's Test P-Value : NA              
-
-Statistics by Class:
-
-                     Class: Burgundy Class: California Class: Casablanca_Valley
-Sensitivity                   0.7857            0.7570                 0.230769
-Specificity                   0.9261            0.8028                 0.995711
-Pos Pred Value                0.6404            0.7757                 0.461538
-Neg Pred Value                0.9627            0.7856                 0.987842
-Prevalence                    0.1435            0.4741                 0.015682
-Detection Rate                0.1128            0.3589                 0.003619
-Detection Prevalence          0.1761            0.4626                 0.007841
-Balanced Accuracy             0.8559            0.7799                 0.613240
-                     Class: Marlborough Class: New_York Class: Oregon
-Sensitivity                     0.00000         0.00000        0.7361
-Specificity                     1.00000         1.00000        0.8304
-Pos Pred Value                      NaN             NaN        0.6758
-Neg Pred Value                  0.97346         0.98432        0.8675
-Prevalence                      0.02654         0.01568        0.3245
-Detection Rate                  0.00000         0.00000        0.2388
-Detection Prevalence            0.00000         0.00000        0.3534
-Balanced Accuracy               0.50000         0.50000        0.7832</code></pre>
+          Reference
+Prediction FALSE TRUE
+     FALSE   996  165
+     TRUE    125  373
+                                         
+               Accuracy : 0.8252         
+                 95% CI : (0.806, 0.8432)
+    No Information Rate : 0.6757         
+    P-Value [Acc &gt; NIR] : &lt; 2e-16        
+                                         
+                  Kappa : 0.5933         
+                                         
+ Mcnemar's Test P-Value : 0.02201        
+                                         
+            Sensitivity : 0.8885         
+            Specificity : 0.6933         
+         Pos Pred Value : 0.8579         
+         Neg Pred Value : 0.7490         
+             Prevalence : 0.6757         
+         Detection Rate : 0.6004         
+   Detection Prevalence : 0.6998         
+      Balanced Accuracy : 0.7909         
+                                         
+       'Positive' Class : FALSE          
+                                         </code></pre>
 </div>
 </div>
 <p>Not bad. But what if we decrease threshold for a word to be included?</p>
@@ -1207,78 +1159,14 @@ Balanced Accuracy               0.50000         0.50000        0.7832</code></pr
 <section id="using-more-words" class="slide level2">
 <h2>Using more words</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">500</span>, F)</span>
-<span id="cb34-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb34-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
-<span id="cb34-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
-<span id="cb34-5"><a></a></span>
-<span id="cb34-6"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># weights:  336 (275 variable)
-initial  value 9602.038996 
-final  value 5424.513522 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9602.038996 
-final  value 5448.241623 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9602.038996 
-final  value 5424.537270 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5613.064862 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5640.101054 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5613.091942 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5518.427780 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5542.075656 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5518.451448 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9598.455477 
-final  value 5540.417597 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9598.455477 
-final  value 5564.918023 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9598.455477 
-final  value 5540.442118 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5478.331162 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5502.379058 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 9596.663717 
-final  value 5478.355230 
-stopped after 5 iterations
-# weights:  336 (275 variable)
-initial  value 11997.621406 
-final  value 4616.250044 
-stopped after 5 iterations</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">500</span>, F) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a></a>  <span class="fu">mutate</span>(<span class="at">oregon =</span> <span class="fu">factor</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>province)</span>
+<span id="cb35-4"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>oregon, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-5"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb35-6"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb35-7"><a></a></span>
+<span id="cb35-8"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="check-kappa-1" class="slide level2">
@@ -1385,84 +1273,20 @@ Balanced Accuracy             0.5108036        0.576315        0.8054</code></pr
 <section id="using-stems" class="slide level2">
 <h2>Using stems</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">1000</span>, T)</span>
-<span id="cb42-2"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>province, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-3"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
-<span id="cb42-4"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
-<span id="cb42-5"><a></a></span>
-<span id="cb42-6"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4286.351736 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4291.067783 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4286.356458 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4298.408145 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4303.068124 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4298.412811 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9591.288439 
-final  value 4332.443024 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9591.288439 
-final  value 4337.113706 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9591.288439 
-final  value 4332.447701 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9585.913160 
-final  value 4332.220731 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9585.913160 
-final  value 4336.919668 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9585.913160 
-final  value 4332.225436 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4333.254266 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4337.925870 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 9587.704920 
-final  value 4333.258944 
-stopped after 5 iterations
-# weights:  186 (150 variable)
-initial  value 11985.079090 
-final  value 5113.588517 
-stopped after 5 iterations</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>wino <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">1000</span>, T) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a></a>  <span class="fu">mutate</span>(<span class="at">oregon =</span> <span class="fu">factor</span>(province<span class="sc">==</span><span class="st">"Oregon"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a></a>  <span class="fu">select</span>(<span class="sc">-</span>province)</span>
+<span id="cb42-4"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(wino<span class="sc">$</span>oregon, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-5"><a></a>train <span class="ot">&lt;-</span> wino[ wine_index, ]</span>
+<span id="cb42-6"><a></a>test <span class="ot">&lt;-</span> wino[<span class="sc">-</span>wine_index, ]</span>
+<span id="cb42-7"><a></a></span>
+<span id="cb42-8"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">get_fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="check-kappa-2" class="slide level2">
 <h2>Check Kappa</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Penalized Multinomial Regression 
 
@@ -1488,7 +1312,7 @@ The final value used for the model was decay = 0.1.</code></pre>
 <section id="check-odds-1" class="slide level2">
 <h2>Check odds</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a><span class="fu">get_odds</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="fu">get_odds</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   name        class       odds
@@ -1505,7 +1329,7 @@ The final value used for the model was decay = 0.1.</code></pre>
 <section id="confusion-matrix-2" class="slide level2">
 <h2>Confusion Matrix</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a><span class="fu">get_matrix</span>(fit,test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a><span class="fu">get_matrix</span>(fit,test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -1669,35 +1493,35 @@ Balanced Accuracy               0.50000       0.4996959        0.7911</code></pr
 <section id="roc-curve-evaluation" class="slide level2">
 <h2>ROC Curve evaluation</h2>
 <ul>
-<li>Have to use numeric data.</li>
+<li>Let’s look at our most recent fit:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a>winor <span class="ot">&lt;-</span> <span class="fu">wine_words</span>(wine, <span class="dv">1000</span>, T) <span class="sc">%&gt;%</span> </span>
-<span id="cb50-2"><a></a>           <span class="fu">mutate</span>(<span class="at">oregon =</span> <span class="fu">as.factor</span>(province <span class="sc">==</span> <span class="st">"Oregon"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb50-3"><a></a>           <span class="fu">select</span>(<span class="sc">-</span>province)</span>
-<span id="cb50-4"><a></a>wine_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(winor<span class="sc">$</span>oregon, <span class="at">p =</span> <span class="fl">0.80</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb50-5"><a></a>train <span class="ot">&lt;-</span> winor[wine_index, ]</span>
-<span id="cb50-6"><a></a>test <span class="ot">&lt;-</span> winor[<span class="sc">-</span>wine_index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized Linear Model 
+
+6688 samples
+  29 predictor
+   2 classes: 'FALSE', 'TRUE' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 5351, 5351, 5350, 5349, 5351 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.8449465  0.6420326</code></pre>
 </div>
-</section>
-<section id="use-a-numeric-legal-regression." class="slide level2">
-<h2>Use a numeric legal regression.</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(oregon <span class="sc">~</span> .,</span>
-<span id="cb51-2"><a></a>             <span class="at">data =</span> train, </span>
-<span id="cb51-3"><a></a>             <span class="at">trControl =</span> control,</span>
-<span id="cb51-4"><a></a>             <span class="at">method =</span> <span class="st">"glm"</span>,</span>
-<span id="cb51-5"><a></a>             <span class="at">family =</span> <span class="st">"binomial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="see-the-curve" class="slide level2">
 <h2>See the curve</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a>prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)[,<span class="dv">2</span>]</span>
-<span id="cb52-2"><a></a>myRoc <span class="ot">&lt;-</span> <span class="fu">roc</span>(test<span class="sc">$</span>oregon, prob)</span>
-<span id="cb52-3"><a></a><span class="fu">plot</span>(myRoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> test, <span class="at">type =</span> <span class="st">"prob"</span>)[,<span class="dv">2</span>]</span>
+<span id="cb51-2"><a></a>myRoc <span class="ot">&lt;-</span> <span class="fu">roc</span>(test<span class="sc">$</span>oregon, prob)</span>
+<span id="cb51-3"><a></a><span class="fu">plot</span>(myRoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a><span class="fu">auc</span>(myRoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a><span class="fu">auc</span>(myRoc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Area under the curve: 0.9175</code></pre>
 </div>
