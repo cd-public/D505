@@ -1,0 +1,15 @@
+{
+  "hash": "47a854b307923ed62f997bf3057fc024",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Conditional Probability\"\nauthor: \"Your name here!\"\ndate: \"02/17/2025\"\n\nformat: \n  html:  # You will quite likely want to change all but the last one, to taste\n    theme: superhero  \n    mainfont: monospace\n    highlight-style: github\n    title-block-banner: true\n    embed-resources: true\n---\n\n\n\n**Abstract:**\n\nThis is a technical blog post of **both** an HTML file *and* [.qmd file](https://raw.githubusercontent.com/cd-public/D505/refs/heads/master/hws/src/cond.qmd) hosted on GitHub pages.\n\n# 0. Quarto Type-setting\n\n- This document is rendered with Quarto, and configured to embed an images using the `embed-resources` option in the header.\n- If you wish to use a similar header, here's is the format specification for this document:\n\n```email\nformat: \n  html:\n    embed-resources: true\n```\n\n# 1. Setup\n\n**Step Up Code:**\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsh <- suppressPackageStartupMessages\nsh(library(tidyverse))\nsh(library(caret))\nwine <- readRDS(gzcon(url(\"https://github.com/cd-public/D505/raw/master/dat/pinot.rds\")))\n```\n:::\n\n\n\n# 2. Conditional Probability\n\nCalculate the probability that a Pinot comes from Burgundy given it has the word 'fruit' in the description.\n\n$$\nP({\\rm Burgundy}~|~{\\rm Fruit})\n$$\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# TODO\n```\n:::\n\n\n\n# 3. Naive Bayes Algorithm\n\nWe train a naive bayes algorithm to classify a wine's province using:\n1. An 80-20 train-test split.\n2. Three features engineered from the description\n3. 5-fold cross validation.\n\nWe report Kappa after using the model to predict provinces in the holdout sample.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# TODO\n```\n:::\n\n\n\n\n# 4. Frequency Differences\n\nWe find the three words that most distinguish New York Pinots from all other Pinots.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# TODO\n```\n:::\n\n\n\n# 5. Extension\n\n> Either do this as a bonus problem, or delete this section.\n\nCalculate the variance of the logged word-frequency distributions for each province.",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

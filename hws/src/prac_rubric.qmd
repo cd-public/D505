@@ -11,7 +11,6 @@ format:
     mainfont: monospace
     highlight-style: github
     title-block-banner: true
-    embed-resources: true
 
 ---
 
