@@ -24,7 +24,7 @@ format:
 
 **Step Up Code:**
 
-```{r}
+```{.r}
 sh <- suppressPackageStartupMessages
 sh(library(tidyverse))
 sh(library(caret))
@@ -48,7 +48,7 @@ We train a logistic regression algorithm to classify a whether a wine comes from
 
 We report Kappa after using the model to predict provinces in the holdout sample.
 
-```{r}
+```{.r}
 # TODO
 ```
 
@@ -64,8 +64,8 @@ What is the difference between determining some form of classification through l
 
 We can display an ROC for the model to explain your model's quality.
 
-```{r}
-# You can find a tutorial on ROC curves here: https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5
+```{.r}
+# You can find a tutorial on ROC curves here: https://towardsdatascience.com/understanding-the-roc-curve-and-auc-dd4f9a192ecb/
 ```
 
 > <span style="color:red;font-weight:bold">TODO</span>: *Explain.*
