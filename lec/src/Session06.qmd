@@ -17,6 +17,17 @@ execute:
 2. Random forests
 3. Group work
 
+# GitHub Change
+
+## Optional -> Mandatory
+
+- I am "promoting" GitHub usage to mandatory for the:
+  - Model
+  - Midterm
+  - Final
+- You will need it for DATA 510 at high probability
+- It is useful now.
+  - Alternative is Canvas...
 
 # Midterm 3/17
 
@@ -31,17 +42,22 @@ execute:
 
 ## Practice
 
-- I am working to develop a practice midterm.
-- I will circulate it by 3 Mar.
-- You will go over it on 10 Mar.
+- Practice Midterm live, on course webpage.
+  - Exam, .qmd, Solutions, and Rubric.
+- We will work through it in our model groups 3/10.
 - It is based on the 5 homeworks.
 - It is based on the prior slide.
   - Little to no computatational linguistics
-  - I'm regarding `tidytext` as extension, not core, content.
 
 ## Modality Update
 
-- Reminder for me if we haven't set modality.
+- I will release the midterm exam Monday at 6 PM PT
+  - 3/17
+- I will expect all students to complete by Friday at 10 PM PT
+  - 3/21
+- It will be digital release via GitHub Classroom
+- You will have 4 hours after starting the assignment to complete it, via submitting upload.
+- We will conduct the practice midterm over GitHub Classroom.
 
 # First Model Due 3/10
 
@@ -68,9 +84,9 @@ execute:
 
 ## Context
 
-- The "final exam" is that during the last class you will present your model results as though you are speaking to the
-managers of a large winery.
-- It should be presented from a Quarto presentation on GitHub or perhaps e.g. RPubs.
+- The "final exam" is that during the last class you will present your model results as though you are speaking to the managers of a large winery.
+  - I may change the target audience a bit stay tuned.
+- It should be presented from a Quarto presentation on GitHub.
 - You must present via the in-room "teaching machine" computer, not your own physical device, to ensure that you are comfortable distributing your findings.
 
 ## Group Meetings
@@ -148,6 +164,11 @@ wino
 4. Sort the training examples to the appropriate descendant node leaf.
 5. If examples are perfectly classified, then `STOP` else iterate over the new leaf nodes.
 
+## Aside:
+
+- Do we know what nodes and edges are in graph theory?
+- [Slides](https://cd-public.github.io/courses/old/cld24/slides/07.html#/2)
+
 ## Visualize
 
 <img style="filter:invert(.925)" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Beachdecisiontree.png">
@@ -164,7 +185,7 @@ wino
 
 ## Information Gain
 
-- The \emph{information content} of a piece of information is how "surprising" it is.
+- The *information content* of a piece of information is how "surprising" it is.
 - In sports, perhaps, wins above replacement.
 - In grades, perhaps, standard deviations above the mean
 - In weather, perhaps, date of a rainstorm in desert vs in rainforest.
