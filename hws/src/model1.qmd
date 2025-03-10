@@ -90,7 +90,7 @@ wine.to_pickle("group_m_naive.pickle")
     - With either `method = "knn"` or `method = "naive_bayes"`
 
 ```{.r}
-wine <- readRDS("group_n_method.rds")
+wine <- readRDS("group_n_method.rds") # or url
 split <- createDataPartition(wine$province, p = 0.8, list = FALSE)
 train <- wine[split, ]
 test <- wine[-split, ]
@@ -113,10 +113,10 @@ confusionMatrix(predict(fit, test),factor(test$province))$overall['Kappa']
 
 ```{.py}
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.neighbors import KNeighborsClassifier, GaussianNB
+from sklearn.neighbors import KNeighborsClassifier #, GaussianNB
 from sklearn.metrics import cohen_kappa_score
 
-wine = pd.read_pickle("group_m_method.pickle")
+wine = pd.read_pickle("group_m_method.pickle") # or url
 train, test = train_test_split(wine, test_size=0.2, stratify=wine['province'])
 
 # Separate features and target variable
@@ -126,7 +126,7 @@ y_train, y_test = train['province'], test['province']
 knn = KNeighborsClassifier() # or GaussianNB
 knn.fit(X_train, y_train)
 
-kappa = cohen_kappa_score(y_test, y_pred = knn.predict(X_test))
+kappa = cohen_kappa_score(y_test, knn.predict(X_test))
 ```
 
 # FAQ
