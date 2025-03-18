@@ -1,0 +1,640 @@
+---
+title: "Dimensionality Reduction"
+subtitle: "Applied Machine Learning"
+author: "Jameson > Hendrik > Calvin"
+  
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+---
+
+# Agenda
+
+1. Review of Mid-term
+2. Next modeling project
+3. Principle component analysis
+4. Topic modeling
+5. Group breakout sessions (if time)
+
+# Next modeling project
+
+1. Due 2 more Mondays (14 Apr)
+2. Use bank data to predict churn
+3. Using only 5 features
+4. Models scored based on AUC
+5. We'll leave time at the end to get started
+
+# Principle component analysis
+
+> [Principal component analysis (PCA) is a linear dimensionality reduction technique with applications in exploratory data analysis, visualization and data preprocessing.](https://en.wikipedia.org/wiki/Principal_component_analysis)
+
+# How?
+
+> [The data is linearly transformed onto a new coordinate system such that the directions (principal components) capturing the largest variation in the data can be easily identified.](https://en.wikipedia.org/wiki/Principal_component_analysis)
+
+# Linear Transform
+
+- We use this notion of linear combinations a lot:
+  - Features with coeffiencients
+  - Street address
+  - Course numbers
+- DATA 505 is a combination of 
+  - a non-numerical (categorical) prefix
+  - a "hundred level" (5, for MS) and 
+  - a course number (05)
+
+# Non-independence
+
+- There are *many more* 100 and 200 level courses than 500
+  - So we shouldn't assume that "05" means the same thing after "5" as it does after "1"
+    - Many prefixes $\times$ hundred levels lack an "01" course at all!
+
+# Visualize {.smaller}
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+<a title="Nicoguaro, CC BY 4.0 &lt;https://creativecommons.org/licenses/by/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:GaussianScatterPCA.svg"><img width="512" alt="GaussianScatterPCA" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/512px-GaussianScatterPCA.svg.png?20160210062755"></a>
+
+:::
+
+:::{.column width="50%"}
+
+> PCA of a multivariate Gaussian distribution centered at (1,3) with a standard deviation of 3 in roughly the (0.866, 0.5) direction and of 1 in the orthogonal direction. The vectors shown are the eigenvectors of the covariance matrix scaled by the square root of the corresponding eigenvalue, and shifted so their tails are at the mean.
+
+:::
+
+::::
+
+# Why?
+
+What are the primary reasons to use PCA?
+
+- Dimensionality reduction
+- Visualization
+- Noise reduction
+
+## Curse of dimensionality
+
+- As the dimensionality of the feature space increases, 
+  - the number of configurations can grow exponentially, and thus 
+  - the number of configurations covered by an observation decreases. 
+
+- Another formulation: 
+  - distances between observations 
+    - tend to shrink as 
+    - dimensionality tends to infinity.
+
+# 
+
+![](images/dim_error1.png)
+
+#
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YSzyTDXyEcE?si=-lnXOlumI_quUpSB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+[src](https://cs.gmu.edu/~jessica/DimReducDanger.htm)
+
+#
+
+![](images/dim_opt.png)
+
+## Idea
+
+1. Find a linear combination of variables to create principle components
+2. Maintain as much variance as possible.
+3. Principle components are *orthogonal* (uncorrelated)
+
+## Rotation of orthogonal axes{.smaller}
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+<a title="Nicoguaro, CC BY 4.0 &lt;https://creativecommons.org/licenses/by/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:GaussianScatterPCA.svg"><img width="512" alt="GaussianScatterPCA" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/GaussianScatterPCA.svg/512px-GaussianScatterPCA.svg.png?20160210062755"></a>
+
+:::
+
+:::{.column width="50%"}
+
+> PCA of a multivariate Gaussian distribution centered at (1,3) with a standard deviation of 3 in roughly the (0.866, 0.5) direction and of 1 in the orthogonal direction. The vectors shown are the eigenvectors of the covariance matrix scaled by the square root of the corresponding eigenvalue, and shifted so their tails are at the mean.
+
+:::
+
+::::
+
+
+## Singular value decomposition{.smaller}
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+<a title="Georg-Johann, CC BY-SA 3.0 &lt;https://creativecommons.org/licenses/by-sa/3.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Singular-Value-Decomposition.svg"><img width="512" alt="Illustration of the singular value decomposition UΣV* of a real 2×2 matrix M." src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Singular-Value-Decomposition.svg/512px-Singular-Value-Decomposition.svg.png?20100831064053"></a>
+
+:::
+
+:::{.column width="50%" .smaller}
+
+- Illustration of the singular value decomposition $U\Sigma V⁎$ of matrix $M$.
+
+    - **Top**: The action of $M$, indicated by its effect on the unit disc $D$ and the two canonical unit vectors $e_1$ and $e_2$.
+    - **Left**: The action of $V⁎$, a rotation, on $D$, $e_1$ and $e_2$.
+    - **Bottom**: The action of $\Sigma$, a scaling by the singular values $\sigma_1$ horizontally and $\sigma_1$ vertically.
+    - **Right**: The action of $U$, another rotation.
+
+:::
+
+::::
+
+## Libraries Setup
+
+- Note we are putting `id` into the wine dataframe!
+  - Why do we do this?
+
+```{r libs}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(tidytext))
+sh(library(caret))
+sh(library(topicmodels)) # new?
+data(stop_words)
+sh(library(thematic))
+theme_set(theme_dark())
+thematic_rmd(bg = "#111", fg = "#eee", accent = "#eee")
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/variety.rds"))) %>% rowid_to_column("id") 
+bank <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/BankChurners.rds")))
+```
+
+## Wine Words
+
+- Let's take some wine words.
+
+```{r words}
+winewords <- function(df, cutoff) {
+  df %>% 
+    unnest_tokens(word, description) %>% anti_join(stop_words) %>%
+    filter(!(word %in% c("drink","vineyard","variety","price","points","wine","pinot","chardonnay","gris","noir","riesling","syrah"))) %>% 
+    count(id, word) %>%  group_by(word) %>%  mutate(total = sum(n)) %>%  filter(total > cutoff) %>% 
+    ungroup() %>% group_by(id) %>% mutate(exists = if_else(n>0,1,0)) %>%  ungroup() %>% 
+    pivot_wider(id_cols=id, names_from=word, values_from=exists, values_fill=c(exists=0)) %>% 
+    right_join(wine, by="id") %>% drop_na(.) %>%  mutate(log_price = log(price)) %>% 
+    select(-id, -price, -description) 
+}
+```
+
+## Wine Words
+
+- Let's take some wine words.
+
+```{r wino}
+wino <- winewords(wine, 500)
+names(wine)
+```
+
+# PCA
+
+- `prcomp`: Principal Components Analysis
+
+> Performs a principal components analysis on the given data matrix and returns the results as an object of class prcomp.
+
+# PCA the wine
+
+```{r}
+pr_wine <- prcomp(x = select(wino,-variety), scale = T, center = T)
+summary(pr_wine)
+```
+
+## Show variance plot
+
+```{r}
+screeplot(pr_wine, type = "lines")
+```
+
+## Visualize biplots
+
+```{r}
+biplot(pr_wine)
+```
+
+## Visualize biplots
+
+```{r}
+biplot(pr_wine, choices = c(3,4))
+```
+## Factor loadings
+
+```{r}
+pr_wine$rotation
+```
+
+## Plotly
+
+```{r}
+library(plotly)
+biplot_data <- data.frame(pr_wine$x)
+biplot_data$variety <- wino$variety
+
+p <- plot_ly(biplot_data, x = ~PC1, y = ~PC2, z = ~PC3, color = ~PC4, type = 'scatter3d', mode = 'markers') %>%
+  layout(title = '3D Biplot',
+         scene = list(
+           xaxis = list(title = 'PC1'),
+           yaxis = list(title = 'PC2'),
+           zaxis = list(title = 'PC3')
+         ))
+```
+
+
+## See it
+
+```{r}
+p
+```
+
+
+## Add labels
+
+- This is a bit objective but you can just look at the biggest positive coefficient.
+
+```{r}
+prc <- bind_cols(select(wino,variety),as.data.frame(pr_wine$x)) %>% 
+  select(1:5) %>% 
+  rename("points" = PC1) %>% 
+  rename("fruit" = PC2) %>% 
+  rename("tannin" = PC3) %>% 
+  rename("finish" = PC4)
+head(prc)
+```
+
+## Density by variety (1&2)
+
+```{r}
+prc %>% 
+  select(variety, points, fruit) %>% 
+  pivot_longer(cols = -variety,names_to = "component",values_to = "loading") %>% 
+  ggplot(aes(loading, fill=variety)) +
+  geom_density(alpha=0.5) +
+  facet_grid(.~component)
+```
+
+## Density by variety (3&4)
+
+```{r}
+prc %>% 
+  select(variety, tannin, finish) %>% 
+  pivot_longer(cols = -variety,names_to = "component",values_to = "loading") %>% 
+  ggplot(aes(loading, fill=variety)) +
+  geom_density(alpha=0.5) +
+  facet_grid(.~component)
+```
+
+## Aside
+
+- This should be factored.
+
+```{r}
+see_two <- function(df, thing1, thing2) {
+  df %>% 
+    select(variety, thing1, thing2) %>% 
+    pivot_longer(cols = -variety,names_to = "component",values_to = "loading") %>% 
+    ggplot(aes(loading, fill=variety)) +
+    geom_density(alpha=0.5) +
+    facet_grid(.~component)
+}
+```
+
+## Use it
+
+```{r}
+see_two(prc, "fruit","finish")
+```
+
+## More Words
+
+```{r}
+# wino <- winewords(wine, 500)
+wino <- winewords(wine, 100)
+names(wine)
+```
+
+- Why does changing "500" to "100" *increase* the number of words?
+
+## Run PCA
+
+```{r}
+pr_wine <- prcomp(x = select(wino,-variety), scale = T, center = T)
+screeplot(pr_wine, type = "lines")
+```
+
+## Highest loadings per factor
+
+```{r}
+rownames_to_column(as.data.frame(pr_wine$rotation)) %>% 
+  select(1:5) %>% 
+  filter(abs(PC1) >= 0.25 | abs(PC2) >= 0.25 | abs(PC3) >= 0.25 | abs(PC4) >= 0.25)
+```
+- Price
+- French Oak
+- Also French Oak but not pears or points?
+- Willamette Valley
+
+## Name it
+```{r}
+prc <- bind_cols(select(wine,variety),as.data.frame(pr_wine$x)) %>% 
+  select(1:5) %>% 
+  rename("points"=PC1, "french_oak"=PC2, "french_BROKE"=PC3, "willamette_valley"=PC4)
+```
+
+# Graph it
+
+```{r}
+see_two(prc, "points", "willamette_valley")
+```
+
+
+# Graph more
+
+```{r}
+see_two(prc, "french_oak", "french_BROKE")
+```
+
+## ML it
+
+```{r}
+fit <- train(variety ~ .,
+             data = prc, 
+             method = "naive_bayes",
+             metric = "Kappa",
+             trControl = trainControl(method = "cv"))
+confusionMatrix(predict(fit, prc),factor(prc$variety))$overall['Kappa']
+```
+
+- Not bad!
+
+# Planned Dinner
+
+- Are we close??????
+
+
+# (Long) Exercise
+
+1. Load the bank data
+2. Run a principal component analysis on all the data except Churn
+3. Choose a number of factors based on a scree plot
+4. name those factors, see whether you can interpret them
+5. Plot them against Churn using a density plot
+
+
+## Hendrik's solution...
+
+```{r}
+library(fastDummies)
+bank <- bank %>%
+  mutate(Churn = Churn=="yes") %>%
+  dummy_cols(remove_selected_columns = T)
+  
+pr_bank = prcomp(x = select(bank, -Churn), scale=T, center = T)
+```
+
+## Hendrik's solution...
+
+```{r}
+screeplot(pr_bank, type="lines")
+```
+
+## Hendrik's solution...
+
+```{r}
+rownames_to_column(as.data.frame(pr_bank$rotation)) %>% select(1:5) %>%
+  filter(abs(PC1) >= 0.35 | abs(PC2) >= 0.35 | abs(PC3) >= 0.35 | abs(PC4) >= 0.35)
+```
+
+## Hendrik's solution...
+
+```{r}
+prc <- bind_cols(select(bank, Churn), as.data.frame(pr_bank$x)) %>% select(1:5) %>%
+  rename("Buy/Credit" = PC1, "Blue/Man" = PC2, "Trans" = PC3, "Age"= PC4)
+```
+
+## Hendrik's solution...
+
+```{r}
+prc %>%
+  pivot_longer(cols = -Churn, names_to = "component", values_to = "loading") %>%
+  ggplot(aes(loading, fill=Churn)) + geom_density(alpha = 0.5) + facet_grid(.~component)
+```
+
+
+## Topic Modeling
+
+![](https://miro.medium.com/v2/resize:fit:720/format:webp/1*LsTAeih16RXl4VSZO_Hhag.png)
+
+Credit: [https://medium.com/data-science/dimensionality-reduction-with-latent-dirichlet-allocation-8d73c586738c](https://medium.com/data-science/dimensionality-reduction-with-latent-dirichlet-allocation-8d73c586738c)
+
+
+## Latent Dirichlet allocation
+
+- A common algorithms for topic modeling.
+- Two principles:
+  - Every document is a mixture of topics.
+  - Every topic is a mixture of words.
+
+[More](https://www.tidytextmining.com/topicmodeling.html#latent-dirichlet-allocation)
+
+## Documents
+
+> We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say “Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B.”
+
+## Topics  
+
+> Every topic is a mixture of words. For example, we could imagine a two-topic model of American news, with one topic for “politics” and one for “entertainment.” The most common words in the politics topic might be “President”, “Congress”, and “government”, while the entertainment topic may be made up of words such as “movies”, “television”, and “actor”. Importantly, words can be shared between topics; a word like “budget” might appear in both equally.
+
+## Running a model
+
+```{r}
+wine_dtm <- wine %>% 
+  unnest_tokens(word, description) %>% anti_join(stop_words) %>%
+  filter(!(word %in% c("drink","vineyard","variety","price","points","wine","pinot","chardonnay","gris","noir","riesling","syrah"))) %>% 
+  count(id,word) %>% cast_dtm(id, word, n) # DocumentTermMatrix
+head(wine_dtm)
+```
+
+## Latent Dirichlet
+
+```{r}
+wine_lda <- LDA(wine_dtm, k = 4)#, control = list(seed = 505))
+wine_lda
+```
+
+## Introduce two letters.
+
+- Lowercase Beta, $\beta$, per-topic-per-word probabilities
+- Lowercase Gamma, $\gamma$, per-document-per-topic probabilities
+- [More](https://www.tidytextmining.com/topicmodeling.html#latent-dirichlet-allocation)
+  - ctrl+f "beta" and "gamma" 
+  - Use double quotes in the search bar!
+
+## Word-topic probabilities
+
+```{r}
+topics <- tidy(wine_lda, matrix = "beta")
+head(topics)
+```
+
+## Word-topic probabilities
+
+```{r}
+top_terms <- topics %>%
+  group_by(topic) %>% top_n(10, beta) %>% ungroup() %>% arrange(topic, -beta)
+top_terms
+```
+
+## Word-topic probabilities
+
+```{r}
+plots <- function(df) {
+  df %>%
+    mutate(term = reorder_within(term, beta, topic)) %>%
+    ggplot(aes(term, beta, fill = factor(topic))) +
+    geom_col(show.legend = FALSE) +
+    facet_wrap(~ topic, scales = "free") +
+    coord_flip() +
+    scale_x_reordered()
+}
+plots(top_terms)
+```
+
+## Document-topic probabilities
+
+```{r}
+topics <- tidy(wine_lda, matrix = "gamma")
+head(topics)
+```
+
+## What if we pivot wider?
+
+```{r}
+wider <- function(df) {
+  df %>% 
+    pivot_wider(id_cols = document,names_from = topic,values_from = gamma, names_prefix = "topic_") %>% 
+    mutate(id=as.integer(document)) %>%
+    left_join(select(wine, id, variety)) %>% 
+    select(-document, -id)
+}
+topics <- wider(topics)
+head(topics)
+```
+
+
+## Can we model an outcome?
+
+```{r}
+fit <- train(variety ~ .,
+             data = topics, 
+             method = "naive_bayes",
+             metric = "Kappa",
+             trControl = trainControl(method = "cv"),
+             maxit = 5)
+
+confusionMatrix(predict(fit, topics),factor(topics$variety))$overall['Kappa']
+```
+
+## What if we used more topics?
+
+```{r}
+wine_lda = LDA(wine_dtm, k = 20)
+topics <- wider(tidy(wine_lda, matrix = "gamma"))
+head(topics)
+```
+
+
+## What if we used more topics?
+
+```{r}
+fit <- train(variety ~ .,
+             data = topics, 
+             method = "naive_bayes",
+             metric = "Kappa",
+             trControl = trainControl(method = "cv"),
+             maxit = 5)
+
+confusionMatrix(predict(fit, topics),factor(topics$variety))$overall['Kappa']
+```
+
+## Associated Press
+
+```{r}
+data("AssociatedPress")
+assoc_LDA = LDA(AssociatedPress, k = 2, control = list(seed = 503))
+```
+
+
+## Word-topic probabilities
+
+```{r}
+assoc_topics = tidy(assoc_LDA, matrix="beta")
+head(assoc_topics, 20)
+```
+
+## Top words by topic
+
+```{r}
+top_terms <- assoc_topics %>% group_by(topic) %>% top_n(20, beta) %>% ungroup() %>% arrange(topic, -beta)
+plots(top_terms)
+```
+
+## Greatest beta differences
+
+```{r}
+assoc_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  pivot_wider(names_from = topic, values_from = beta) %>%
+  head(20)
+
+```
+
+## Greatest beta differences
+
+```{r}
+beta_wide <- assoc_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  pivot_wider(names_from = topic, values_from = beta) %>% 
+  filter(topic1 > .001 | topic2 > .001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+```
+
+## Greatest beta differences
+
+```{r}
+beta_wide %>%
+  head(30)
+```
+
+## Greatest beta differences
+
+```{r}
+ggplot(beta_wide %>% arrange(log_ratio) %>% head(15), aes(x=reorder(term, log_ratio), y=log_ratio)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+```
+
+## Greatest beta differences
+
+```{r}
+ggplot(beta_wide %>% arrange(-log_ratio) %>% head(15), aes(x=reorder(term, log_ratio), y=log_ratio)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+Credit: [https://www.tidytextmining.com/topicmodeling.html](https://www.tidytextmining.com/topicmodeling.html)
+
+
+# Breakout Sessions
+
+Group modeling project #2! Let's get started.
+
+
