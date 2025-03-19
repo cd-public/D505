@@ -17,7 +17,15 @@ execute:
 4. Topic modeling
 5. Group breakout sessions (if time)
 
-# Next modeling project
+## Timing Update
+
+- I misnumbered my weeks, so Model 2 is due immediately before the final.
+- In theory, this means you have more time on it.
+- Anyways:
+  - Model 2 by 14 Apr
+  - Final on 21 Apr
+
+## Next modeling project
 
 1. Due 2 more Mondays (14 Apr)
 2. Use bank data to predict churn
@@ -25,15 +33,15 @@ execute:
 4. Models scored based on AUC
 5. We'll leave time at the end to get started
 
-# Principle component analysis
+## Principle component analysis
 
 > [Principal component analysis (PCA) is a linear dimensionality reduction technique with applications in exploratory data analysis, visualization and data preprocessing.](https://en.wikipedia.org/wiki/Principal_component_analysis)
 
-# How?
+## How?
 
 > [The data is linearly transformed onto a new coordinate system such that the directions (principal components) capturing the largest variation in the data can be easily identified.](https://en.wikipedia.org/wiki/Principal_component_analysis)
 
-# Linear Transform
+## Linear Transform
 
 - We use this notion of linear combinations a lot:
   - Features with coeffiencients
@@ -44,13 +52,13 @@ execute:
   - a "hundred level" (5, for MS) and 
   - a course number (05)
 
-# Non-independence
+## Non-independence
 
 - There are *many more* 100 and 200 level courses than 500
   - So we shouldn't assume that "05" means the same thing after "5" as it does after "1"
     - Many prefixes $\times$ hundred levels lack an "01" course at all!
 
-# Visualize {.smaller}
+## Visualize {.smaller}
 
 ::::{.columns}
 
@@ -68,7 +76,7 @@ execute:
 
 ::::
 
-# Why?
+## Why?
 
 What are the primary reasons to use PCA?
 

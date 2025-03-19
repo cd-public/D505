@@ -1,0 +1,67 @@
+---
+title: "Model 2"
+author: "Team $i$"
+date: "04/14/2025"
+---
+
+# Goal
+
+*This is a binary classification assignment*
+
+1. Engineering exactly 5 features.
+2. Predict `Churn`
+
+# Submission
+
+- One Model 1 you replied to email "Group $n$" with a link to a GitHub repository
+- Update this repository with a `model_2.rds` dataframe and a `model_2.qmd` or rmd that created the dataframe.
+- You may update this submission as many times as you like until class starts on 14 Apr.
+    - **NOT Midnight AOE**
+
+# Setup
+
+- You may use any libraries, but as a feature engineering assignment `tidyverse` may be sufficient.
+    - The next most likely are dummy column and textual libraries.
+    - If you wish, you may use Python, Julia, or Observable in any manner you see fit and I will figure out how to assess it.
+- For assessment, we will use "caret".
+
+```{.r}
+library(tidyverse)
+library(caret)
+```
+
+# Dataframe
+
+- We use the `BankChurners` dataframe.
+
+```{.r}
+bank <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/BankChurners.rds")))
+```
+
+- You will necessarily perform some feature engineering as you see fit.
+    - Exactly five (5) features.
+
+# Save the dataframe
+
+- In addition to a document like this, you will also need to submit your dataframe.
+
+```{.r}
+write_rds(bank, file="model_2.rds")
+```
+
+# Assessment
+
+- Assessments will be evaluated as follows:
+    - Note that the first five (5) features are selected.
+    - This ensures no more than 5 features are used.
+    - It ensures "Churn" is included.
+    - It reports the $\kappa$ value `Kappa`
+
+```{.r}
+train(Churn ~ .,
+      data = bank |> select(1,2,3,4,5,grep("Churn", colnames(bank))), 
+      trControl = trainControl(method = "cv", number = 5),
+      method = "glm",
+      family = "binomial",
+      maxit = 5)$results['Kappa']
+```
