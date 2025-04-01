@@ -159,7 +159,7 @@ kclusts <- tibble(k = 1:9) %>%
 
 ```{r}
 
-assignments <- kclusts %>% 
+assignments <- kclusts %>%
   unnest(augmented)
 
 ggplot(assignments, aes(price, points)) +

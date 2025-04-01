@@ -1,0 +1,575 @@
+---
+title: "Clustering"
+author: "Jameson > Hendrik > Calvin"
+  
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+---
+
+## Agenda
+
+1. Modeling Reminders
+2. K-means Clustering
+3. Hierarchical Clustering
+4. Final Modeling Project
+
+## Timing Update
+
+- I misnumbered my weeks, so Model 2 is due immediately before the final.
+- In theory, this means you have more time on model 2?
+- Anyways:
+  - Model 2 by 14 Apr
+  - Final on 21 Apr
+
+## Next modeling project
+
+1. Due *next* Monday (14 Apr)
+2. Use bank data to predict churn
+3. Using exactly 5 features
+4. Models scored based on AUC
+5. We'll leave time at the end to get started
+
+## Time to Touch on final
+
+- [Click me](https://cd-public.github.io/D505/hws/final_present.html#/title-slide)
+
+## Emphasis
+
+- No code
+- 10 features
+
+> A hold-out sample is a random sample from a data set that is withheld and not used in the model fitting process. After the model is fit to the main data (the “training” data), it is then applied to the hold-out sample. This gives an unbiased assessment of how well the model might do if applied to new data.
+
+# Supervision
+
+## Motivating Questions
+
+1. What is difference between supervised and unsupervised learning?
+2. What is unsupervised learning used for?
+3. What are some challenges with unsupervised learning?
+
+## Supervised Learning
+
+* Uses *labeled* data.
+* Maps inputs to outputs.
+* Goal: Predict outcomes.
+* Examples: Classification, regression.
+
+
+
+## Unsupervised Learning
+
+
+* Uses *unlabeled* data.
+* Finds hidden patterns.
+* Goal: Discover structure.
+* Examples: Clustering, dimensionality reduction.
+
+
+
+## The Label Divide
+
+* Supervised: Labeled data.
+* Unsupervised: Unlabeled data.
+* Label presence is key.
+
+<center><a title="Balkiss.hamad, CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Supervised_and_unsupervised_learning.png"><img alt="Difference between supervised and unsupervised learning" src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Supervised_and_unsupervised_learning.png?20241123155435"></a></center>
+
+
+
+## Uses of Unsupervised
+
+
+* Clustering: Grouping similar data.
+  * E.g. discover Yemenia novel coffee varietal
+  * [Learn more](https://www.youtube.com/watch?v=-oiHm0wlhfM)
+    * 18 min + can't watch on stream.
+* Anomaly detection: Finding outliers.
+* Dimensionality reduction: Simplifying data.
+* Association rule learning: Finding relationships.
+
+
+
+## Clustering in Action
+
+* Customer/market segmentation.
+  * Why EU entered "esports winter" 18+ months before US?
+* Document clustering.
+<center style="background-color:white;border-radius:50%"><a title="Original:  hellisp Vector:  Wgabrie, Public domain, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Cluster-2.svg"><img  alt="fotoğraf galerisi video resim haber içerikleri yükleyebilir" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cluster-2.svg/512px-Cluster-2.svg.png?20100210061956"></a></cennter>
+
+
+
+## Anomaly Detection
+
+* Detect fraudulent bank transactions.
+  * E.g. if I purchased an espresso in Salem, MA
+* Detect anomalous (computer) network behavior.
+  * My colleague at MS does this
+* Predict imminent equipment failure in e.g. manufacturing sector.
+  * Do you do this in 596?
+
+## Dimensionality Reduction
+
+* Just a refresh
+  * Feature extraction.
+  * Data visualization.
+  * Reducing noise.
+
+# Challenges
+
+## Challenges 
+
+- Evaluation
+  * No clear "right" answer.
+    * And sometimes there's *someday* a right answer, but you have to make the model now.
+    * Sometimes the "right" answer is determined by someone in power.
+  * Subjective evaluation metrics.
+    * Non-falsifiable by construction.
+  * Validating discovered patterns.
+
+
+
+## Challenges
+
+- Interpretation
+  * Understanding discovered structures.
+    * Think in e.g. practice midterm - did you "discover" colleges vs. universities.
+    * What about "big school" and "small school"
+  * Meaningful insights can be hard.
+    * Did you find "Colleges that Change Lives"
+  * Requires or at least benefits from domain expertise.
+
+## Challenges
+
+- Computational Cost
+  * Large datasets are common.
+  * Algorithms can be complex.
+  * Scalability is a concern.
+- [Computational costs become operating costs](https://console.cloud.google.com/billing/013EFE-0A54F4-1CB6BE/reports/cost-breakdown;timeRange=CUSTOM_RANGE;from=2024-06-01;to=2025-02-28?organizationId=692811010335&project=dataproc-ce-project)
+
+## Takeaways
+
+* Supervised: Labeled data &rArr; predict label.
+* Unsupervised: Unlabeled data &rArr; discover patterns.
+  * Valuable, but challenging.
+  * Value is correlated with challenge given scarcity.
+
+# K-means Clustering Algorithm
+
+## Start with k random clusters
+
+- [src](https://rpubs.com/odenipinedo/unsupervised-learning-in-R)
+
+![](images/kmeans1.png)
+
+## Calculate means
+
+![](images/kmeans2.png)
+
+## Select cluster based on which mean point is closest to
+
+![](images/kmeans3.png)
+
+## Adjust menas and repeat
+
+![](images/kmeans4.png)
+
+## Potential Issues
+
+- What happens with high dimensionality?
+- What happens when dimensions aren't scaled?
+
+## Setup
+
+```{r}
+sh <- suppressPackageStartupMessages
+sh(library(tidyverse))
+sh(library(tidytext))
+data(stop_words)
+wine <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/variety.rds"))) %>% rowid_to_column("id")
+glimpse(wine)
+```
+
+
+## Relate Word to IDS
+
+```{r}
+word_ids <- wine %>%
+  unnest_tokens(word, description) %>%
+  anti_join(stop_words) %>% 
+  filter(!(word %in% c("wine","flavors","pinot","gris"))) %>% 
+  count(id, word) %>% group_by(id) %>% 
+  mutate(n = if_else(n>0,1,0)) %>% ungroup()
+
+head(word_ids)
+```
+
+## Find top words by variety
+
+```{r}
+top_words <- word_ids %>% 
+  right_join(wine, by="id") %>%
+  count(variety, word) %>% 
+  group_by(variety) %>% top_n(3,n) %>%
+  ungroup() %>% select(word) %>% distinct()
+
+head(top_words)
+```
+
+## Engineer Features
+
+```{r}
+wino <- word_ids %>% 
+  filter(word %in% top_words$word) %>% 
+  pivot_wider(id_cols = id, names_from = word, values_from = n, values_fill = 0) %>% 
+  right_join(wine, by="id") %>% 
+  mutate(price=log(price)) %>%
+  mutate(price=scale(price), points=scale(points)) %>% 
+  select(-id,-variety, -description) %>% drop_na(.)
+
+head(wino)
+```
+
+## Basic K-means cluster
+
+```{r}
+kclust <- kmeans(wino, centers = 3)
+kclust$centers
+```
+
+## Add clusters
+
+```{r}
+wink <- wino %>% mutate(cluster = kclust$cluster)
+head(wink)
+```
+
+## Cluster Visualizer
+
+```{r}
+see_densities <- function(df, names) {
+  df %>% 
+    pivot_longer(names,names_to = "feature") %>% 
+    ggplot(aes(value, fill=cluster))+
+    geom_density(alpha=0.3)+
+    facet_wrap(~feature)
+}
+```
+
+
+## Visualize clusters
+
+```{r}
+see_densities(wink, c("oak", "finish", "fruit"))
+```
+
+## Visualize clusters
+
+```{r}
+see_densities(wink, c("cherry", "pear", "apple"))
+```
+
+## Visualize clusters
+
+```{r}
+see_densities(wink, c("points","price"))
+```
+
+## Try different numbers of clusters
+
+```{r}
+kclusts <- map(1:9, function(k) { 
+    kmeans(wino, centers = k)$cluster
+  }
+)
+```
+
+## Examine any one of the clusterings
+
+```{r}
+unlist(kclusts[7])
+```
+
+## Add Clusterings
+
+```{r}
+winks <- wino %>% mutate(
+  two =   unlist(kclusts[2]),
+  three = unlist(kclusts[3]),
+  four =  unlist(kclusts[4]),
+  five =  unlist(kclusts[5]),
+  six =   unlist(kclusts[6]),
+  seven = unlist(kclusts[7]),
+  eight = unlist(kclusts[8]),
+  nine =  unlist(kclusts[9]))
+names(winks)
+```
+
+## View
+
+::::{columns}
+
+:::{.column width="50%"}
+
+```{r}
+ggplot(winks, aes(price, points)) +
+  geom_point(aes(color = two))
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{r}
+ggplot(winks, aes(price, points)) +
+  geom_point(aes(color = nine))
+```
+
+:::
+
+::::
+
+## View
+
+::::{columns}
+
+:::{.column width="50%"}
+
+```{r}
+ggplot(winks, aes(price, points)) +
+  geom_point(aes(color = three))
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{r}
+ggplot(winks, aes(price, points)) +
+  geom_point(aes(color = five))
+```
+
+:::
+
+::::
+
+## Just look at one
+
+```{r}
+ggplot(winks %>% mutate(six = as.factor(six)), aes(price, points)) +
+  geom_point(aes(color = six))
+```
+
+# Group Exercise
+
+
+1. $k$-means clustering on 1-12 (age - credit) of churn
+2. Label the clusters appropriately
+3. Add customer revenue feature:
+$$
+\begin{align}
+&0.20&*&\text{Revolving Credit}\\
++&0.25&*&\text{Transaction Count}\\
+-&15&*&\text{Contacts Count}
+\end{align}
+$$
+4. Density plot clusters vs this revenue & revolving balance
+
+## Walkthrough
+
+1. $k$-means clustering on 1-12 (age-  credit) of churn
+  - Load `BankChurners.rds`
+
+```{r}
+bank <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/BankChurners.rds"))) %>% drop_na(.)
+names(bank)
+```
+
+## Walkthrough
+
+1. $k$-means clustering on 1-12 (age - credit) of churn
+  - "(age - credit)"
+
+```{r}
+features <- bank %>% select(1:12) %>% drop_na(.)
+names(features)
+```
+
+## Walkthrough
+
+1. $k$-means clustering on 1-12 (age - credit) of churn
+  - Engineer features
+
+```{r}
+features <- features %>%
+  mutate(Gender = as.numeric(Gender=="F"))  %>%
+  mutate(Education_Level = as.numeric(Education_Level == "Graduate")) %>%
+  mutate(Marital_Status = as.numeric(Marital_Status == "Married")) %>% 
+  mutate(Income_Category = as.numeric(Income_Category == "$120K +")) %>% 
+  mutate(Card_Category = as.numeric(Card_Category=="Blue"))
+
+head(features)
+```
+
+## Walkthrough
+
+1. $k$-means clustering on 1-12 (age - credit) of churn
+  - What if we use 4?
+
+```{r}
+kclust <- kmeans(features, 4)
+kclust$centers
+```
+
+
+## Walkthrough
+
+1. $k$-means clustering on 1-12 (age - credit) of churn
+  - Use two clusters (rich and not rich, probably)
+
+```{r}
+kclust <- kmeans(features, 2)
+kclust$centers
+```
+
+## Walkthrough
+
+2. Label the clusters appropriately
+
+```{r}
+bank <- bank %>% mutate(cluster = kclust$cluster) %>% 
+  mutate(Marxist_Class = ifelse(cluster==1, "Bourgeoisie", "Proletariat")) %>%
+  select(-cluster)
+```
+
+
+## Walkthrough
+
+3. Add customer revenue feature:
+$$
+\begin{align}
+&0.20&*&\text{Revolving Credit}\\
++&0.25&*&\text{Transaction Count}\\
+-&15&*&\text{Contacts Count}
+\end{align}
+$$
+
+```{r}
+bank <- bank %>% mutate(Revenue = Total_Revolving_Bal/5 +  Total_Trans_Ct/4 - 15 * Contacts_Count_12_mon)
+```
+
+## Walkthrough
+
+4. Density plot clusters vs this revenue & revolving balance
+
+```{r}
+bank %>% 
+  ggplot(aes(Revenue))+
+  geom_density(alpha=0.3)+
+  facet_wrap(~Marxist_Class)
+```
+
+
+## Walkthrough
+
+4. Density plot clusters vs this revenue & revolving balance
+
+```{r}
+bank %>% 
+  ggplot(aes(Total_Revolving_Bal))+
+  geom_density(alpha=0.3)+
+  facet_wrap(~Marxist_Class)
+```
+
+## Walkthrough
+
+4. Density plot clusters vs ... churn?
+
+```{r}
+bank %>% 
+  ggplot(aes(Churn))+
+  geom_density(alpha=0.3)+
+  facet_wrap(~Marxist_Class)
+```
+
+# Hierarchical Clustering
+
+## Hierarchical Clustering
+
+![](images/hclust1.png)
+
+## Hierarchical Clustering
+
+![](images/hclust2.png)
+
+## Hierarchical Clustering
+
+![](images/hclust3.png)
+
+## Hierarchical Clustering
+
+![](images/hclust4.png)
+
+## Hierarchical Clustering
+
+```{r}
+swine <- wino %>% sample_n(200)
+hclustr <- hclust(d=dist(swine))
+summary(hclustr)
+```
+
+## Plot the dendrogram
+
+```{r}
+plot(hclustr)
+abline(h=3, col="red")
+```
+
+## Assign clusters
+```{r}
+hclustr <- hclust(d=dist(wino))
+cluster <- cutree(hclustr, k=3)
+swine <- wino %>% 
+  add_column(cluster) %>% 
+  mutate(cluster=as_factor(cluster))
+
+head(swine)
+```
+
+
+## Visualize clusters
+
+```{r}
+see_densities(swine, c("oak", "finish", "fruit"))
+```
+
+## Visualize clusters
+
+```{r}
+see_densities(swine, c("cherry", "pear", "apple"))
+```
+
+## Visualize clusters
+
+```{r}
+see_densities(swine, c("points","price"))
+```
+What do you see as some of the issues with Hierarchical clustering?
+
+## The Problem
+
+```{r}
+c(nrow(wino %>% sample_n(200)), nrow(wino)) # swine <- wino %>% sample_n(200)
+```
+
+- Wait a minute. 
+
+```{r}
+c(2 ^ 200, 2 ^ 3093)
+```
+
+## References
+
+[https://cran.r-project.org/web/packages/broom/vignettes/kmeans.html](https://cran.r-project.org/web/packages/broom/vignettes/kmeans.html)

@@ -27,7 +27,7 @@ execute:
 
 ## Next modeling project
 
-1. Due 2 more Mondays (14 Apr)
+1. Due 1 more Monday (14 Apr)
 2. Use bank data to predict churn
 3. Using only 5 features
 4. Models scored based on AUC
