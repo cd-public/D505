@@ -169,29 +169,6 @@ Important
 <p>Predict the profit of “future products developed at CravenSpeed”</p>
 </div>
 </div>
-</section>
-<section id="criteria" class="level1">
-<h1>Criteria</h1>
-<ul>
-<li>Every group member must participate in the presentation</li>
-<li>Maximum 10 features including interactions</li>
-</ul>
-</section>
-<section id="assessment" class="level1">
-<h1>Assessment</h1>
-<ul>
-<li>Assessments will be setup as follows:
-<ul>
-<li>“Profit” is engineered.</li>
-<li>Note that the first ten (10) features are selected.</li>
-<li>This ensures no more than 10 features are used.</li>
-<li>“Profit” is incorporated into the data frame.</li>
-</ul></li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>profit <span class="ot">&lt;-</span> fast[<span class="st">"Revenue 2019 to present"</span>] <span class="sc">-</span> fast[<span class="st">"BOM Cost"</span>] <span class="sc">*</span> fast[<span class="st">"Units Sold"</span>]</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> fast <span class="sc">%&gt;%</span> <span class="fu">engineer</span>()</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> fast <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="co"># Max 10 features</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>fast[<span class="st">"Profit"</span>] <span class="ot">=</span> profit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="information-leaks" class="level2">
 <h2 class="anchored" data-anchor-id="information-leaks">Information leaks</h2>
 <ul>
@@ -213,129 +190,85 @@ Important
 <ul>
 <li>I find it unreasonable to conclude that any of the following could be known about a product <em>before it is developed</em>:
 <ul>
-<li>These are indices <code>2:30</code> and <code>38</code></li>
+<li>These are indices <code>2:29,38,41</code></li>
 </ul></li>
 </ul>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td>“First Order (from sales data)”</td>
-<td>“src_www”</td>
-</tr>
-<tr class="even">
-<td>“src_iphone”</td>
-<td>“src_android”</td>
-</tr>
-<tr class="odd">
-<td>“src_ipad”</td>
-<td>“src_manual”</td>
-</tr>
-<tr class="even">
-<td>“src_facebookshop”</td>
-<td>“src_external”</td>
-</tr>
-<tr class="odd">
-<td>“src_Amazon FBM”</td>
-<td>“January”</td>
-</tr>
-<tr class="even">
-<td>“February”</td>
-<td>“March”</td>
-</tr>
-<tr class="odd">
-<td>“April”</td>
-<td>“May”</td>
-</tr>
-<tr class="even">
-<td>“June”</td>
-<td>“July”</td>
-</tr>
-<tr class="odd">
-<td>“August”</td>
-<td>“September”</td>
-</tr>
-<tr class="even">
-<td>“October”</td>
-<td>“November”</td>
-</tr>
-<tr class="odd">
-<td>“December”</td>
-<td>“pct_Direct Sales”</td>
-</tr>
-<tr class="even">
-<td>“pct_Orders for Stock”</td>
-<td>“pct_Drop Shipments”</td>
-</tr>
-<tr class="odd">
-<td>“pct_Platypus”</td>
-<td>“pct_Moss Motors Only”</td>
-</tr>
-<tr class="even">
-<td>“pct_R&amp;D Club”</td>
-<td>“Units Sold”</td>
-</tr>
-<tr class="odd">
-<td>“Base Product Sku”</td>
-<td>“Revenue 2019 to present”</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"First Order (from sales data)"</span> <span class="st">"src_www"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">3</span>] <span class="st">"src_iphone"</span>                    <span class="st">"src_android"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"src_ipad"</span>                      <span class="st">"src_manual"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">7</span>] <span class="st">"src_facebookshop"</span>              <span class="st">"src_external"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"src_Amazon FBM"</span>                <span class="st">"January"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] <span class="st">"February"</span>                      <span class="st">"March"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>[<span class="dv">13</span>] <span class="st">"April"</span>                         <span class="st">"May"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>[<span class="dv">15</span>] <span class="st">"June"</span>                          <span class="st">"July"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">17</span>] <span class="st">"August"</span>                        <span class="st">"September"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">19</span>] <span class="st">"October"</span>                       <span class="st">"November"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">21</span>] <span class="st">"December"</span>                      <span class="st">"pct_Direct Sales"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>[<span class="dv">23</span>] <span class="st">"pct_Orders for Stock"</span>          <span class="st">"pct_Drop Shipments"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>[<span class="dv">25</span>] <span class="st">"pct_Platypus"</span>                  <span class="st">"pct_Moss Motors Only"</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>[<span class="dv">27</span>] <span class="st">"pct_R&amp;D Club"</span>                  <span class="st">"Units Sold"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>[<span class="dv">29</span>] <span class="st">"Revenue 2019 to present"</span>       <span class="st">"Sales Channel"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>That is, it is not meaningful to predict profit from metrics that can only be gathered if profit is known.</li>
 <li>I find it reasonable to considering the following:</li>
 </ul>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td>“lookupId”</td>
-<td>“Listing Type”</td>
-</tr>
-<tr class="even">
-<td>“Unit Weight (pounds)”</td>
-<td>“retailPrice”</td>
-</tr>
-<tr class="odd">
-<td>“make”</td>
-<td>“model”</td>
-</tr>
-<tr class="even">
-<td>“yearMin”</td>
-<td>“yearMax”</td>
-</tr>
-<tr class="odd">
-<td>“Number of Components”</td>
-<td>“BOM Cost”</td>
-</tr>
-<tr class="even">
-<td>“Sales Channel”</td>
-<td>“Product Type”</td>
-</tr>
-<tr class="odd">
-<td>“Designer”</td>
-<td>“Main Component Material”</td>
-</tr>
-<tr class="even">
-<td>“Main Component MFG Process”</td>
-<td>“Main Component Finishing Process”</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"lookupId"</span>                         <span class="st">"Base Product Sku"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">3</span>] <span class="st">"Listing Type"</span>                     <span class="st">"Unit Weight (pounds)"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"retailPrice"</span>                      <span class="st">"make"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">7</span>] <span class="st">"model"</span>                            <span class="st">"yearMin"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"yearMax"</span>                          <span class="st">"Number of Components"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] <span class="st">"BOM Cost"</span>                         <span class="st">"Product Type"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>[<span class="dv">13</span>] <span class="st">"Designer"</span>                         <span class="st">"Main Component Material"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>[<span class="dv">15</span>] <span class="st">"Main Component MFG Process"</span>       <span class="st">"Main Component Finishing Process"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>For this reason, I have included only these fields in the <code>secret</code> hold-out data.</li>
+<li>For this reason, I have included only these fields in the <code>secret</code> hold-out data.
+<ul>
+<li>Profit, precomputed, is also present (of course).</li>
+</ul></li>
 </ul>
 </section>
 </section>
-<section id="assessment-1" class="level1">
+<section id="assessment" class="level1">
 <h1>Assessment</h1>
 <ul>
 <li>Assessments will be evaluated via RMSE over the secret data as follows:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">train</span>(Profit <span class="sc">~</span> .,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> fast, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>))<span class="sc">$</span>results<span class="sc">$</span>RMSE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">gzcon</span>(<span class="fu">url</span>(<span class="st">"https://github.com/cd-public/D505/raw/refs/heads/master/dat/secret.rds"</span>)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>profit <span class="ot">&lt;-</span> fast[<span class="st">"Profit"</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fast <span class="ot">&lt;-</span> fast <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Profit) <span class="sc">|&gt;</span> <span class="fu">engineer</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fast[<span class="st">"Profit"</span>] <span class="ot">=</span> profit</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">train</span>(Profit <span class="sc">~</span> .,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> fast, </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>))<span class="sc">$</span>results<span class="sc">$</span>RMSE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The sample engineering function achieved an RMSE of <code>2074.117</code> by selecting the first 10 features and naively modeling.</li>
+</ul>
+<section id="special-cases" class="level2">
+<h2 class="anchored" data-anchor-id="special-cases">Special Cases</h2>
+<ul>
+<li>In a few cases, students avoided information leaks as far as I can tell, but it was hard to be sure as code contained hard-coded indices and I may have made a mistake.</li>
+<li>I allowed two plausible disagreements over what constituted an information leak, derived from sales data put plausibly known at development time:
+<ul>
+<li>Seasonality, derived from sales data put plausible known at development time, and</li>
+<li>Sales strategy of direct vs.&nbsp;stock sales passed on percentages.</li>
+</ul></li>
+<li>Ultimately, this led to too few eligible submissions to perserve anonymity and I have closed the rankings.</li>
+</ul>
+</section>
+<section id="my-apologies" class="level2">
+<h2 class="anchored" data-anchor-id="my-apologies">My Apologies</h2>
+<ul>
+<li>The degree of information leakage on the final project could arise from an error in my instruction.</li>
+<li>I apologize.</li>
+<li>Please review these slides and avoid information leakages in future work.</li>
+<li><a href="https://cd-public.github.io/D505/lec/Session03.html#/overfitting-or-a-leak">Overfitting… or a leak?</a></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

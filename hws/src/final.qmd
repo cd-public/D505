@@ -16,26 +16,6 @@ date: "04/30/2025"
 Predict the profit of "future products developed at CravenSpeed"
 :::
 
-# Criteria
-
-- Every group member must participate in the presentation
-- Maximum 10 features including interactions
-
-# Assessment
-
-- Assessments will be setup as follows:
-    - "Profit" is engineered.
-    - Note that the first ten (10) features are selected.
-    - This ensures no more than 10 features are used.
-    - "Profit" is incorporated into the data frame.
-
-```{.r}
-profit <- fast["Revenue 2019 to present"] - fast["BOM Cost"] * fast["Units Sold"]
-fast <- fast %>% engineer()
-fast <- fast |> select(1:10) # Max 10 features
-fast["Profit"] = profit
-```
-
 ## Information leaks
 
 - Recall the following slides: [Overfitting… or a leak?](https://cd-public.github.io/D505/lec/Session03.html#/overfitting-or-a-leak)
@@ -87,8 +67,31 @@ Predict the profit of "future products developed at CravenSpeed"
 - Assessments will be evaluated via RMSE over the secret data as follows:
 
 ```{.r}
+fast <- readRDS(gzcon(url("https://github.com/cd-public/D505/raw/refs/heads/master/dat/secret.rds")))
+
+profit <- fast["Profit"]
+fast <- fast |> select(-Profit) |> engineer() |> select(1:10)
+fast["Profit"] = profit
+
 train(Profit ~ .,
       data = fast, 
       method = "lm",
       trControl = trainControl(method = "cv", number = 5))$results$RMSE
 ```
+
+- The sample engineering function achieved an RMSE of `2074.117` by selecting the first 10 features and naively modeling.
+
+## Special Cases
+
+- In a few cases, students avoided information leaks as far as I can tell, but it was hard to be sure as code contained hard-coded indices and I may have made a mistake.
+- I allowed two plausible disagreements over what constituted an information leak, derived from sales data put plausibly known at development time:
+    - Seasonality, derived from sales data put plausible known at development time, and
+    - Sales strategy of direct vs. stock sales passed on percentages.
+- Ultimately, this led to too few eligible submissions to perserve anonymity and I have closed the rankings.
+
+## My Apologies
+
+- The degree of information leakage on the final project could arise from an error in my instruction.
+- I apologize.
+- Please review these slides and avoid information leakages in future work.
+- [Overfitting… or a leak?](https://cd-public.github.io/D505/lec/Session03.html#/overfitting-or-a-leak)
