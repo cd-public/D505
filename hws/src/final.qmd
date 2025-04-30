@@ -1,0 +1,94 @@
+---
+title: "Final Retrospective"
+author: "Prof. Calvin"
+date: "04/30/2025"
+---
+
+# Goal
+
+*This is a generalized ML assignment*
+
+1. Predict the profit of future products developed at CravenSpeed
+2. Using any model (or ensemble) you'd like
+3. Evaluated using RMSE on holdout sample (you won't see)
+
+::: {.callout-important}
+Predict the profit of "future products developed at CravenSpeed"
+:::
+
+# Criteria
+
+- Every group member must participate in the presentation
+- Maximum 10 features including interactions
+
+# Assessment
+
+- Assessments will be setup as follows:
+    - "Profit" is engineered.
+    - Note that the first ten (10) features are selected.
+    - This ensures no more than 10 features are used.
+    - "Profit" is incorporated into the data frame.
+
+```{.r}
+profit <- fast["Revenue 2019 to present"] - fast["BOM Cost"] * fast["Units Sold"]
+fast <- fast %>% engineer()
+fast <- fast |> select(1:10) # Max 10 features
+fast["Profit"] = profit
+```
+
+## Information leaks
+
+- Recall the following slides: [Overfitting… or a leak?](https://cd-public.github.io/D505/lec/Session03.html#/overfitting-or-a-leak)
+
+::: {.callout-important}
+Predict the profit of "future products developed at CravenSpeed"
+:::
+
+- I find it unreasonable to conclude that any of the following could be known about a product *before it is developed*:
+    - These are indices `2:29,38,41`
+
+```{.r}
+ [1] "First Order (from sales data)" "src_www"
+ [3] "src_iphone"                    "src_android"
+ [5] "src_ipad"                      "src_manual"
+ [7] "src_facebookshop"              "src_external"
+ [9] "src_Amazon FBM"                "January"
+[11] "February"                      "March"
+[13] "April"                         "May"
+[15] "June"                          "July"
+[17] "August"                        "September"
+[19] "October"                       "November"
+[21] "December"                      "pct_Direct Sales"
+[23] "pct_Orders for Stock"          "pct_Drop Shipments"
+[25] "pct_Platypus"                  "pct_Moss Motors Only"
+[27] "pct_R&D Club"                  "Units Sold"
+[29] "Revenue 2019 to present"       "Sales Channel"
+```
+
+- That is, it is not meaningful to predict profit from metrics that can only be gathered if profit is known.
+- I find it reasonable to considering the following:
+
+```{.r}
+ [1] "lookupId"                         "Base Product Sku"
+ [3] "Listing Type"                     "Unit Weight (pounds)"
+ [5] "retailPrice"                      "make"
+ [7] "model"                            "yearMin"
+ [9] "yearMax"                          "Number of Components"
+[11] "BOM Cost"                         "Product Type"
+[13] "Designer"                         "Main Component Material"
+[15] "Main Component MFG Process"       "Main Component Finishing Process"
+```
+
+- For this reason, I have included only these fields in the `secret` hold-out data.
+    - Profit, precomputed, is also present (of course).
+
+# Assessment
+
+- Assessments will be evaluated via RMSE over the secret data as follows:
+
+```{.r}
+train(Profit ~ .,
+      data = fast, 
+      method = "lm",
+      trControl = trainControl(method = "cv", number = 5))$results$RMSE
+```
